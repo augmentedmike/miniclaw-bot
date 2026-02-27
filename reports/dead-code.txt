@@ -1,0 +1,15 @@
+╔══════════════════════════════════════════════════╗
+║           DEAD CODE REPORT                      ║
+╚══════════════════════════════════════════════════╝
+
+⚠  POTENTIALLY UNUSED EXPORTS (7):
+   agent.ts:17  export createTools
+   auth.ts:110  export writeCredentials
+   auth.ts:114  export readCredentials
+   auth.ts:118  export isExpired
+   conversation.ts:39  export appendToHistory
+   memory/store.ts:33  export readMemory
+   telegram/bot.ts:7  export startBot
+
+⚠  ORPHAN FILES (not imported by anything):
+   telegram/bot.ts  (exports: startBot)

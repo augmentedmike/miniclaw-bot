@@ -1,0 +1,51 @@
+╔══════════════════════════════════════════════════╗
+║           SIDE-EFFECT TRACE                     ║
+╚══════════════════════════════════════════════════╝
+
+IMPURE FUNCTIONS (have side effects):
+──────────────────────────────────────────────────────────────────────
+  auth.ts:
+    isExpired:118  [date]
+    getAccessToken:127  [date]
+  config.ts:
+    ensureMinicawDirs:24  [fs]
+    loadConfig:35  [fs] [env]
+  conversation.ts:
+    loadHistory:14  [fs]
+    saveHistory:29  [fs]
+  memory/search.ts:
+    searchMemory:15  [fs]
+  memory/store.ts:
+    saveMemory:21  [fs]
+    readMemory:33  [fs]
+    listMemories:46  [fs]
+  system-prompt.ts:
+    buildSystemPrompt:3  [process] [env] [date]
+  telegram/bot.ts:
+    startBot:7  [console]
+  telegram/handlers.ts:
+    registerHandlers:7  [console]
+  tools/shell.ts:
+    createShellTool:5  [process] [env] [child_process]
+  vault.ts:
+    getMasterPassword:56  [fs] [env]
+    initVaultKey:77  [fs]
+    vaultSet:178  [date]
+
+PURE FUNCTIONS (no side effects):
+──────────────────────────────────────────────────────────────────────
+  ✓ agent.ts:17  createTools
+  ✓ agent.ts:36  runAgent
+  ✓ auth.ts:110  writeCredentials
+  ✓ auth.ts:114  readCredentials
+  ✓ config.ts:20  getMinicawHome
+  ✓ conversation.ts:39  appendToHistory
+  ✓ telegram/format.ts:32  markdownToTelegramHtml
+  ✓ telegram/format.ts:152  chunkText
+  ✓ telegram/send.ts:11  sendResponse
+  ✓ vault.ts:217  vaultGet
+  ✓ vault.ts:236  vaultDelete
+  ✓ vault.ts:256  vaultList
+
+Total: 29 functions, 12 pure (41%), 17 impure
+Effect frequency: fs(10), date(4), env(4), process(2), console(2), child_process(1)

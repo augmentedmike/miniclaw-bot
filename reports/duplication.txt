@@ -1,0 +1,108 @@
+╔══════════════════════════════════════════════════╗
+║           DUPLICATION REPORT                    ║
+╚══════════════════════════════════════════════════╝
+
+⚠  DUPLICATED BLOCKS (19):
+
+  Block (5 lines) found in 2 files:
+    auth.ts:11
+    types.ts:12
+    Preview:   accessToken: string;
+
+  Block (5 lines) found in 3 files:
+    auth.ts:45
+    memory/store.ts:38
+    vault.ts:133
+    Preview:   } catch {
+
+  Block (5 lines) found in 2 files:
+    conversation.ts:21
+    memory/store.ts:52
+    Preview:   } catch {
+
+  Block (5 lines) found in 2 files:
+    memory/search.ts:46
+    vault.ts:268
+    Preview:     }
+
+  Block (5 lines) found in 3 files:
+    memory/search.ts:47
+    tools/web.ts:161
+    vault.ts:269
+    Preview:   }
+
+  Block (5 lines) found in 2 files:
+    memory/store.ts:39
+    vault.ts:134
+    Preview:     return null;
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:44
+    tools/shell.ts:25
+    Preview:         // No timeout — Claude Code tasks can be long-running
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:46
+    tools/shell.ts:26
+    Preview: 
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:47
+    tools/shell.ts:27
+    Preview:       let stdout = "";
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:48
+    tools/shell.ts:28
+    Preview:       let stderr = "";
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:49
+    tools/shell.ts:29
+    Preview: 
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:50
+    tools/shell.ts:30
+    Preview:       proc.stdout.on("data", (data: Buffer) => {
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:51
+    tools/shell.ts:31
+    Preview:         stdout += data.toString();
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:52
+    tools/shell.ts:32
+    Preview:       });
+
+  Block (5 lines) found in 2 files:
+    tools/claude-code.ts:53
+    tools/shell.ts:33
+    Preview:       proc.stderr.on("data", (data: Buffer) => {
+
+  Block (5 lines) found in 3 files:
+    tools/edit.ts:1
+    tools/files.ts:1
+    tools/glob.ts:1
+    Preview: import fs from "node:fs";
+
+  Block (5 lines) found in 3 files:
+    tools/edit.ts:41
+    tools/files.ts:27
+    tools/web.ts:42
+    Preview:     } catch (err) {
+
+  Block (5 lines) found in 4 files:
+    tools/edit.ts:42
+    tools/files.ts:28
+    tools/grep.ts:61
+    tools/web.ts:43
+    Preview:       const msg = err instanceof Error ? err.message : String(err);
+
+  Block (5 lines) found in 4 files:
+    tools/edit.ts:43
+    tools/files.ts:29
+    tools/grep.ts:62
+    tools/web.ts:44
+    Preview:       return `[error] ${msg}`;

@@ -1,0 +1,68 @@
+graph TD
+  subgraph root
+    agent_ts["agent.ts"]
+    auth_ts["auth.ts"]
+    system-prompt_ts["system-prompt.ts"]
+    types_ts["types.ts"]
+    config_ts["config.ts"]
+    conversation_ts["conversation.ts"]
+    index_ts["index.ts"]
+    vault_ts["vault.ts"]
+    vault-cli_ts["vault-cli.ts"]
+  end
+  subgraph tools
+    tools_shell_ts["shell.ts"]
+    tools_files_ts["files.ts"]
+    tools_edit_ts["edit.ts"]
+    tools_glob_ts["glob.ts"]
+    tools_grep_ts["grep.ts"]
+    tools_web_ts["web.ts"]
+    tools_memory_ts["memory.ts"]
+    tools_claude-code_ts["claude-code.ts"]
+    tools_vault_ts["vault.ts"]
+  end
+  subgraph telegram
+    telegram_bot_ts["bot.ts"]
+    telegram_handlers_ts["handlers.ts"]
+    telegram_format_ts["format.ts"]
+    telegram_send_ts["send.ts"]
+  end
+  subgraph memory
+    memory_search_ts["search.ts"]
+    memory_store_ts["store.ts"]
+  end
+  agent_ts --> auth_ts
+  agent_ts --> system-prompt_ts
+  agent_ts --> tools_shell_ts
+  agent_ts --> tools_files_ts
+  agent_ts --> tools_edit_ts
+  agent_ts --> tools_glob_ts
+  agent_ts --> tools_grep_ts
+  agent_ts --> tools_web_ts
+  agent_ts --> tools_memory_ts
+  agent_ts --> tools_claude-code_ts
+  agent_ts --> tools_vault_ts
+  agent_ts --> types_ts
+  auth_ts --> types_ts
+  config_ts --> types_ts
+  conversation_ts --> config_ts
+  index_ts --> config_ts
+  index_ts --> agent_ts
+  index_ts --> telegram_bot_ts
+  memory_search_ts --> config_ts
+  memory_store_ts --> config_ts
+  telegram_bot_ts --> telegram_handlers_ts
+  telegram_bot_ts --> types_ts
+  telegram_handlers_ts --> agent_ts
+  telegram_handlers_ts --> telegram_send_ts
+  telegram_handlers_ts --> conversation_ts
+  telegram_handlers_ts --> types_ts
+  telegram_send_ts --> telegram_format_ts
+  tools_memory_ts --> memory_store_ts
+  tools_memory_ts --> memory_search_ts
+  tools_vault_ts --> vault_ts
+  tools_vault_ts --> vault_ts
+  vault-cli_ts --> vault_ts
+  vault-cli_ts --> config_ts
+  vault-cli_ts --> vault_ts
+  vault_ts --> config_ts

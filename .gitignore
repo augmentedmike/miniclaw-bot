@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Test artifacts
+coverage/
+
+# Generated output (devtools scratch — reports/ is committed)
+devtools/*.html
+devtools/*.svg
+devtools/*.png
+devtools/*.mermaid
+docs/
+
+# Nano banana test artifact
+nano-banana.png
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Generated test artifacts
+e2e/output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Runtime data
+~/.miniclaw/
