@@ -1,0 +1,214 @@
+%% auth.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% config.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  caught --> fallback : fallback
+  fallback --> success : complete
+  success --> [*]
+
+%% conversation.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% index.ts :: process_events
+stateDiagram-v2
+  [*] --> idle
+  idle --> SIGINT : SIGINT
+  SIGINT --> idle : done
+  idle --> SIGTERM : SIGTERM
+  SIGTERM --> idle : done
+
+%% index.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% memory/search.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% memory/store.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% telegram/bot.ts :: process_events
+stateDiagram-v2
+  [*] --> idle
+  idle --> SIGINT : SIGINT
+  SIGINT --> idle : done
+  idle --> SIGTERM : SIGTERM
+  SIGTERM --> idle : done
+
+%% telegram/bot.ts :: startBot_flow
+stateDiagram-v2
+  [*] --> start
+  start --> bot_api_getMe : await bot.api.getMe()
+  bot_api_getMe --> runner_task : await runner.task()
+  runner_task --> complete : return
+  complete --> [*]
+
+%% telegram/handlers.ts :: registerHandlers_flow
+stateDiagram-v2
+  [*] --> start
+  state error <<error>>
+  start --> runAgent : await runAgent()
+  runAgent --> sendResponse : await sendResponse()
+  sendResponse --> bot_api_sendMessage : await bot.api.sendMessage()
+  bot_api_sendMessage --> bot_api_sendMessage : await bot.api.sendMessage()
+  bot_api_sendMessage --> error : catch
+  bot_api_sendMessage --> complete : return
+  complete --> [*]
+
+%% telegram/handlers.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% telegram/send.ts :: sendResponse_flow
+stateDiagram-v2
+  [*] --> start
+  state error <<error>>
+  start --> bot_api_sendMessage : await bot.api.sendMessage()
+  bot_api_sendMessage --> bot_api_sendMessage : await bot.api.sendMessage()
+  bot_api_sendMessage --> error : catch
+  bot_api_sendMessage --> complete : return
+  complete --> [*]
+
+%% telegram/send.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  caught --> attempt : retry
+  caught --> fallback : fallback
+  fallback --> success : complete
+  success --> [*]
+
+%% tools/claude-code.ts :: proc_events
+stateDiagram-v2
+  [*] --> idle
+  state error <<error>>
+  idle --> close : close
+  idle --> error : error
+  close --> [*]
+
+%% tools/claude-code.ts :: process_lifecycle
+stateDiagram-v2
+  [*] --> spawning
+  state error <<error>>
+  spawning --> running : spawn()
+  running --> stdout_data : stdout.data
+  stdout_data --> running : accumulate
+  running --> stderr_data : stderr.data
+  stderr_data --> running : accumulate
+  running --> closed : close
+  running --> error : error
+  closed --> [*]
+
+%% tools/edit.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% tools/files.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% tools/glob.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% tools/grep.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% tools/shell.ts :: proc_events
+stateDiagram-v2
+  [*] --> idle
+  state error <<error>>
+  idle --> close : close
+  idle --> error : error
+  close --> [*]
+
+%% tools/shell.ts :: process_lifecycle
+stateDiagram-v2
+  [*] --> spawning
+  state error <<error>>
+  spawning --> running : spawn()
+  running --> stdout_data : stdout.data
+  stdout_data --> running : accumulate
+  running --> stderr_data : stderr.data
+  stderr_data --> running : accumulate
+  running --> closed : close
+  running --> error : error
+  closed --> [*]
+
+%% tools/vault.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% tools/web.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  caught --> fallback : fallback
+  fallback --> success : complete
+  success --> [*]
+
+%% vault.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]

@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+##
+# Prepare-commit-msg hook — appends quality block to commit message.
+#
+# Reads the test output saved by pre-commit and the generated reports
+# to build a standardized commit message footer with test results,
+# quality metrics, and links to the report artifacts.
+#
+# Commit message format:
+#   <user's summary>
+#
+#   --- Test Results ---
+#   Tests:  316 passed (35)
+#   Files:  35 passed (35)
+#   Time:   4.21s
+#
+#   --- Quality Metrics ---
+#   SOLID: clean | Read: 85/100 | Cohesion: 58/100 | Bidir: 0 | Dup: 0
+#
+#   --- Reports ---
+#   reports/SUMMARY.txt
+#   reports/depgraph.mermaid
+#   reports/state-machine.mermaid
+##
+
+set -euo pipefail
+
+COMMIT_MSG_FILE="$1"
+COMMIT_SOURCE="${2:-}"
+
+# Only modify for regular commits (not merges, squashes, etc.)
+if [ -n "$COMMIT_SOURCE" ] && [ "$COMMIT_SOURCE" != "message" ]; then
+  exit 0
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+
+# Read test output saved by pre-commit hook
+TEST_OUTPUT_FILE="$ROOT/.git/LAST_TEST_OUTPUT"
+if [ ! -f "$TEST_OUTPUT_FILE" ]; then
+  # If no test output (hook may have been skipped), generate reports now
+  TEST_OUTPUT=$(npx vitest run 2>&1) || true
+  npx tsx devtools/report.ts --root src/ --out reports/ 2>/dev/null || true
+else
+  TEST_OUTPUT=$(cat "$TEST_OUTPUT_FILE")
+fi
+
+# Extract test summary lines
+TESTS_LINE=$(echo "$TEST_OUTPUT" | grep -E "^ *Tests" | head -1 | sed 's/^[[:space:]]*//' || echo "")
+FILES_LINE=$(echo "$TEST_OUTPUT" | grep -E "^ *Test Files" | head -1 | sed 's/^[[:space:]]*//' || echo "")
+DURATION_LINE=$(echo "$TEST_OUTPUT" | grep -E "^ *Duration" | head -1 | sed 's/^[[:space:]]*//' || echo "")
+
+# Extract quality metrics from reports
+METRICS_LINE=""
+if [ -f "$ROOT/reports/SUMMARY.txt" ]; then
+  # Use the report.ts extractMetricsLine via a quick tsx call
+  METRICS_LINE=$(npx tsx -e "
+    import { generateReports, extractMetricsLine } from './devtools/report.js';
+    const r = generateReports('src');
+    console.log(extractMetricsLine(r));
+  " 2>/dev/null || echo "n/a")
+fi
+
+# Build the quality block
+QUALITY_BLOCK=$(cat <<BLOCK
+
+--- Test Results ---
+${TESTS_LINE:-Tests: see reports/}
+${FILES_LINE:+$FILES_LINE
+}${DURATION_LINE:+$DURATION_LINE
+}
+--- Quality Metrics ---
+${METRICS_LINE:-n/a}
+
+--- Reports ---
+reports/SUMMARY.txt
+reports/depgraph.mermaid
+reports/state-machine.mermaid
+BLOCK
+)
+
+# Read existing message (user's summary)
+EXISTING_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Check if quality block is already present (avoid double-appending)
+if echo "$EXISTING_MSG" | grep -q "^--- Test Results ---"; then
+  exit 0
+fi
+
+# Append quality block to commit message
+echo "$EXISTING_MSG" > "$COMMIT_MSG_FILE"
+echo "$QUALITY_BLOCK" >> "$COMMIT_MSG_FILE"
+
+# Clean up temp file
+rm -f "$TEST_OUTPUT_FILE"

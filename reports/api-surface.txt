@@ -1,0 +1,118 @@
+╔══════════════════════════════════════════════════╗
+║           API SURFACE MAP                       ║
+╚══════════════════════════════════════════════════╝
+
+┌─── config.ts (3 exports, 6 consumers) ⚠ STABLE (many dependents)
+│  function   getMinicawHome → conversation, search, store, vault
+│  function   ensureMinicawDirs → index, vault-cli
+│  function   loadConfig → index
+└
+
+┌─── agent.ts (2 exports, 2 consumers)
+│  function   createTools → UNUSED
+│  function   runAgent → index, handlers
+└
+
+┌─── vault.ts (8 exports, 2 consumers)
+│  function   getMasterPassword → vault-cli
+│  function   initVaultKey → vault-cli
+│  function   vaultSet → vault-cli
+│  function   vaultGet → vault, vault-cli
+│  function   vaultDelete → vault-cli
+│  function   vaultList → vault, vault-cli
+│  type       VaultCategory → UNUSED
+│  type       VaultEntry → UNUSED
+└
+
+┌─── auth.ts (4 exports, 1 consumers)
+│  function   writeCredentials → UNUSED
+│  function   readCredentials → UNUSED
+│  function   isExpired → UNUSED
+│  function   getAccessToken → agent
+└
+
+┌─── conversation.ts (3 exports, 1 consumers)
+│  function   loadHistory → handlers
+│  function   saveHistory → handlers
+│  function   appendToHistory → UNUSED
+└
+
+┌─── memory/search.ts (1 exports, 1 consumers)
+│  function   searchMemory → memory
+└
+
+┌─── memory/store.ts (3 exports, 1 consumers)
+│  function   saveMemory → memory
+│  function   readMemory → UNUSED
+│  function   listMemories → memory
+└
+
+┌─── system-prompt.ts (1 exports, 1 consumers)
+│  function   buildSystemPrompt → agent
+└
+
+┌─── telegram/format.ts (2 exports, 1 consumers)
+│  function   markdownToTelegramHtml → send
+│  function   chunkText → send
+└
+
+┌─── telegram/handlers.ts (1 exports, 1 consumers)
+│  function   registerHandlers → bot
+└
+
+┌─── telegram/send.ts (1 exports, 1 consumers)
+│  function   sendResponse → handlers
+└
+
+┌─── tools/claude-code.ts (1 exports, 1 consumers)
+│  const      claudeCodeTool → agent
+└
+
+┌─── tools/edit.ts (1 exports, 1 consumers)
+│  const      editFileTool → agent
+└
+
+┌─── tools/files.ts (3 exports, 1 consumers)
+│  const      readFileTool → agent
+│  const      writeFileTool → agent
+│  const      listDirectoryTool → agent
+└
+
+┌─── tools/glob.ts (1 exports, 1 consumers)
+│  const      globTool → agent
+└
+
+┌─── tools/grep.ts (1 exports, 1 consumers)
+│  const      grepTool → agent
+└
+
+┌─── tools/memory.ts (2 exports, 1 consumers)
+│  const      memorySaveTool → agent
+│  const      memorySearchTool → agent
+└
+
+┌─── tools/shell.ts (1 exports, 1 consumers)
+│  function   createShellTool → agent
+└
+
+┌─── tools/vault.ts (2 exports, 1 consumers)
+│  const      vaultGetTool → agent
+│  const      vaultListTool → agent
+└
+
+┌─── tools/web.ts (2 exports, 1 consumers)
+│  const      webFetchTool → agent
+│  const      webSearchTool → agent
+└
+
+┌─── telegram/bot.ts (1 exports, 0 consumers)
+│  function   startBot → UNUSED
+└
+
+┌─── types.ts (3 exports, 0 consumers)
+│  type       MinicawConfig → UNUSED
+│  type       OAuthCredentials → UNUSED
+│  type       AgentResult → UNUSED
+└
+
+Total: 22 modules, 47 exports, 12 potentially unused

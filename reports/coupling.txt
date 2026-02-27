@@ -1,0 +1,18 @@
+╔══════════════════════════════════════════════════╗
+║           COUPLING MATRIX                       ║
+╚══════════════════════════════════════════════════╝
+
+             root memory telegr  tools
+──────────────────────────────────────
+root            ·      ·      ·      9
+memory          2      ·      ·      ·
+telegram        4      ·      ·      ·
+tools           2      2      ·      ·
+
+STRONGEST COUPLING:
+  root ↔ tools  score:11 (root→tools:9, tools→root:2) ⚠ BIDIRECTIONAL
+  root ↔ telegram  score:4 (root→telegram:0, telegram→root:4)
+  root ↔ memory  score:2 (root→memory:0, memory→root:2)
+  memory ↔ tools  score:2 (memory→tools:0, tools→memory:2)
+
+Total: 4 modules, 19 import edges, 1 bidirectional pairs

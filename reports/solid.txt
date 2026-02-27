@@ -1,0 +1,12 @@
+╔══════════════════════════════════════════════════╗
+║           SOLID CHECK REPORT                    ║
+╚══════════════════════════════════════════════════╝
+
+DIP (Dependency Inversion):
+  △ conversation.ts: Direct fs import — consider injecting via dependency
+  △ vault.ts: Direct fs import — consider injecting via dependency
+
+SRP (Single Responsibility):
+  △ vault.ts: 8 exports — approaching too many responsibilities
+
+Total: 0 errors, 3 warnings

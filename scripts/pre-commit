@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+##
+# Pre-commit hook — runs tests and generates quality reports.
+#
+# Fails the commit if tests fail. On success, generates reports/
+# and stages them so every commit carries a quality snapshot.
+##
+
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "╔══════════════════════════════════════╗"
+echo "║  Pre-commit: tests + quality reports ║"
+echo "╚══════════════════════════════════════╝"
+echo ""
+
+# --- 1. Run tests ---
+echo "▸ Running tests..."
+TEST_OUTPUT=$(npx vitest run 2>&1) || {
+  echo ""
+  echo "✗ Tests failed — commit aborted."
+  echo ""
+  echo "$TEST_OUTPUT" | tail -20
+  exit 1
+}
+
+# Save full test output for the commit message hook
+echo "$TEST_OUTPUT" > "$ROOT/.git/LAST_TEST_OUTPUT"
+
+# Show summary
+echo "$TEST_OUTPUT" | grep -E "^(Tests|Test Files|Duration)" || true
+echo ""
+
+# --- 2. Generate quality reports ---
+echo "▸ Generating quality reports..."
+npx tsx devtools/report.ts --root src/ --out reports/
+echo ""
+
+# --- 3. Stage reports ---
+echo "▸ Staging reports/..."
+git add reports/
+
+echo "✓ Pre-commit complete."

@@ -1,0 +1,33 @@
+╔══════════════════════════════════════════════════╗
+║           COMPLEXITY REPORT                     ║
+╚══════════════════════════════════════════════════╝
+
+⚠  FUNCTIONS NEEDING ATTENTION:
+────────────────────────────────────────────────────────────────────────────────
+Grade  Cmplx  LOC  Nest  Params  Function
+────────────────────────────────────────────────────────────────────────────────
+  F      23    85    6      0     main (vault-cli.ts:50)
+  F      23    85    6      0     main (vault-cli.ts:50)
+  D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
+  D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
+  D      22    77    5      1     switch (vault-cli.ts:57)
+  C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
+  C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
+  D      12    49    7      1     createShellTool (tools/shell.ts:5)
+  D      12    49    7      1     createShellTool (tools/shell.ts:5)
+  B      11    16    2      1     parseClaudeOauth (auth.ts:20)
+  B      11    16    2      1     parseClaudeOauth (auth.ts:20)
+  B      11    20    2      0     loadConfig (config.ts:35)
+  B      11    20    2      0     loadConfig (config.ts:35)
+  D      11    25    6      4     sendResponse (telegram/send.ts:11)
+  D      11    25    6      4     sendResponse (telegram/send.ts:11)
+  B      10    20    5      1     for (telegram/send.ts:20)
+
+SUMMARY:
+  Total functions: 189
+  A (simple):     166
+  B (moderate):   10
+  C (complex):    4
+  D (very complex): 7
+  F (needs refactor): 2
+  Avg complexity: 3.2
