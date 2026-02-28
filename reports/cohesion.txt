@@ -18,14 +18,14 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   △  56      2         0          4         2     telegram/format.ts
   △  58      4         0          0         1     tools/kb.ts
   △  58      4         0          0         1     tools/memory.ts
+  △  64      5         0         10         5     memory/search.ts
   ✓  65      2         0         10         2     context.ts
-  ✓  65      5         0         10         5     memory/search.ts
   ✓  68      6         0         20         4     tools/files.ts
   ✓  69      4         2          1         4     auth.ts
   ✓  72      3         1          6         3     conversation.ts
   ✓  73      7         4          3         6     persona.ts
   ✓  76      6         3          4         3     vault.ts
-  ✓  77      9         7          3         8     telegram/access.ts
+  ✓  80      9         8          3         8     telegram/access.ts
   ✓  85      8         7          3         4     config.ts
 
 Average cohesion: 61/100

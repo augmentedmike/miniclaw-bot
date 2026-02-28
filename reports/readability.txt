@@ -6,18 +6,18 @@ FILE SCORES (worst first):
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
 ────────────────────────────────────────────────────────────────────────────────
-  C      55     37    141     7%     7    5    kb/engine.ts
-  C      58     37    110     7%     6    5    kb-cli.ts
+  C      57     40    176     8%    12    5    kb/engine.ts
+  C      57     40    117     5%     6    5    kb-cli.ts
   C      58     37     89     1%     6    8    tools/files.ts
   C      62     30     80     4%     8    6    web/handler.ts
-  C      63     41    124     7%     5    6    tools/grep.ts
+  C      63     41    116     7%     5    6    tools/grep.ts
   C      64     39    119     7%     8    5    agent.ts
   C      64     36    114    10%     3    9    telegram/handlers.ts
   C      66     46    123     0%     7    3    tools/memory.ts
-  B      70     40    120     5%     4    5    tools/kb.ts
+  C      68     45    175     5%     4    5    tools/kb.ts
+  B      70     38     94     7%     6    6    tools/glob.ts
   B      72     26     83     1%     4    6    web/ui.ts
   B      75     45    149     2%     0    7    tools/edit.ts
-  B      76     38     94     7%     4    6    tools/glob.ts
   B      76     36    110    10%     3    5    tools/web.ts
   B      78     30     93     0%     3    4    setup.ts
   B      78     34     92    15%     3    6    telegram/send.ts
@@ -27,28 +27,28 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   B      83     35    121    20%     8    4    context.ts
   B      83     32    109     7%     1    5    index.ts
   A      86     40    133    11%     1    6    tools/vault.ts
+  A      89     34    101    24%     3    4    memory/search.ts
   A      89     39    112     8%     0    6    tools/claude-code.ts
+  A      90     32     97    19%     1    5    snapshot.ts
   A      90     31     74    13%     0    4    telegram/bot.ts
   A      91     34     76     3%     2    4    web/server.ts
-  A      92     33     92    23%     3    4    memory/search.ts
   A      92     33    224     7%     0    4    persona-cli.ts
-  A      93     32    111    19%     1    5    snapshot.ts
   A      94     33    105    10%     0    4    install-tui.ts
   A      94     57    238     0%     0    3    system-prompt.ts
-  A      94     34    130     9%     1    4    vault-cli.ts
+  A      94     33    130     9%     1    4    vault-cli.ts
   A      96     40    103    24%     2    5    telegram/format.ts
-  A      98     36     89    17%     3    4    conversation.ts
+  A      96     34     84    12%     2    4    tools/run-process.ts
+  A      98     37     91    17%     3    4    conversation.ts
   A     100     36    120    20%     2    3    config.ts
   A     100     34     81    28%     3    2    kb/embeddings.ts
   A     100     34     77    19%     0    2    kb/index.ts
-  A     100     23     74     0%     0    1    kb/types.ts
-  A     100     27     71    17%     0    2    memory/store.ts
+  A     100     26     96     9%     0    1    kb/types.ts
+  A     100     27     76    17%     0    2    memory/store.ts
   A     100     35    110    26%     0    3    persona.ts
   A     100     32     93    10%     0    3    snapshot-cli.ts
-  A     100     34    102     7%     0    3    telegram/access.ts
-  A     100     34     84    16%     0    3    tools/run-process.ts
+  A     100     35    102    15%     0    3    telegram/access.ts
   A     100     37     85    32%     0    4    tools/util.ts
   A     100     22     59     0%     0    1    types.ts
 
 Average readability score: 84/100
-Grades: A:23 B:12 C:8 D:0 F:0
+Grades: A:23 B:11 C:9 D:0 F:0

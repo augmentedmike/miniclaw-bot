@@ -172,7 +172,7 @@ describe("telegram handlers", () => {
 
     expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
       123,
-      expect.stringContaining("LLM failed"),
+      "Something went wrong. Check server logs for details.",
       expect.objectContaining({ reply_to_message_id: 42 }),
     );
   });
@@ -214,7 +214,7 @@ describe("telegram handlers", () => {
 
     expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
       123,
-      expect.stringContaining("string error"),
+      "Something went wrong. Check server logs for details.",
       expect.objectContaining({ reply_to_message_id: 42 }),
     );
   });

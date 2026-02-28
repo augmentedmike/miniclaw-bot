@@ -45,6 +45,20 @@ vi.mock("node:child_process", async () => {
       // @ts-ignore
       return actual.execSync(cmd, ...args);
     },
+    execFileSync: (cmd: string, args?: string[], ...rest: unknown[]) => {
+      if (cmd === "qmd" && args) {
+        const sub = args[0];
+        if (sub === "collection") return "miniclaw-memory";
+        if (sub === "search" || sub === "vsearch") {
+          const query = args[1] ?? "";
+          const memDir = path.join(tmpDir, "memory");
+          return simulateSearch(memDir, query);
+        }
+        if (sub === "update" || sub === "embed") return "";
+      }
+      // @ts-ignore
+      return actual.execFileSync(cmd, args, ...rest);
+    },
     spawn: vi.fn(() => ({ unref: vi.fn() })),
   };
 });

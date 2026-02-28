@@ -24,7 +24,7 @@
     config.ts:46
     memory/store.ts:45
     persona.ts:71
-    snapshot.ts:186
+    snapshot.ts:189
     vault.ts:133
     Preview:   } catch {
 
@@ -42,13 +42,13 @@
     conversation.ts:58
     memory/store.ts:59
     persona.ts:98
-    snapshot.ts:170
+    snapshot.ts:173
     Preview:   } catch {
 
   Block (5 lines) found in 3 files:
     conversation.ts:59
     persona.ts:99
-    snapshot.ts:171
+    snapshot.ts:174
     Preview:     return [];
 
   Block (5 lines) found in 2 files:
@@ -82,43 +82,42 @@
     Preview: 
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:187
-    kb-cli.ts:297
+    install-tui.ts:186
+    kb-cli.ts:398
     persona-cli.ts:224
     snapshot-cli.ts:128
     vault-cli.ts:133
     Preview: }
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:188
-    kb-cli.ts:298
+    install-tui.ts:187
+    kb-cli.ts:399
     persona-cli.ts:225
     snapshot-cli.ts:129
     vault-cli.ts:134
     Preview: 
 
-  Block (5 lines) found in 3 files:
-    kb/engine.ts:201
-    tools/web.ts:160
-    vault.ts:269
-    Preview:     }
+  Block (5 lines) found in 2 files:
+    kb-cli.ts:24
+    tools/kb.ts:13
+    Preview: 
 
   Block (5 lines) found in 4 files:
-    kb-cli.ts:280
+    kb-cli.ts:381
     persona-cli.ts:209
     snapshot-cli.ts:115
     vault-cli.ts:121
     Preview:   const [command, ...args] = process.argv.slice(2);
 
   Block (5 lines) found in 4 files:
-    kb-cli.ts:295
+    kb-cli.ts:396
     persona-cli.ts:222
     snapshot-cli.ts:126
     vault-cli.ts:131
     Preview:     default:                   usage();
 
   Block (5 lines) found in 4 files:
-    kb-cli.ts:296
+    kb-cli.ts:397
     persona-cli.ts:223
     snapshot-cli.ts:127
     vault-cli.ts:132

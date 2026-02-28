@@ -20,18 +20,27 @@ import fs from "node:fs";
 import path from "node:path";
 import { getActivePersonaHome, ensurePersonaDirs, loadConfig } from "./config.js";
 import { KBEngine } from "./kb/engine.js";
-import type { KBCategory, KBEntry } from "./kb/types.js";
+import type { KBCategory, KBOrigin, KBVolatility, KBEntry } from "./kb/types.js";
 
 const CATEGORIES = ["personality", "fact", "procedure", "general"] as const;
+const ORIGINS = ["scholastic", "human", "observed", "read", "inferred", "imported"] as const;
+const VOLATILITIES = ["stable", "temporal", "versioned"] as const;
 
 function usage(): never {
   console.log(`
 Knowledge Base — local vector database
 
 Commands:
-  add <category> <content>     Add an entry
-  search <query>               Hybrid search (vector + keyword)
-  list [category]              List entries
+  add <category> <content> [flags]
+                               Add an entry
+    --origin <origin>          scholastic|human|observed|read|inferred|imported
+    --confidence <0-1>         Override default confidence
+    --volatility <vol>         stable|temporal|versioned
+    --expires <ISO date>       Expiry for temporal entries
+    --source <source>          Mechanical provenance (URL, conversation, file)
+    --tags <t,t,...>           Comma-separated tags
+  search <query> [--origin <o>]  Hybrid search (vector + keyword)
+  list [category] [--origin <o>] List entries
   get <id>                     Get full entry by ID
   remove <id>                  Remove an entry
   import-memory                Import existing memory/ markdown files
@@ -54,8 +63,31 @@ function getEngine(): KBEngine {
   return new KBEngine(dbPath);
 }
 
+function extractFlag(args: string[], flag: string): { value: string | undefined; rest: string[] } {
+  const idx = args.indexOf(flag);
+  if (idx === -1 || idx + 1 >= args.length) return { value: undefined, rest: args };
+  const value = args[idx + 1]!;
+  const rest = [...args.slice(0, idx), ...args.slice(idx + 2)];
+  return { value, rest };
+}
+
 async function handleAdd(args: string[]): Promise<void> {
-  const [category, ...contentParts] = args;
+  let remaining = args;
+
+  const { value: source, rest: r1 } = extractFlag(remaining, "--source");
+  remaining = r1;
+  const { value: tagsRaw, rest: r2 } = extractFlag(remaining, "--tags");
+  remaining = r2;
+  const { value: originRaw, rest: r3 } = extractFlag(remaining, "--origin");
+  remaining = r3;
+  const { value: confidenceRaw, rest: r4 } = extractFlag(remaining, "--confidence");
+  remaining = r4;
+  const { value: volatilityRaw, rest: r5 } = extractFlag(remaining, "--volatility");
+  remaining = r5;
+  const { value: expiresAt, rest: r6 } = extractFlag(remaining, "--expires");
+  remaining = r6;
+
+  const [category, ...contentParts] = remaining;
   const content = contentParts.join(" ");
   if (!category || !content) usage();
 
@@ -64,26 +96,69 @@ async function handleAdd(args: string[]): Promise<void> {
     process.exit(1);
   }
 
+  if (originRaw && !ORIGINS.includes(originRaw as KBOrigin)) {
+    console.error(`Invalid origin: ${originRaw}. Must be one of: ${ORIGINS.join(", ")}`);
+    process.exit(1);
+  }
+
+  if (volatilityRaw && !VOLATILITIES.includes(volatilityRaw as KBVolatility)) {
+    console.error(`Invalid volatility: ${volatilityRaw}. Must be one of: ${VOLATILITIES.join(", ")}`);
+    process.exit(1);
+  }
+
+  const tags = tagsRaw ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean) : undefined;
+  const origin = (originRaw as KBOrigin | undefined) ?? (source === "cli" || !source ? undefined : undefined);
+  const confidence = confidenceRaw ? parseFloat(confidenceRaw) : undefined;
+
+  if (confidence !== undefined && (isNaN(confidence) || confidence < 0 || confidence > 1)) {
+    console.error("Confidence must be a number between 0 and 1.");
+    process.exit(1);
+  }
+
   const engine = getEngine();
-  const entry = await engine.add(category as KBCategory, content, { source: "cli" });
+  const entry = await engine.add(category as KBCategory, content, {
+    source: source ?? "cli",
+    origin,
+    confidence,
+    volatility: volatilityRaw as KBVolatility | undefined,
+    expiresAt: expiresAt ?? undefined,
+    tags,
+  });
   console.log(`Added: ${entry.category}/${entry.id}`);
   console.log(`Content: ${entry.content.slice(0, 100)}${entry.content.length > 100 ? "..." : ""}`);
+  console.log(`Origin: ${entry.origin} (confidence: ${entry.confidence.toFixed(1)}, ${entry.volatility})`);
+  if (entry.source) console.log(`Source: ${entry.source}`);
+  if (entry.tags.length > 0) console.log(`Tags: ${entry.tags.join(", ")}`);
+  if (entry.expiresAt) console.log(`Expires: ${entry.expiresAt}`);
   engine.close();
 }
 
 async function handleSearch(args: string[]): Promise<void> {
-  const query = args.join(" ");
+  let remaining = args;
+  const { value: originRaw, rest: r1 } = extractFlag(remaining, "--origin");
+  remaining = r1;
+
+  const query = remaining.join(" ");
   if (!query) usage();
 
+  if (originRaw && !ORIGINS.includes(originRaw as KBOrigin)) {
+    console.error(`Invalid origin: ${originRaw}. Must be one of: ${ORIGINS.join(", ")}`);
+    process.exit(1);
+  }
+
   const engine = getEngine();
-  const results = await engine.search(query, { limit: 10 });
+  const results = await engine.search(query, {
+    limit: 10,
+    origin: originRaw as KBOrigin | undefined,
+  });
 
   if (results.length === 0) {
     console.log("No results found.");
   } else {
     for (const r of results) {
       const tags = r.entry.tags.length > 0 ? ` [${r.entry.tags.join(", ")}]` : "";
-      console.log(`\n${r.entry.category}/${r.entry.id} (score: ${r.score.toFixed(4)}, ${r.method})${tags}`);
+      const meta = `${r.entry.origin}, conf=${r.entry.confidence.toFixed(1)}`;
+      console.log(`\n${r.entry.category}/${r.entry.id} (score: ${r.score.toFixed(4)}, ${r.method}, ${meta})${tags}`);
       console.log(`  ${r.entry.content}`);
     }
     console.log(`\n${results.length} result(s)`);
@@ -92,21 +167,34 @@ async function handleSearch(args: string[]): Promise<void> {
 }
 
 function handleList(args: string[]): void {
-  const [category] = args;
+  let remaining = args;
+  const { value: originRaw, rest: r1 } = extractFlag(remaining, "--origin");
+  remaining = r1;
+
+  const [category] = remaining;
   if (category && !CATEGORIES.includes(category as KBCategory)) {
     console.error(`Invalid category: ${category}. Must be one of: ${CATEGORIES.join(", ")}`);
     process.exit(1);
   }
 
+  if (originRaw && !ORIGINS.includes(originRaw as KBOrigin)) {
+    console.error(`Invalid origin: ${originRaw}. Must be one of: ${ORIGINS.join(", ")}`);
+    process.exit(1);
+  }
+
   const engine = getEngine();
-  const entries = engine.list(category as KBCategory | undefined);
+  const entries = engine.list(
+    category as KBCategory | undefined,
+    originRaw as KBOrigin | undefined,
+  );
 
   if (entries.length === 0) {
-    console.log(category ? `No entries in "${category}".` : "Knowledge base is empty.");
+    const filter = [category, originRaw].filter(Boolean).join(", ") || "any";
+    console.log(`No entries matching (${filter}).`);
   } else {
     for (const e of entries) {
       const preview = e.content.length > 80 ? e.content.slice(0, 80) + "..." : e.content;
-      console.log(`${e.category}/${e.id}: ${preview}`);
+      console.log(`${e.category}/${e.id} [${e.origin}]: ${preview}`);
     }
     console.log(`\n${entries.length} entry/entries`);
   }
@@ -125,14 +213,18 @@ function handleGet(args: string[]): void {
     process.exit(1);
   }
 
-  console.log(`ID:       ${entry.id}`);
-  console.log(`Category: ${entry.category}`);
-  console.log(`Source:   ${entry.source || "(none)"}`);
-  console.log(`Tags:     ${entry.tags.length > 0 ? entry.tags.join(", ") : "(none)"}`);
-  console.log(`Created:  ${entry.createdAt}`);
-  console.log(`Updated:  ${entry.updatedAt}`);
+  console.log(`ID:         ${entry.id}`);
+  console.log(`Category:   ${entry.category}`);
+  console.log(`Origin:     ${entry.origin}`);
+  console.log(`Confidence: ${entry.confidence.toFixed(2)}`);
+  console.log(`Volatility: ${entry.volatility}`);
+  if (entry.expiresAt) console.log(`Expires:    ${entry.expiresAt}`);
+  console.log(`Source:     ${entry.source || "(none)"}`);
+  console.log(`Tags:       ${entry.tags.length > 0 ? entry.tags.join(", ") : "(none)"}`);
+  console.log(`Created:    ${entry.createdAt}`);
+  console.log(`Updated:    ${entry.updatedAt}`);
   if (Object.keys(entry.metadata).length > 0) {
-    console.log(`Metadata: ${JSON.stringify(entry.metadata)}`);
+    console.log(`Metadata:   ${JSON.stringify(entry.metadata)}`);
   }
   console.log(`\n${entry.content}`);
   engine.close();
@@ -199,6 +291,7 @@ async function handleImportMemory(): Promise<void> {
 
       await engine.add(category, body, {
         source: `memory/${file}`,
+        origin: "imported",
         tags: [topic],
       });
       imported++;
@@ -245,6 +338,10 @@ async function handleImport(args: string[]): Promise<void> {
       metadata: entry.metadata,
       tags: entry.tags,
       source: entry.source || `import:${path.basename(file)}`,
+      origin: entry.origin,
+      confidence: entry.confidence,
+      volatility: entry.volatility,
+      expiresAt: entry.expiresAt ?? undefined,
     });
     imported++;
   }
@@ -262,6 +359,10 @@ function handleStats(): void {
   console.log(`  By category:`);
   for (const [cat, count] of Object.entries(s.byCategory)) {
     console.log(`    ${cat}: ${count}`);
+  }
+  console.log(`  By origin:`);
+  for (const [origin, count] of Object.entries(s.byOrigin)) {
+    if (count > 0) console.log(`    ${origin}: ${count}`);
   }
   console.log(`  Database size: ${(s.dbSizeBytes / 1024).toFixed(1)} KB`);
   console.log(`  DB path: ${engine.dbPath}`);

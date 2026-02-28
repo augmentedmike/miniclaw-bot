@@ -19,11 +19,16 @@ vi.mock("node:child_process", async () => {
       if (typeof cmd === "string" && cmd.includes("which qmd")) {
         return "/usr/local/bin/qmd";
       }
-      if (typeof cmd === "string" && cmd.startsWith("qmd collection")) {
+      if (typeof cmd === "string" && cmd.startsWith("qmd")) {
         return "miniclaw-memory";
       }
       // @ts-ignore
       return actual.execSync(cmd, ...args);
+    },
+    execFileSync: (cmd: string, args?: string[], ...rest: unknown[]) => {
+      if (cmd === "qmd") return "miniclaw-memory";
+      // @ts-ignore
+      return actual.execFileSync(cmd, args, ...rest);
     },
     spawn: vi.fn(() => ({ unref: vi.fn() })),
   };

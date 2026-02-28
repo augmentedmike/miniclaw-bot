@@ -26,9 +26,9 @@
 
 ┌─── kb/ ──────────────────────────────────────┐
 │  embeddings.ts                  in:1 out:0
-│  engine.ts                      in:2 out:2
+│  engine.ts                      in:2 out:3
 │  index.ts                       in:3 out:2
-│  types.ts                       in:3 out:0
+│  types.ts                       in:4 out:0 ★ hub
 │
 │  → depends on: .
 └──────────────────────────────────────────────┘
@@ -75,4 +75,4 @@
 │  → depends on: .
 └──────────────────────────────────────────────┘
 
-Modules: 6  Files: 43  Dependencies: 85  Cycles: 0
+Modules: 6  Files: 43  Dependencies: 86  Cycles: 0

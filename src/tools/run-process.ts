@@ -15,6 +15,8 @@ export type RunProcessOptions = {
  * Shared between shell and claude-code tools to avoid duplicating the
  * stdout/stderr collect-and-format pattern.
  */
+const MAX_BUFFER = 10 * 1024 * 1024; // 10MB
+
 export function runProcess(opts: RunProcessOptions): Promise<string> {
   return new Promise<string>((resolve) => {
     const proc = spawn(opts.command, opts.args, {
@@ -24,12 +26,23 @@ export function runProcess(opts: RunProcessOptions): Promise<string> {
 
     let stdout = "";
     let stderr = "";
+    let killed = false;
 
     proc.stdout.on("data", (data: Buffer) => {
       stdout += data.toString();
+      if (stdout.length > MAX_BUFFER && !killed) {
+        killed = true;
+        stdout += "\n[truncated — output exceeded 10MB]";
+        proc.kill("SIGTERM");
+      }
     });
     proc.stderr.on("data", (data: Buffer) => {
       stderr += data.toString();
+      if (stderr.length > MAX_BUFFER && !killed) {
+        killed = true;
+        stderr += "\n[truncated — stderr exceeded 10MB]";
+        proc.kill("SIGTERM");
+      }
     });
 
     proc.on("close", (exitCode) => {

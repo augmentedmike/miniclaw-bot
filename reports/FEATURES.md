@@ -110,7 +110,7 @@ Automatic context retrieval before each response. Searches stored knowledge usin
 - Knowledge Base tools for the agent
 - Add an entry to the knowledge base
 - Search the knowledge base using hybrid semantic + keyword search
-- List entries in the knowledge base, optionally filtered by category
+- List entries in the knowledge base, optionally filtered by category or origin
 - Remove an entry from the knowledge base by ID
 
 **Files:** `context.ts`, `kb/engine.ts`, `tools/kb.ts`

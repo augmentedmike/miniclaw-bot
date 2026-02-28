@@ -2,18 +2,24 @@
  * Knowledge Base engine — SQLite + sqlite-vec + FTS5.
  *
  * Three-table design:
- *   kb_entries — canonical data (ULID id, category, content, metadata, tags, source, timestamps)
+ *   kb_entries — canonical data (ULID id, category, content, metadata, tags, source,
+ *                origin, confidence, volatility, expires_at, timestamps)
  *   kb_vec     — sqlite-vec virtual table for cosine similarity on float[384]
  *   kb_fts     — FTS5 virtual table for BM25 keyword search
  *
- * Hybrid search merges vector + keyword results via Reciprocal Rank Fusion.
+ * Hybrid search merges vector + keyword results via Reciprocal Rank Fusion,
+ * then applies trust weighting: origin_weight * confidence * freshness_decay.
  */
 
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";
 import { embed, EMBEDDING_DIM } from "./embeddings.js";
-import type { KBCategory, KBEntry, KBSearchResult, KBSearchOptions, KBStats } from "./types.js";
+import type {
+  KBCategory, KBOrigin, KBVolatility, KBEntry,
+  KBSearchResult, KBSearchOptions, KBStats,
+} from "./types.js";
+import { ORIGIN_WEIGHTS } from "./types.js";
 
 const require = createRequire(import.meta.url);
 
@@ -43,9 +49,29 @@ function ulid(): string {
   return ts + rand;
 }
 
+// ── Freshness decay ─────────────────────────────────────────────────────────
+
+/** Half-life decay: entries lose half their freshness boost every `halfLifeDays`. */
+function freshnessMultiplier(createdAt: string, halfLifeDays = 90): number {
+  const ageMs = Date.now() - new Date(createdAt).getTime();
+  const ageDays = ageMs / (1000 * 60 * 60 * 24);
+  // Decay from 1.0 → 0.5 over halfLifeDays, floor at 0.25
+  return Math.max(0.25, Math.pow(0.5, ageDays / halfLifeDays));
+}
+
 // ── Database ────────────────────────────────────────────────────────────────
 
 type Database = ReturnType<typeof import("better-sqlite3")>;
+
+export type AddOptions = {
+  metadata?: Record<string, string>;
+  tags?: string[];
+  source?: string;
+  origin?: KBOrigin;
+  confidence?: number;
+  volatility?: KBVolatility;
+  expiresAt?: string;
+};
 
 export class KBEngine {
   private db: Database;
@@ -69,14 +95,18 @@ export class KBEngine {
   private initSchema(): void {
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS kb_entries (
-        id        TEXT PRIMARY KEY,
-        category  TEXT NOT NULL CHECK(category IN ('personality','fact','procedure','general')),
-        content   TEXT NOT NULL,
-        metadata  TEXT NOT NULL DEFAULT '{}',
-        tags      TEXT NOT NULL DEFAULT '[]',
-        source    TEXT NOT NULL DEFAULT '',
-        created_at TEXT NOT NULL,
-        updated_at TEXT NOT NULL
+        id          TEXT PRIMARY KEY,
+        category    TEXT NOT NULL CHECK(category IN ('personality','fact','procedure','general')),
+        content     TEXT NOT NULL,
+        metadata    TEXT NOT NULL DEFAULT '{}',
+        tags        TEXT NOT NULL DEFAULT '[]',
+        source      TEXT NOT NULL DEFAULT '',
+        origin      TEXT NOT NULL DEFAULT 'imported' CHECK(origin IN ('scholastic','human','observed','read','inferred','imported')),
+        confidence  REAL NOT NULL DEFAULT 0.5 CHECK(confidence >= 0 AND confidence <= 1),
+        volatility  TEXT NOT NULL DEFAULT 'stable' CHECK(volatility IN ('stable','temporal','versioned')),
+        expires_at  TEXT,
+        created_at  TEXT NOT NULL,
+        updated_at  TEXT NOT NULL
       );
 
       CREATE VIRTUAL TABLE IF NOT EXISTS kb_fts USING fts5(
@@ -91,26 +121,47 @@ export class KBEngine {
         embedding float[${EMBEDDING_DIM}]
       );
     `);
+
+    // Migrate older DBs that lack the new columns
+    this.migrate();
+  }
+
+  private migrate(): void {
+    const cols = this.db.prepare(`PRAGMA table_info(kb_entries)`).all() as { name: string }[];
+    const colNames = new Set(cols.map((c) => c.name));
+
+    if (!colNames.has("origin")) {
+      this.db.exec(`ALTER TABLE kb_entries ADD COLUMN origin TEXT NOT NULL DEFAULT 'imported' CHECK(origin IN ('scholastic','human','observed','read','inferred','imported'))`);
+    }
+    if (!colNames.has("confidence")) {
+      this.db.exec(`ALTER TABLE kb_entries ADD COLUMN confidence REAL NOT NULL DEFAULT 0.5 CHECK(confidence >= 0 AND confidence <= 1)`);
+    }
+    if (!colNames.has("volatility")) {
+      this.db.exec(`ALTER TABLE kb_entries ADD COLUMN volatility TEXT NOT NULL DEFAULT 'stable' CHECK(volatility IN ('stable','temporal','versioned'))`);
+    }
+    if (!colNames.has("expires_at")) {
+      this.db.exec(`ALTER TABLE kb_entries ADD COLUMN expires_at TEXT`);
+    }
   }
 
   // ── CRUD ──────────────────────────────────────────────────────────────────
 
-  async add(
-    category: KBCategory,
-    content: string,
-    opts?: { metadata?: Record<string, string>; tags?: string[]; source?: string },
-  ): Promise<KBEntry> {
+  async add(category: KBCategory, content: string, opts?: AddOptions): Promise<KBEntry> {
     const id = ulid();
     const now = new Date().toISOString();
     const metadata = opts?.metadata ?? {};
     const tags = opts?.tags ?? [];
     const source = opts?.source ?? "";
+    const origin = opts?.origin ?? "imported";
+    const confidence = opts?.confidence ?? defaultConfidence(origin);
+    const volatility = opts?.volatility ?? "stable";
+    const expiresAt = opts?.expiresAt ?? null;
 
     const vector = await embed(content);
 
     const insertEntry = this.db.prepare(`
-      INSERT INTO kb_entries (id, category, content, metadata, tags, source, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO kb_entries (id, category, content, metadata, tags, source, origin, confidence, volatility, expires_at, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertFts = this.db.prepare(`
@@ -122,31 +173,35 @@ export class KBEngine {
     `);
 
     const tx = this.db.transaction(() => {
-      insertEntry.run(id, category, content, JSON.stringify(metadata), JSON.stringify(tags), source, now, now);
+      insertEntry.run(id, category, content, JSON.stringify(metadata), JSON.stringify(tags), source, origin, confidence, volatility, expiresAt, now, now);
       insertFts.run(id, content, category);
       insertVec.run(id, new Float32Array(vector));
     });
     tx();
 
-    return { id, category, content, metadata, tags, source, createdAt: now, updatedAt: now };
+    return { id, category, content, metadata, tags, source, origin, confidence, volatility, expiresAt, createdAt: now, updatedAt: now };
   }
 
-  async update(id: string, content: string): Promise<KBEntry | null> {
+  async update(id: string, content: string, opts?: { confidence?: number; volatility?: KBVolatility; expiresAt?: string | null }): Promise<KBEntry | null> {
     const existing = this.get(id);
     if (!existing) return null;
 
     const now = new Date().toISOString();
+    const confidence = opts?.confidence ?? existing.confidence;
+    const volatility = opts?.volatility ?? existing.volatility;
+    const expiresAt = opts?.expiresAt !== undefined ? opts.expiresAt : existing.expiresAt;
     const vector = await embed(content);
 
     const tx = this.db.transaction(() => {
-      this.db.prepare(`UPDATE kb_entries SET content = ?, updated_at = ? WHERE id = ?`).run(content, now, id);
+      this.db.prepare(`UPDATE kb_entries SET content = ?, confidence = ?, volatility = ?, expires_at = ?, updated_at = ? WHERE id = ?`)
+        .run(content, confidence, volatility, expiresAt, now, id);
       this.db.prepare(`UPDATE kb_fts SET content = ? WHERE id = ?`).run(content, id);
       this.db.prepare(`DELETE FROM kb_vec WHERE id = ?`).run(id);
       this.db.prepare(`INSERT INTO kb_vec (id, embedding) VALUES (?, ?)`).run(id, new Float32Array(vector));
     });
     tx();
 
-    return { ...existing, content, updatedAt: now };
+    return { ...existing, content, confidence, volatility, expiresAt, updatedAt: now };
   }
 
   get(id: string): KBEntry | null {
@@ -154,13 +209,18 @@ export class KBEngine {
     return row ? rowToEntry(row) : null;
   }
 
-  list(category?: KBCategory): KBEntry[] {
-    const sql = category
-      ? `SELECT * FROM kb_entries WHERE category = ? ORDER BY created_at DESC`
-      : `SELECT * FROM kb_entries ORDER BY created_at DESC`;
-    const rows = (category
-      ? this.db.prepare(sql).all(category)
-      : this.db.prepare(sql).all()) as EntryRow[];
+  list(category?: KBCategory, origin?: KBOrigin): KBEntry[] {
+    let sql = `SELECT * FROM kb_entries`;
+    const conditions: string[] = [];
+    const params: string[] = [];
+
+    if (category) { conditions.push(`category = ?`); params.push(category); }
+    if (origin) { conditions.push(`origin = ?`); params.push(origin); }
+
+    if (conditions.length > 0) sql += ` WHERE ${conditions.join(" AND ")}`;
+    sql += ` ORDER BY created_at DESC`;
+
+    const rows = this.db.prepare(sql).all(...params) as EntryRow[];
     return rows.map(rowToEntry);
   }
 
@@ -180,52 +240,76 @@ export class KBEngine {
     const method = opts?.method ?? "hybrid";
     const limit = opts?.limit ?? 10;
     const threshold = opts?.threshold ?? 0;
+    const ranked = opts?.ranked !== false; // default true
 
     let results: KBSearchResult[];
 
     switch (method) {
       case "vector":
-        results = await this.vectorSearch(query, limit, opts?.category);
+        results = await this.vectorSearch(query, limit, opts?.category, opts?.origin);
         break;
       case "keyword":
-        results = this.keywordSearch(query, limit, opts?.category);
+        results = this.keywordSearch(query, limit, opts?.category, opts?.origin);
         break;
       case "hybrid":
       default:
-        results = await this.hybridSearch(query, limit, opts?.category);
+        results = await this.hybridSearch(query, limit, opts?.category, opts?.origin);
         break;
+    }
+
+    // Filter expired temporal entries
+    const now = new Date().toISOString();
+    results = results.filter((r) => {
+      if (r.entry.volatility === "temporal" && r.entry.expiresAt && r.entry.expiresAt < now) {
+        return false;
+      }
+      return true;
+    });
+
+    // Apply trust weighting: origin_weight * confidence * freshness_decay
+    if (ranked) {
+      for (const r of results) {
+        const originWeight = ORIGIN_WEIGHTS[r.entry.origin] ?? 0.5;
+        const freshness = freshnessMultiplier(r.entry.createdAt);
+        r.score = r.score * originWeight * r.entry.confidence * freshness;
+      }
+      results.sort((a, b) => b.score - a.score);
     }
 
     if (threshold > 0) {
       results = results.filter((r) => r.score >= threshold);
     }
 
-    return results;
+    return results.slice(0, limit);
   }
 
-  private async vectorSearch(query: string, limit: number, category?: KBCategory): Promise<KBSearchResult[]> {
+  private async vectorSearch(query: string, limit: number, category?: KBCategory, origin?: KBOrigin): Promise<KBSearchResult[]> {
     const queryVec = await embed(query);
 
+    // Fetch extra to allow for post-filtering
+    const fetchLimit = limit * 3;
     const rows = this.db.prepare(`
       SELECT v.id, v.distance
       FROM kb_vec v
       WHERE embedding MATCH ?
       ORDER BY v.distance
       LIMIT ?
-    `).all(new Float32Array(queryVec), limit) as { id: string; distance: number }[];
+    `).all(new Float32Array(queryVec), fetchLimit) as { id: string; distance: number }[];
 
     const results: KBSearchResult[] = [];
     for (const row of rows) {
       const entry = this.get(row.id);
       if (!entry) continue;
       if (category && entry.category !== category) continue;
+      if (origin && entry.origin !== origin) continue;
       // sqlite-vec returns cosine distance; convert to similarity (1 - distance)
       results.push({ entry, score: 1 - row.distance, method: "vector" });
+      if (results.length >= limit) break;
     }
     return results;
   }
 
-  private keywordSearch(query: string, limit: number, category?: KBCategory): KBSearchResult[] {
+  private keywordSearch(query: string, limit: number, category?: KBCategory, origin?: KBOrigin): KBSearchResult[] {
     // Escape FTS5 special characters and build query
     const ftsQuery = query
       .replace(/['"]/g, "")
@@ -236,30 +320,33 @@ export class KBEngine {
 
     if (!ftsQuery) return [];
 
+    const fetchLimit = limit * 3;
     const rows = this.db.prepare(`
       SELECT id, rank
       FROM kb_fts
       WHERE content MATCH ?
       ORDER BY rank
       LIMIT ?
-    `).all(ftsQuery, limit * 2) as { id: string; rank: number }[];
+    `).all(ftsQuery, fetchLimit) as { id: string; rank: number }[];
 
     const results: KBSearchResult[] = [];
     for (const row of rows) {
       const entry = this.get(row.id);
       if (!entry) continue;
       if (category && entry.category !== category) continue;
+      if (origin && entry.origin !== origin) continue;
       // FTS5 rank is negative (lower = better); normalize to 0..1 range
       results.push({ entry, score: 1 / (1 + Math.abs(row.rank)), method: "keyword" });
+      if (results.length >= limit) break;
     }
-    return results.slice(0, limit);
+    return results;
   }
 
-  private async hybridSearch(query: string, limit: number, category?: KBCategory): Promise<KBSearchResult[]> {
+  private async hybridSearch(query: string, limit: number, category?: KBCategory, origin?: KBOrigin): Promise<KBSearchResult[]> {
     // Run both searches
     const [vectorResults, keywordResults] = await Promise.all([
-      this.vectorSearch(query, limit, category),
-      Promise.resolve(this.keywordSearch(query, limit, category)),
+      this.vectorSearch(query, limit, category, origin),
+      Promise.resolve(this.keywordSearch(query, limit, category, origin)),
     ]);
 
     // Reciprocal Rank Fusion (k=60)
@@ -305,6 +392,12 @@ export class KBEngine {
       byCategory[cat] = (this.db.prepare(`SELECT COUNT(*) as count FROM kb_entries WHERE category = ?`).get(cat) as { count: number }).count;
     }
 
+    const origins: KBOrigin[] = ["scholastic", "human", "observed", "read", "inferred", "imported"];
+    const byOrigin = {} as Record<KBOrigin, number>;
+    for (const o of origins) {
+      byOrigin[o] = (this.db.prepare(`SELECT COUNT(*) as count FROM kb_entries WHERE origin = ?`).get(o) as { count: number }).count;
+    }
+
     let dbSizeBytes = 0;
     try {
       dbSizeBytes = fs.statSync(this.dbPath).size;
@@ -312,7 +405,7 @@ export class KBEngine {
       // DB might be in-memory
     }
 
-    return { total, byCategory, dbSizeBytes };
+    return { total, byCategory, byOrigin, dbSizeBytes };
   }
 
   // ── Maintenance ───────────────────────────────────────────────────────────
@@ -344,8 +437,35 @@ export class KBEngine {
     return entries.length;
   }
 
+  /** Remove expired temporal entries. */
+  pruneExpired(): number {
+    const now = new Date().toISOString();
+    const expired = this.db.prepare(
+      `SELECT id FROM kb_entries WHERE volatility = 'temporal' AND expires_at IS NOT NULL AND expires_at < ?`,
+    ).all(now) as { id: string }[];
+
+    for (const row of expired) {
+      this.remove(row.id);
+    }
+    return expired.length;
+  }
+
   close(): void {
     this.db.close();
+  }
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+/** Default confidence based on origin — can be overridden per-entry. */
+function defaultConfidence(origin: KBOrigin): number {
+  switch (origin) {
+    case "scholastic": return 1.0;
+    case "human":      return 0.9;
+    case "observed":   return 0.7;
+    case "read":       return 0.6;
+    case "inferred":   return 0.5;
+    case "imported":   return 0.4;
   }
 }
 
@@ -358,6 +478,10 @@ type EntryRow = {
   metadata: string;
   tags: string;
   source: string;
+  origin: string;
+  confidence: number;
+  volatility: string;
+  expires_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -370,6 +494,10 @@ function rowToEntry(row: EntryRow): KBEntry {
     metadata: JSON.parse(row.metadata) as Record<string, string>,
     tags: JSON.parse(row.tags) as string[],
     source: row.source,
+    origin: (row.origin ?? "imported") as KBOrigin,
+    confidence: row.confidence ?? 0.5,
+    volatility: (row.volatility ?? "stable") as KBVolatility,
+    expiresAt: row.expires_at ?? null,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

@@ -154,6 +154,7 @@ stateDiagram-v2
   state caught <<error>>
   attempt --> success : no error
   attempt --> caught : catch
+  caught --> attempt : retry
   success --> [*]
 
 %% telegram/bot.ts :: process_events

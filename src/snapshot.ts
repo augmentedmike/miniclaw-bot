@@ -8,7 +8,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { getUserDir, getSystemDir } from "./config.js";
 
 export type SnapshotManifest = {
@@ -100,10 +100,13 @@ export function exportSnapshot(name?: string): string {
     "--exclude=.vault-key",
   ];
 
-  execSync(
-    `tar czf "${archivePath}" ${excludes.join(" ")} -C "${path.dirname(userDir)}" "${path.basename(userDir)}"`,
-    { stdio: "pipe" },
-  );
+  execFileSync("tar", [
+    "czf", archivePath,
+    "--exclude=snapshots",
+    "--exclude=.vault-key",
+    "-C", path.dirname(userDir),
+    path.basename(userDir),
+  ], { stdio: "pipe" });
 
   // Clean up temporary manifest
   fs.unlinkSync(manifestPath);
@@ -150,7 +153,7 @@ export function restoreSnapshot(
   }
 
   // Extract
-  execSync(`tar xzf "${archivePath}" -C "${targetDir}"`, { stdio: "pipe" });
+  execFileSync("tar", ["xzf", archivePath, "-C", targetDir], { stdio: "pipe" });
 
   // Restore .vault-key files
   for (const [keyPath, content] of vaultKeys) {
@@ -177,10 +180,10 @@ export function listSnapshots(): string[] {
  */
 export function showSnapshot(archivePath: string): SnapshotManifest | null {
   try {
-    const raw = execSync(
-      `tar xzf "${archivePath}" -O user/snapshot.json 2>/dev/null || true`,
-      { encoding: "utf8", stdio: "pipe" },
-    );
+    const raw = execFileSync("tar", ["xzf", archivePath, "-O", "user/snapshot.json"], {
+      encoding: "utf8",
+      stdio: ["pipe", "pipe", "ignore"],
+    });
     if (!raw.trim()) return null;
     return JSON.parse(raw.trim()) as SnapshotManifest;
   } catch {

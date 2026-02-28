@@ -49,7 +49,7 @@ function prompt(question: string): Promise<string> {
 
 function handleInit(): void {
   const key = initVaultKey();
-  console.log("Vault key created. Key (first 8 chars):", key.slice(0, 8) + "...");
+  console.log("Vault key created.");
   console.log(`Stored in ${getActivePersonaHome()}/.vault-key (chmod 600)`);
 }
 

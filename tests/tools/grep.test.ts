@@ -5,18 +5,22 @@ import os from "node:os";
 
 const ctx = { toolCallId: "test", messages: [] as never[], abortSignal: new AbortController().signal };
 
-// Store the real execSync reference
+// Store real references
 let _realExecSync: typeof import("node:child_process").execSync;
+let _realExecFileSync: typeof import("node:child_process").execFileSync;
 
 // We need vi.mock to override ESM exports. Default behavior passes through to real implementation.
 const mockExecSync = vi.fn((...args: unknown[]) => _realExecSync(...args as Parameters<typeof _realExecSync>));
+const mockExecFileSync = vi.fn((...args: unknown[]) => _realExecFileSync(...args as Parameters<typeof _realExecFileSync>));
 
 vi.mock("node:child_process", async () => {
   const actual = await vi.importActual<typeof import("node:child_process")>("node:child_process");
   _realExecSync = actual.execSync;
+  _realExecFileSync = actual.execFileSync;
   return {
     ...actual,
     execSync: (...args: unknown[]) => mockExecSync(...args),
+    execFileSync: (...args: unknown[]) => mockExecFileSync(...args),
   };
 });
 
@@ -86,16 +90,11 @@ describe("grep tool", () => {
   });
 
   it("falls back to grep when rg is not available", async () => {
-    let callCount = 0;
-    mockExecSync.mockImplementation((...args: unknown[]) => {
-      callCount++;
-      if (callCount === 1) {
-        // "which rg" should fail
-        throw new Error("rg not found");
-      }
-      // Let the real command run (grep fallback)
-      return _realExecSync(...args as Parameters<typeof _realExecSync>);
-    });
+    // "which rg" fails
+    mockExecSync.mockImplementationOnce(() => { throw new Error("rg not found"); });
+    // execFileSync runs real grep fallback
+    mockExecFileSync.mockImplementationOnce((...args: unknown[]) =>
+      _realExecFileSync(...args as Parameters<typeof _realExecFileSync>));
 
     const { grepTool } = await import("@tools/grep.js");
     const result = await grepTool.execute(
@@ -106,14 +105,11 @@ describe("grep tool", () => {
   });
 
   it("falls back to grep with glob filter and case insensitive", async () => {
-    let callCount = 0;
-    mockExecSync.mockImplementation((...args: unknown[]) => {
-      callCount++;
-      if (callCount === 1) {
-        throw new Error("rg not found");
-      }
-      return _realExecSync(...args as Parameters<typeof _realExecSync>);
-    });
+    // "which rg" fails
+    mockExecSync.mockImplementationOnce(() => { throw new Error("rg not found"); });
+    // execFileSync runs real grep fallback
+    mockExecFileSync.mockImplementationOnce((...args: unknown[]) =>
+      _realExecFileSync(...args as Parameters<typeof _realExecFileSync>));
 
     const { grepTool } = await import("@tools/grep.js");
     const result = await grepTool.execute(
@@ -124,14 +120,10 @@ describe("grep tool", () => {
   });
 
   it("returns error message for non-status-1 grep errors", async () => {
-    let callCount = 0;
-    mockExecSync.mockImplementation(() => {
-      callCount++;
-      if (callCount === 1) {
-        // "which rg" passes
-        return Buffer.from("/usr/bin/rg\n");
-      }
-      // Actual rg command fails with exit code 2
+    // "which rg" passes
+    mockExecSync.mockReturnValueOnce(Buffer.from("/usr/bin/rg\n"));
+    // execFileSync for rg fails with exit code 2
+    mockExecFileSync.mockImplementationOnce(() => {
       const err = new Error("rg syntax error") as Error & { status: number };
       err.status = 2;
       throw err;
@@ -146,13 +138,10 @@ describe("grep tool", () => {
   });
 
   it("returns no matches message for status 1 exit code", async () => {
-    let callCount = 0;
-    mockExecSync.mockImplementation(() => {
-      callCount++;
-      if (callCount === 1) {
-        return Buffer.from("/usr/bin/rg\n");
-      }
-      // Exit code 1 = no matches
+    // which rg succeeds
+    mockExecSync.mockReturnValueOnce(Buffer.from("/usr/bin/rg\n"));
+    // execFileSync for rg throws status 1 (no matches)
+    mockExecFileSync.mockImplementationOnce(() => {
       const err = new Error("") as Error & { status: number };
       err.status = 1;
       throw err;

@@ -51,7 +51,7 @@ describe("KBEngine", () => {
     engine.close();
   });
 
-  it("adds and retrieves an entry", async () => {
+  it("adds and retrieves an entry with defaults", async () => {
     const engine = createEngine();
     const entry = await engine.add("personality", "I am a helpful assistant");
     expect(entry.id).toMatch(/^[0-9A-Z]{26}$/);
@@ -59,6 +59,10 @@ describe("KBEngine", () => {
     expect(entry.content).toBe("I am a helpful assistant");
     expect(entry.metadata).toEqual({});
     expect(entry.tags).toEqual([]);
+    expect(entry.origin).toBe("imported");
+    expect(entry.confidence).toBe(0.4); // default for 'imported'
+    expect(entry.volatility).toBe("stable");
+    expect(entry.expiresAt).toBeNull();
     expect(entry.createdAt).toBeTruthy();
 
     const retrieved = engine.get(entry.id);
@@ -66,16 +70,42 @@ describe("KBEngine", () => {
     engine.close();
   });
 
-  it("adds entry with metadata, tags, and source", async () => {
+  it("adds entry with all provenance fields", async () => {
     const engine = createEngine();
     const entry = await engine.add("fact", "The user likes TypeScript", {
-      metadata: { confidence: "high" },
+      metadata: { note: "strong preference" },
       tags: ["preferences", "programming"],
       source: "conversation-2026-01-15",
+      origin: "human",
+      confidence: 0.95,
+      volatility: "stable",
     });
-    expect(entry.metadata).toEqual({ confidence: "high" });
+    expect(entry.origin).toBe("human");
+    expect(entry.confidence).toBe(0.95);
+    expect(entry.volatility).toBe("stable");
+    expect(entry.metadata).toEqual({ note: "strong preference" });
     expect(entry.tags).toEqual(["preferences", "programming"]);
     expect(entry.source).toBe("conversation-2026-01-15");
+    engine.close();
+  });
+
+  it("adds temporal entry with expiry", async () => {
+    const engine = createEngine();
+    const entry = await engine.add("fact", "Meeting is next Tuesday", {
+      origin: "observed",
+      volatility: "temporal",
+      expiresAt: "2026-03-10T00:00:00.000Z",
+    });
+    expect(entry.volatility).toBe("temporal");
+    expect(entry.expiresAt).toBe("2026-03-10T00:00:00.000Z");
+    engine.close();
+  });
+
+  it("scholastic entries get confidence 1.0 by default", async () => {
+    const engine = createEngine();
+    const entry = await engine.add("procedure", "Always validate user input", { origin: "scholastic" });
+    expect(entry.origin).toBe("scholastic");
+    expect(entry.confidence).toBe(1.0);
     engine.close();
   });
 
@@ -148,9 +178,10 @@ describe("KBEngine", () => {
     await engine.add("fact", "The capital of Germany is Berlin");
     await engine.add("procedure", "Always greet the user warmly");
 
-    const results = await engine.search("capital France", { method: "keyword", limit: 5 });
+    const results = await engine.search("capital France", { method: "keyword", limit: 5, ranked: false });
     expect(results.length).toBeGreaterThan(0);
     expect(results[0]!.method).toBe("keyword");
+    // France matches both "capital" and "France", should rank first without trust weighting
     expect(results[0]!.entry.content).toContain("France");
     engine.close();
   });
@@ -190,11 +221,78 @@ describe("KBEngine", () => {
     engine.close();
   });
 
-  it("stats returns correct counts", async () => {
+  it("list filters by origin", async () => {
     const engine = createEngine();
-    await engine.add("personality", "Entry one");
-    await engine.add("fact", "Entry two");
-    await engine.add("fact", "Entry three");
+    await engine.add("fact", "Curated fact", { origin: "scholastic" });
+    await engine.add("fact", "User said this", { origin: "human" });
+    await engine.add("fact", "Agent figured it out", { origin: "inferred" });
+
+    const scholastic = engine.list(undefined, "scholastic");
+    expect(scholastic).toHaveLength(1);
+    expect(scholastic[0]!.origin).toBe("scholastic");
+
+    const human = engine.list("fact", "human");
+    expect(human).toHaveLength(1);
+    engine.close();
+  });
+
+  it("search filters by origin", async () => {
+    const engine = createEngine();
+    await engine.add("fact", "Curated design principle", { origin: "scholastic" });
+    await engine.add("fact", "User mentioned design", { origin: "human" });
+
+    const results = await engine.search("design", { method: "keyword", origin: "scholastic", limit: 5 });
+    expect(results.every((r) => r.entry.origin === "scholastic")).toBe(true);
+    engine.close();
+  });
+
+  it("ranked search boosts high-trust origins", async () => {
+    const engine = createEngine();
+    // Same content, different origins
+    await engine.add("fact", "Always use TypeScript strict mode", { origin: "scholastic" });
+    await engine.add("fact", "Always use TypeScript strict mode maybe", { origin: "inferred" });
+
+    const results = await engine.search("TypeScript strict mode", { method: "keyword", limit: 5 });
+    // Scholastic should rank higher due to origin weight + confidence
+    expect(results.length).toBe(2);
+    expect(results[0]!.entry.origin).toBe("scholastic");
+    engine.close();
+  });
+
+  it("expired temporal entries are excluded from search", async () => {
+    const engine = createEngine();
+    await engine.add("fact", "Meeting is tomorrow", {
+      origin: "observed",
+      volatility: "temporal",
+      expiresAt: "2020-01-01T00:00:00.000Z", // long expired
+    });
+    await engine.add("fact", "Regular fact about meetings");
+
+    const results = await engine.search("meeting", { method: "keyword", limit: 5 });
+    // Expired entry should be filtered out
+    expect(results.every((r) => r.entry.volatility !== "temporal" || !r.entry.expiresAt || r.entry.expiresAt >= new Date().toISOString())).toBe(true);
+    engine.close();
+  });
+
+  it("pruneExpired removes expired temporal entries", async () => {
+    const engine = createEngine();
+    await engine.add("fact", "Expired meeting", {
+      volatility: "temporal",
+      expiresAt: "2020-01-01T00:00:00.000Z",
+    });
+    await engine.add("fact", "Still valid");
+
+    const pruned = engine.pruneExpired();
+    expect(pruned).toBe(1);
+    expect(engine.list()).toHaveLength(1);
+    engine.close();
+  });
+
+  it("stats returns correct counts including origin breakdown", async () => {
+    const engine = createEngine();
+    await engine.add("personality", "Entry one", { origin: "scholastic" });
+    await engine.add("fact", "Entry two", { origin: "human" });
+    await engine.add("fact", "Entry three", { origin: "human" });
 
     const s = engine.stats();
     expect(s.total).toBe(3);
@@ -202,6 +300,9 @@ describe("KBEngine", () => {
     expect(s.byCategory.fact).toBe(2);
     expect(s.byCategory.procedure).toBe(0);
     expect(s.byCategory.general).toBe(0);
+    expect(s.byOrigin.scholastic).toBe(1);
+    expect(s.byOrigin.human).toBe(2);
+    expect(s.byOrigin.inferred).toBe(0);
     expect(s.dbSizeBytes).toBeGreaterThan(0);
     engine.close();
   });
