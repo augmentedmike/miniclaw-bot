@@ -2,20 +2,45 @@
 ║           API SURFACE MAP                       ║
 ╚══════════════════════════════════════════════════╝
 
-┌─── config.ts (3 exports, 6 consumers) ⚠ STABLE (many dependents)
-│  function   getMinicawHome → conversation, search, store, vault
-│  function   ensureMinicawDirs → index, vault-cli
-│  function   loadConfig → index
+┌─── config.ts (8 exports, 15 consumers) ⚠ STABLE (many dependents)
+│  function   getMinicawHome → persona
+│  function   getSystemDir → install-tui, persona-cli, snapshot
+│  function   getUserDir → install-tui, persona-cli, persona, snapshot-cli, snapshot
+│  function   getActivePersonaHome → conversation, index, kb-cli, search, store, access, vault-cli, vault
+│  function   writeActivePersona → install-tui, persona-cli
+│  function   ensureMinicawDirs → index, persona-cli, setup, snapshot-cli, vault-cli
+│  function   ensurePersonaDirs → install-tui, kb-cli, persona-cli
+│  function   loadConfig → index, kb-cli, persona-cli
 └
 
-┌─── agent.ts (2 exports, 2 consumers)
+┌─── tools/util.ts (2 exports, 6 consumers) ⚠ STABLE (many dependents)
+│  function   formatToolError → edit, files, glob, grep, web
+│  function   resolveJailed → edit, files, glob, grep, shell
+└
+
+┌─── memory/search.ts (6 exports, 4 consumers) ⚠ STABLE (many dependents)
+│  function   ensureQmdCollection → store, setup
+│  function   indexMemory → store, setup
+│  function   searchMemory → context, memory
+│  function   vectorSearchMemory → context, memory
+│  function   deepSearchMemory → memory
+│  type       SearchResult → UNUSED
+└
+
+┌─── agent.ts (2 exports, 3 consumers)
 │  function   createTools → UNUSED
-│  function   runAgent → index, handlers
+│  function   runAgent → index, handlers, handler
 └
 
-┌─── vault.ts (8 exports, 2 consumers)
+┌─── memory/store.ts (3 exports, 3 consumers)
+│  function   saveMemory → context, conversation, memory
+│  function   readMemory → context
+│  function   listMemories → memory
+└
+
+┌─── vault.ts (8 exports, 3 consumers)
 │  function   getMasterPassword → vault-cli
-│  function   initVaultKey → vault-cli
+│  function   initVaultKey → install-tui, vault-cli
 │  function   vaultSet → vault-cli
 │  function   vaultGet → vault, vault-cli
 │  function   vaultDelete → vault-cli
@@ -24,31 +49,78 @@
 │  type       VaultEntry → UNUSED
 └
 
-┌─── auth.ts (4 exports, 1 consumers)
+┌─── auth.ts (4 exports, 2 consumers)
 │  function   writeCredentials → UNUSED
-│  function   readCredentials → UNUSED
-│  function   isExpired → UNUSED
+│  function   readCredentials → setup
+│  function   isExpired → setup
 │  function   getAccessToken → agent
 └
 
+┌─── kb/engine.ts (1 exports, 2 consumers)
+│  class      KBEngine → index, kb-cli
+└
+
+┌─── persona.ts (7 exports, 2 consumers)
+│  function   parsePersona → persona-cli
+│  function   formatPersona → UNUSED
+│  function   buildPersonaPrompt → agent
+│  function   loadPersona → persona-cli
+│  function   savePersona → persona-cli
+│  function   listPersonas → persona-cli
+│  function   loadActivePersona → agent
+└
+
+┌─── tools/run-process.ts (2 exports, 2 consumers)
+│  function   runProcess → claude-code, shell
+│  type       RunProcessOptions → UNUSED
+└
+
+┌─── context.ts (2 exports, 1 consumers)
+│  function   retrieveContext → agent
+│  function   saveContext → agent
+└
+
 ┌─── conversation.ts (3 exports, 1 consumers)
-│  function   loadHistory → handlers
-│  function   saveHistory → handlers
-│  function   appendToHistory → UNUSED
+│  function   loadHistory → agent
+│  function   appendToHistory → agent
+│  function   archiveRotatedMessages → agent
 └
 
-┌─── memory/search.ts (1 exports, 1 consumers)
-│  function   searchMemory → memory
+┌─── kb/embeddings.ts (4 exports, 1 consumers)
+│  function   embed → engine
+│  function   isModelLoaded → UNUSED
+│  function   unloadModel → UNUSED
+│  const      EMBEDDING_DIM → engine
 └
 
-┌─── memory/store.ts (3 exports, 1 consumers)
-│  function   saveMemory → memory
-│  function   readMemory → UNUSED
-│  function   listMemories → memory
+┌─── kb/index.ts (2 exports, 1 consumers)
+│  function   getKB → kb
+│  function   closeKB → UNUSED
+└
+
+┌─── snapshot.ts (5 exports, 1 consumers)
+│  function   exportSnapshot → snapshot-cli
+│  function   restoreSnapshot → snapshot-cli
+│  function   listSnapshots → snapshot-cli
+│  function   showSnapshot → snapshot-cli
+│  type       SnapshotManifest → UNUSED
 └
 
 ┌─── system-prompt.ts (1 exports, 1 consumers)
 │  function   buildSystemPrompt → agent
+└
+
+┌─── telegram/access.ts (10 exports, 1 consumers)
+│  function   loadAccess → handlers
+│  function   saveAccess → UNUSED
+│  function   claimOwner → handlers
+│  function   isAllowed → handlers
+│  function   isPending → handlers
+│  function   addPending → handlers
+│  function   approveUser → handlers
+│  function   denyUser → handlers
+│  function   revokeUser → UNUSED
+│  type       AccessState → UNUSED
 └
 
 ┌─── telegram/format.ts (2 exports, 1 consumers)
@@ -68,27 +140,42 @@
 │  const      claudeCodeTool → agent
 └
 
-┌─── tools/edit.ts (1 exports, 1 consumers)
-│  const      editFileTool → agent
+┌─── tools/edit.ts (2 exports, 1 consumers)
+│  function   createEditFileTool → agent
+│  const      editFileTool → UNUSED
 └
 
-┌─── tools/files.ts (3 exports, 1 consumers)
-│  const      readFileTool → agent
-│  const      writeFileTool → agent
-│  const      listDirectoryTool → agent
+┌─── tools/files.ts (6 exports, 1 consumers)
+│  function   createReadFileTool → agent
+│  function   createWriteFileTool → agent
+│  function   createListDirectoryTool → agent
+│  const      readFileTool → UNUSED
+│  const      writeFileTool → UNUSED
+│  const      listDirectoryTool → UNUSED
 └
 
-┌─── tools/glob.ts (1 exports, 1 consumers)
-│  const      globTool → agent
+┌─── tools/glob.ts (2 exports, 1 consumers)
+│  function   createGlobTool → agent
+│  const      globTool → UNUSED
 └
 
-┌─── tools/grep.ts (1 exports, 1 consumers)
-│  const      grepTool → agent
+┌─── tools/grep.ts (2 exports, 1 consumers)
+│  function   createGrepTool → agent
+│  const      grepTool → UNUSED
 └
 
-┌─── tools/memory.ts (2 exports, 1 consumers)
+┌─── tools/kb.ts (4 exports, 1 consumers)
+│  const      kbAddTool → agent
+│  const      kbSearchTool → agent
+│  const      kbListTool → agent
+│  const      kbRemoveTool → agent
+└
+
+┌─── tools/memory.ts (4 exports, 1 consumers)
 │  const      memorySaveTool → agent
 │  const      memorySearchTool → agent
+│  const      memoryVectorSearchTool → agent
+│  const      memoryDeepSearchTool → agent
 └
 
 ┌─── tools/shell.ts (1 exports, 1 consumers)
@@ -105,14 +192,40 @@
 │  const      webSearchTool → agent
 └
 
+┌─── web/handler.ts (1 exports, 1 consumers)
+│  function   createRequestHandler → server
+└
+
+┌─── web/ui.ts (1 exports, 1 consumers)
+│  const      HTML → handler
+└
+
+┌─── kb/types.ts (5 exports, 0 consumers)
+│  type       KBCategory → UNUSED
+│  type       KBEntry → UNUSED
+│  type       KBSearchResult → UNUSED
+│  type       KBSearchOptions → UNUSED
+│  type       KBStats → UNUSED
+└
+
+┌─── setup.ts (1 exports, 0 consumers)
+│  function   runSetup → UNUSED
+└
+
 ┌─── telegram/bot.ts (1 exports, 0 consumers)
 │  function   startBot → UNUSED
 └
 
-┌─── types.ts (3 exports, 0 consumers)
+┌─── types.ts (5 exports, 0 consumers)
+│  type       Channel → UNUSED
+│  type       Persona → UNUSED
 │  type       MinicawConfig → UNUSED
 │  type       OAuthCredentials → UNUSED
 │  type       AgentResult → UNUSED
 └
 
-Total: 22 modules, 47 exports, 12 potentially unused
+┌─── web/server.ts (1 exports, 0 consumers)
+│  function   startWebServer → UNUSED
+└
+
+Total: 37 modules, 115 exports, 33 potentially unused

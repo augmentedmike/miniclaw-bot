@@ -2,17 +2,22 @@
 ║           COUPLING MATRIX                       ║
 ╚══════════════════════════════════════════════════╝
 
-             root memory telegr  tools
-──────────────────────────────────────
-root            ·      ·      ·      9
-memory          2      ·      ·      ·
-telegram        4      ·      ·      ·
-tools           2      2      ·      ·
+             root     kb memory telegr  tools    web
+────────────────────────────────────────────────────
+root            ·      2      5      ·     10      ·
+kb              1      ·      ·      ·      ·      ·
+memory          2      ·      ·      ·      ·      ·
+telegram        4      ·      ·      ·      ·      ·
+tools           2      2      2      ·      ·      ·
+web             3      ·      ·      ·      ·      ·
 
 STRONGEST COUPLING:
-  root ↔ tools  score:11 (root→tools:9, tools→root:2) ⚠ BIDIRECTIONAL
+  root ↔ tools  score:12 (root→tools:10, tools→root:2) ⚠ BIDIRECTIONAL
+  root ↔ memory  score:7 (root→memory:5, memory→root:2) ⚠ BIDIRECTIONAL
   root ↔ telegram  score:4 (root→telegram:0, telegram→root:4)
-  root ↔ memory  score:2 (root→memory:0, memory→root:2)
+  root ↔ kb  score:3 (root→kb:2, kb→root:1) ⚠ BIDIRECTIONAL
+  root ↔ web  score:3 (root→web:0, web→root:3)
+  kb ↔ tools  score:2 (kb→tools:0, tools→kb:2)
   memory ↔ tools  score:2 (memory→tools:0, tools→memory:2)
 
-Total: 4 modules, 19 import edges, 1 bidirectional pairs
+Total: 6 modules, 33 import edges, 3 bidirectional pairs

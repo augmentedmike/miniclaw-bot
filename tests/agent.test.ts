@@ -5,6 +5,18 @@ vi.mock("@src/auth.js", () => ({
   getAccessToken: vi.fn(async () => "mock-access-token"),
 }));
 
+// Mock context module — no real qmd needed
+vi.mock("@src/context.js", () => ({
+  retrieveContext: vi.fn(() => ""),
+  saveContext: vi.fn(),
+}));
+
+// Mock conversation module
+vi.mock("@src/conversation.js", () => ({
+  loadHistory: vi.fn(() => []),
+  appendToHistory: vi.fn(),
+}));
+
 // Capture the fetch wrapper passed to createAnthropic
 let capturedFetch: typeof globalThis.fetch | null = null;
 
@@ -67,12 +79,14 @@ describe("agent", () => {
       expect(toolNames).toContain("web_search");
       expect(toolNames).toContain("memory_save");
       expect(toolNames).toContain("memory_search");
+      expect(toolNames).toContain("memory_vector_search");
+      expect(toolNames).toContain("memory_deep_search");
       expect(toolNames).toContain("claude_code");
       expect(toolNames).toContain("vault_get");
       expect(toolNames).toContain("vault_list");
     });
 
-    it("creates 14 tools total", () => {
+    it("creates 16 tools total", () => {
       const config = {
         model: "claude-sonnet-4-20250514",
         maxSteps: 25,
@@ -80,7 +94,7 @@ describe("agent", () => {
         conversationLimit: 50,
       };
       const tools = createTools(config);
-      expect(Object.keys(tools)).toHaveLength(14);
+      expect(Object.keys(tools)).toHaveLength(20);
     });
 
     it("passes shell timeout to shell_exec", () => {
@@ -219,6 +233,49 @@ describe("agent", () => {
         config,
       );
       expect(result.text).toBe("Hello world");
+    });
+
+    it("loads and saves conversation history when userId is provided", async () => {
+      const { loadHistory, appendToHistory } = await import("@src/conversation.js");
+      const config = {
+        model: "claude-sonnet-4-20250514",
+        maxSteps: 25,
+        shellTimeout: 5000,
+        conversationLimit: 50,
+      };
+
+      await runAgent(
+        [{ role: "user" as const, content: "hello" }],
+        config,
+        { userId: "tg-123" },
+      );
+
+      expect(loadHistory).toHaveBeenCalledWith("tg-123", 50);
+      expect(appendToHistory).toHaveBeenCalledWith(
+        "tg-123",
+        expect.arrayContaining([
+          expect.objectContaining({ role: "user" }),
+        ]),
+        50,
+      );
+    });
+
+    it("skips history when no userId is provided", async () => {
+      const { loadHistory, appendToHistory } = await import("@src/conversation.js");
+      const config = {
+        model: "claude-sonnet-4-20250514",
+        maxSteps: 25,
+        shellTimeout: 5000,
+        conversationLimit: 50,
+      };
+
+      await runAgent(
+        [{ role: "user" as const, content: "hello" }],
+        config,
+      );
+
+      expect(loadHistory).not.toHaveBeenCalled();
+      expect(appendToHistory).not.toHaveBeenCalled();
     });
 
     it("oauthFetch wrapper sets Bearer auth and removes x-api-key", async () => {

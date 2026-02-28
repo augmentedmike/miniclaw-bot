@@ -1,3 +1,4 @@
+import path from "node:path";
 import { loadConfig, ensureMinicawDirs } from "./config.js";
 import { runAgent } from "./agent.js";
 
@@ -8,11 +9,45 @@ async function main() {
   const args = process.argv.slice(2);
   const messageIndex = args.indexOf("--message");
 
+  // Check for a directory argument (e.g. `miniclaw .` or `miniclaw /some/path`)
+  // A positional arg that isn't a flag and isn't the value after --message becomes the jail.
+  const dirArg = args.find((a, i) => !a.startsWith("-") && !(messageIndex !== -1 && i === messageIndex + 1));
+  if (dirArg) {
+    const resolved = path.resolve(dirArg);
+    const fs = await import("node:fs");
+    if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
+      config.jailDir = resolved;
+    }
+  }
+
+  // If no explicit jail, jail to cwd
+  if (!config.jailDir) {
+    config.jailDir = process.cwd();
+  }
+
+  console.error(`jailed to ${config.jailDir}`);
+
+  if (args[0] === "setup") {
+    const { runSetup } = await import("./setup.js");
+    await runSetup();
+    return;
+  }
+
+  if (args[0] === "serve") {
+    const { startWebServer } = await import("./web/server.js");
+    await startWebServer(config);
+    // Also start telegram bot if token is configured
+    if (config.telegramBotToken) {
+      await startTelegram(config);
+    }
+    return;
+  }
+
   if (messageIndex !== -1) {
     // CLI one-shot mode
     const message = args.slice(messageIndex + 1).join(" ");
     if (!message) {
-      console.error("Usage: miniclaw --message <your message>");
+      console.error("Usage: miniclaw [dir] --message <your message>");
       process.exit(1);
     }
     await runCli(message, config);
@@ -21,22 +56,24 @@ async function main() {
     await startTelegram(config);
   } else {
     console.error(
-      "No mode specified. Either:\n" +
-      "  1. Pass --message 'your message' for CLI mode\n" +
-      "  2. Set TELEGRAM_BOT_TOKEN in .env for Telegram mode",
+      "Usage:\n" +
+      "  miniclaw --message 'your message'         One-shot (jailed to cwd)\n" +
+      "  miniclaw /path --message 'your message'    One-shot (jailed to /path)\n" +
+      "  miniclaw serve                             Web chat UI on :3000\n" +
+      "  Set TELEGRAM_BOT_TOKEN in .env              Telegram bot mode",
     );
     process.exit(1);
   }
 }
 
 async function runCli(message: string, config: ReturnType<typeof loadConfig>) {
-  console.log(`> ${message}\n`);
-
   try {
-    const result = await runAgent(
+    await runAgent(
       [{ role: "user", content: message }],
       config,
       {
+        channel: "cli",
+        userId: "default",
         onText: (text) => process.stdout.write(text),
         onToolCall: (name, args) => {
           console.log(`\n[tool: ${name}]`, JSON.stringify(args, null, 2));

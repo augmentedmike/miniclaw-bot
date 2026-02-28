@@ -2,107 +2,126 @@
 ║           DUPLICATION REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  DUPLICATED BLOCKS (19):
+⚠  DUPLICATED BLOCKS (33):
+
+  Block (5 lines) found in 2 files:
+    agent.ts:135
+    config.ts:114
+    Preview:     } catch {
+
+  Block (5 lines) found in 2 files:
+    agent.ts:156
+    config.ts:130
+    Preview:       // Non-fatal
 
   Block (5 lines) found in 2 files:
     auth.ts:11
-    types.ts:12
+    types.ts:22
     Preview:   accessToken: string;
 
-  Block (5 lines) found in 3 files:
+  Block (5 lines) found in 6 files:
     auth.ts:45
-    memory/store.ts:38
+    config.ts:46
+    memory/store.ts:45
+    persona.ts:71
+    snapshot.ts:186
     vault.ts:133
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
-    conversation.ts:21
-    memory/store.ts:52
+    auth.ts:87
+    install-tui.ts:22
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
-    memory/search.ts:46
-    vault.ts:268
+    conversation.ts:43
+    tools/files.ts:110
     Preview:     }
 
+  Block (5 lines) found in 4 files:
+    conversation.ts:58
+    memory/store.ts:59
+    persona.ts:98
+    snapshot.ts:170
+    Preview:   } catch {
+
   Block (5 lines) found in 3 files:
-    memory/search.ts:47
-    tools/web.ts:161
-    vault.ts:269
+    conversation.ts:59
+    persona.ts:99
+    snapshot.ts:171
+    Preview:     return [];
+
+  Block (5 lines) found in 2 files:
+    index.ts:70
+    web/handler.ts:93
+    Preview:   try {
+
+  Block (5 lines) found in 2 files:
+    install-tui.ts:133
+    persona-cli.ts:82
+    Preview:   } else {
+
+  Block (5 lines) found in 2 files:
+    install-tui.ts:134
+    persona-cli.ts:83
+    Preview:     // Copy template
+
+  Block (5 lines) found in 2 files:
+    install-tui.ts:135
+    persona-cli.ts:84
+    Preview:     const templatePath = path.join(getSystemDir(), "templates", "persona.md");
+
+  Block (5 lines) found in 2 files:
+    install-tui.ts:144
+    persona-cli.ts:95
     Preview:   }
 
   Block (5 lines) found in 2 files:
-    memory/store.ts:39
-    vault.ts:134
-    Preview:     return null;
-
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:44
-    tools/shell.ts:25
-    Preview:         // No timeout — Claude Code tasks can be long-running
-
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:46
-    tools/shell.ts:26
+    install-tui.ts:145
+    persona-cli.ts:96
     Preview: 
 
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:47
-    tools/shell.ts:27
-    Preview:       let stdout = "";
+  Block (5 lines) found in 5 files:
+    install-tui.ts:187
+    kb-cli.ts:297
+    persona-cli.ts:224
+    snapshot-cli.ts:128
+    vault-cli.ts:133
+    Preview: }
 
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:48
-    tools/shell.ts:28
-    Preview:       let stderr = "";
-
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:49
-    tools/shell.ts:29
+  Block (5 lines) found in 5 files:
+    install-tui.ts:188
+    kb-cli.ts:298
+    persona-cli.ts:225
+    snapshot-cli.ts:129
+    vault-cli.ts:134
     Preview: 
 
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:50
-    tools/shell.ts:30
-    Preview:       proc.stdout.on("data", (data: Buffer) => {
-
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:51
-    tools/shell.ts:31
-    Preview:         stdout += data.toString();
-
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:52
-    tools/shell.ts:32
-    Preview:       });
-
-  Block (5 lines) found in 2 files:
-    tools/claude-code.ts:53
-    tools/shell.ts:33
-    Preview:       proc.stderr.on("data", (data: Buffer) => {
-
   Block (5 lines) found in 3 files:
-    tools/edit.ts:1
-    tools/files.ts:1
-    tools/glob.ts:1
-    Preview: import fs from "node:fs";
-
-  Block (5 lines) found in 3 files:
-    tools/edit.ts:41
-    tools/files.ts:27
-    tools/web.ts:42
-    Preview:     } catch (err) {
+    kb/engine.ts:201
+    tools/web.ts:160
+    vault.ts:269
+    Preview:     }
 
   Block (5 lines) found in 4 files:
-    tools/edit.ts:42
-    tools/files.ts:28
-    tools/grep.ts:61
-    tools/web.ts:43
-    Preview:       const msg = err instanceof Error ? err.message : String(err);
+    kb-cli.ts:280
+    persona-cli.ts:209
+    snapshot-cli.ts:115
+    vault-cli.ts:121
+    Preview:   const [command, ...args] = process.argv.slice(2);
 
   Block (5 lines) found in 4 files:
-    tools/edit.ts:43
-    tools/files.ts:29
-    tools/grep.ts:62
-    tools/web.ts:44
-    Preview:       return `[error] ${msg}`;
+    kb-cli.ts:295
+    persona-cli.ts:222
+    snapshot-cli.ts:126
+    vault-cli.ts:131
+    Preview:     default:                   usage();
+
+  Block (5 lines) found in 4 files:
+    kb-cli.ts:296
+    persona-cli.ts:223
+    snapshot-cli.ts:127
+    vault-cli.ts:132
+    Preview:   }
+
+  ... and 13 more

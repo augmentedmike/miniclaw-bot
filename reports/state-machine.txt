@@ -2,6 +2,15 @@
 ║           STATE MACHINE MAP                     ║
 ╚══════════════════════════════════════════════════╝
 
+┌─── agent.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── auth.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
@@ -12,6 +21,31 @@
 └───
 
 ┌─── config.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── context.ts :: retrieveContext_flow ───
+│  ● start
+│  ○ import
+│  ○ kb_search
+│  ✗ error
+│  ◉ complete
+│
+│  start ──[await import()]──▶ import
+│  import ──[await kb.search()]──▶ kb_search
+│  kb_search ──[catch]──▶ error
+│  kb_search ──[return]──▶ complete
+└───
+
+┌─── context.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
 │  ✗ caught
@@ -47,6 +81,41 @@
 │  ● attempt
 │  ◉ success
 │  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── install-tui.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── kb/embeddings.ts :: embed_flow ───
+│  ● start
+│  ○ getPipeline
+│  ○ pipeline
+│  ◉ complete
+│
+│  start ──[await getPipeline()]──▶ getPipeline
+│  getPipeline ──[await pipeline()]──▶ pipeline
+│  pipeline ──[return]──▶ complete
+└───
+
+┌─── kb/engine.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
 │
 │  attempt ──[no error]──▶ success
 │  attempt ──[catch]──▶ caught
@@ -62,6 +131,57 @@
 └───
 
 ┌─── memory/store.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── persona-cli.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── persona.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── setup.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── snapshot.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── telegram/access.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
 │  ✗ caught
@@ -92,8 +212,29 @@
 │  runner_task ──[return]──▶ complete
 └───
 
+┌─── telegram/handlers.ts :: bot_events ───
+│  ● idle
+│  ○ callback_query_data
+│  ○ message_text
+│
+│  idle ──[callback_query:data]──▶ callback_query_data
+│  callback_query_data ──[done]──▶ idle
+│  idle ──[message:text]──▶ message_text
+│  message_text ──[done]──▶ idle
+└───
+
 ┌─── telegram/handlers.ts :: registerHandlers_flow ───
 │  ● start
+│  ○ ctx_answerCallbackQuery
+│  ○ ctx_answerCallbackQuery
+│  ○ ctx_editMessageText
+│  ○ bot_api_sendMessage
+│  ○ ctx_answerCallbackQuery
+│  ○ ctx_editMessageText
+│  ○ bot_api_sendMessage
+│  ○ bot_api_sendMessage
+│  ○ bot_api_sendMessage
+│  ○ bot_api_sendMessage
 │  ○ runAgent
 │  ○ sendResponse
 │  ○ bot_api_sendMessage
@@ -101,7 +242,17 @@
 │  ✗ error
 │  ◉ complete
 │
-│  start ──[await runAgent()]──▶ runAgent
+│  start ──[await ctx.answerCallbackQuery()]──▶ ctx_answerCallbackQuery
+│  ctx_answerCallbackQuery ──[await ctx.answerCallbackQuery()]──▶ ctx_answerCallbackQuery
+│  ctx_answerCallbackQuery ──[await ctx.editMessageText()]──▶ ctx_editMessageText
+│  ctx_editMessageText ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
+│  bot_api_sendMessage ──[await ctx.answerCallbackQuery()]──▶ ctx_answerCallbackQuery
+│  ctx_answerCallbackQuery ──[await ctx.editMessageText()]──▶ ctx_editMessageText
+│  ctx_editMessageText ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
+│  bot_api_sendMessage ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
+│  bot_api_sendMessage ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
+│  bot_api_sendMessage ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
+│  bot_api_sendMessage ──[await runAgent()]──▶ runAgent
 │  runAgent ──[await sendResponse()]──▶ sendResponse
 │  sendResponse ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
 │  bot_api_sendMessage ──[await bot.api.sendMessage()]──▶ bot_api_sendMessage
@@ -113,9 +264,12 @@
 │  ● attempt
 │  ◉ success
 │  ✗ caught
+│  ○ fallback
 │
 │  attempt ──[no error]──▶ success
 │  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
 └───
 
 ┌─── telegram/send.ts :: sendResponse_flow ───
@@ -144,32 +298,6 @@
 │  fallback ──[complete]──▶ success
 └───
 
-┌─── tools/claude-code.ts :: proc_events ───
-│  ● idle
-│  ◉ close
-│  ✗ error
-│
-│  idle ──[close]──▶ close
-│  idle ──[error]──▶ error
-└───
-
-┌─── tools/claude-code.ts :: process_lifecycle ───
-│  ● spawning
-│  ○ running
-│  ○ stdout_data
-│  ○ stderr_data
-│  ◉ closed
-│  ✗ error
-│
-│  spawning ──[spawn()]──▶ running
-│  running ──[stdout.data]──▶ stdout_data
-│  stdout_data ──[accumulate]──▶ running
-│  running ──[stderr.data]──▶ stderr_data
-│  stderr_data ──[accumulate]──▶ running
-│  running ──[close]──▶ closed
-│  running ──[error]──▶ error
-└───
-
 ┌─── tools/edit.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
@@ -186,6 +314,19 @@
 │
 │  attempt ──[no error]──▶ success
 │  attempt ──[catch]──▶ caught
+└───
+
+┌─── tools/glob.ts :: createGlobTool_flow ───
+│  ● start
+│  ○ import
+│  ○ import
+│  ✗ error
+│  ◉ complete
+│
+│  start ──[await import()]──▶ import
+│  import ──[await import()]──▶ import
+│  import ──[catch]──▶ error
+│  import ──[return]──▶ complete
 └───
 
 ┌─── tools/glob.ts :: error_recovery ───
@@ -206,7 +347,16 @@
 │  attempt ──[catch]──▶ caught
 └───
 
-┌─── tools/shell.ts :: proc_events ───
+┌─── tools/kb.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── tools/run-process.ts :: proc_events ───
 │  ● idle
 │  ◉ close
 │  ✗ error
@@ -215,7 +365,7 @@
 │  idle ──[error]──▶ error
 └───
 
-┌─── tools/shell.ts :: process_lifecycle ───
+┌─── tools/run-process.ts :: process_lifecycle ───
 │  ● spawning
 │  ○ running
 │  ○ stdout_data
@@ -230,6 +380,25 @@
 │  stderr_data ──[accumulate]──▶ running
 │  running ──[close]──▶ closed
 │  running ──[error]──▶ error
+└───
+
+┌─── tools/shell.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[retry]──▶ attempt
+└───
+
+┌─── tools/util.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
 └───
 
 ┌─── tools/vault.ts :: error_recovery ───
@@ -262,4 +431,72 @@
 │  attempt ──[catch]──▶ caught
 └───
 
-Total: 24 state machines, 88 states, 76 transitions
+┌─── web/handler.ts :: req_events ───
+│  ● idle
+│  ○ data
+│  ◉ end
+│  ✗ error
+│
+│  idle ──[data]──▶ data
+│  data ──[done]──▶ idle
+│  idle ──[end]──▶ end
+│  idle ──[error]──▶ error
+└───
+
+┌─── web/handler.ts :: createRequestHandler_flow ───
+│  ● start
+│  ○ readBody
+│  ○ runAgent
+│  ✗ error
+│  ◉ complete
+│
+│  start ──[await readBody()]──▶ readBody
+│  readBody ──[await runAgent()]──▶ runAgent
+│  runAgent ──[catch]──▶ error
+│  runAgent ──[return]──▶ complete
+└───
+
+┌─── web/handler.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── web/server.ts :: process_events ───
+│  ● idle
+│  ○ SIGINT
+│  ○ SIGTERM
+│
+│  idle ──[SIGINT]──▶ SIGINT
+│  SIGINT ──[done]──▶ idle
+│  idle ──[SIGTERM]──▶ SIGTERM
+│  SIGTERM ──[done]──▶ idle
+└───
+
+┌─── web/ui.ts :: input_events ───
+│  ● idle
+│  ○ input
+│  ○ keydown
+│
+│  idle ──[input]──▶ input
+│  input ──[done]──▶ idle
+│  idle ──[keydown]──▶ keydown
+│  keydown ──[done]──▶ idle
+└───
+
+┌─── web/ui.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+Total: 44 state machines, 170 states, 151 transitions

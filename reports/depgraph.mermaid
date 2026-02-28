@@ -3,11 +3,19 @@ graph TD
     agent_ts["agent.ts"]
     auth_ts["auth.ts"]
     system-prompt_ts["system-prompt.ts"]
+    persona_ts["persona.ts"]
+    context_ts["context.ts"]
+    conversation_ts["conversation.ts"]
     types_ts["types.ts"]
     config_ts["config.ts"]
-    conversation_ts["conversation.ts"]
     index_ts["index.ts"]
+    setup_ts["setup.ts"]
+    install-tui_ts["install-tui.ts"]
     vault_ts["vault.ts"]
+    kb-cli_ts["kb-cli.ts"]
+    persona-cli_ts["persona-cli.ts"]
+    snapshot-cli_ts["snapshot-cli.ts"]
+    snapshot_ts["snapshot.ts"]
     vault-cli_ts["vault-cli.ts"]
   end
   subgraph tools
@@ -20,19 +28,35 @@ graph TD
     tools_memory_ts["memory.ts"]
     tools_claude-code_ts["claude-code.ts"]
     tools_vault_ts["vault.ts"]
-  end
-  subgraph telegram
-    telegram_bot_ts["bot.ts"]
-    telegram_handlers_ts["handlers.ts"]
-    telegram_format_ts["format.ts"]
-    telegram_send_ts["send.ts"]
+    tools_kb_ts["kb.ts"]
+    tools_run-process_ts["run-process.ts"]
+    tools_util_ts["util.ts"]
   end
   subgraph memory
     memory_search_ts["search.ts"]
     memory_store_ts["store.ts"]
   end
+  subgraph kb
+    kb_index_ts["index.ts"]
+    kb_embeddings_ts["embeddings.ts"]
+    kb_engine_ts["engine.ts"]
+    kb_types_ts["types.ts"]
+  end
+  subgraph web
+    web_server_ts["server.ts"]
+    web_handler_ts["handler.ts"]
+    web_ui_ts["ui.ts"]
+  end
+  subgraph telegram
+    telegram_bot_ts["bot.ts"]
+    telegram_access_ts["access.ts"]
+    telegram_handlers_ts["handlers.ts"]
+    telegram_format_ts["format.ts"]
+    telegram_send_ts["send.ts"]
+  end
   agent_ts --> auth_ts
   agent_ts --> system-prompt_ts
+  agent_ts --> persona_ts
   agent_ts --> tools_shell_ts
   agent_ts --> tools_files_ts
   agent_ts --> tools_edit_ts
@@ -42,27 +66,76 @@ graph TD
   agent_ts --> tools_memory_ts
   agent_ts --> tools_claude-code_ts
   agent_ts --> tools_vault_ts
+  agent_ts --> tools_kb_ts
+  agent_ts --> context_ts
+  agent_ts --> conversation_ts
   agent_ts --> types_ts
   auth_ts --> types_ts
   config_ts --> types_ts
+  context_ts --> memory_search_ts
+  context_ts --> memory_store_ts
+  context_ts --> types_ts
+  context_ts --> memory_search_ts
+  context_ts --> kb_index_ts
+  context_ts --> kb_index_ts
   conversation_ts --> config_ts
+  conversation_ts --> memory_store_ts
   index_ts --> config_ts
   index_ts --> agent_ts
+  index_ts --> setup_ts
+  index_ts --> web_server_ts
   index_ts --> telegram_bot_ts
+  install-tui_ts --> config_ts
+  install-tui_ts --> vault_ts
+  kb_engine_ts --> kb_embeddings_ts
+  kb_engine_ts --> kb_types_ts
+  kb_index_ts --> config_ts
+  kb_index_ts --> kb_engine_ts
+  kb-cli_ts --> config_ts
+  kb-cli_ts --> kb_engine_ts
+  kb-cli_ts --> kb_types_ts
   memory_search_ts --> config_ts
   memory_store_ts --> config_ts
+  memory_store_ts --> memory_search_ts
+  persona-cli_ts --> config_ts
+  persona-cli_ts --> persona_ts
+  persona_ts --> config_ts
+  persona_ts --> types_ts
+  setup_ts --> auth_ts
+  setup_ts --> config_ts
+  setup_ts --> memory_search_ts
+  snapshot-cli_ts --> config_ts
+  snapshot-cli_ts --> snapshot_ts
+  snapshot_ts --> config_ts
+  system-prompt_ts --> types_ts
+  telegram_access_ts --> config_ts
   telegram_bot_ts --> telegram_handlers_ts
   telegram_bot_ts --> types_ts
   telegram_handlers_ts --> agent_ts
   telegram_handlers_ts --> telegram_send_ts
-  telegram_handlers_ts --> conversation_ts
   telegram_handlers_ts --> types_ts
+  telegram_handlers_ts --> telegram_access_ts
   telegram_send_ts --> telegram_format_ts
+  tools_claude-code_ts --> tools_run-process_ts
+  tools_edit_ts --> tools_util_ts
+  tools_files_ts --> tools_util_ts
+  tools_glob_ts --> tools_util_ts
+  tools_grep_ts --> tools_util_ts
+  tools_kb_ts --> kb_index_ts
+  tools_kb_ts --> kb_types_ts
   tools_memory_ts --> memory_store_ts
   tools_memory_ts --> memory_search_ts
+  tools_shell_ts --> tools_run-process_ts
+  tools_shell_ts --> tools_util_ts
   tools_vault_ts --> vault_ts
   tools_vault_ts --> vault_ts
+  tools_web_ts --> tools_util_ts
   vault-cli_ts --> vault_ts
   vault-cli_ts --> config_ts
   vault-cli_ts --> vault_ts
   vault_ts --> config_ts
+  web_handler_ts --> agent_ts
+  web_handler_ts --> web_ui_ts
+  web_handler_ts --> types_ts
+  web_server_ts --> web_handler_ts
+  web_server_ts --> types_ts

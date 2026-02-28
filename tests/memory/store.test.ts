@@ -7,7 +7,27 @@ let tmpDir: string;
 
 vi.mock("@src/config.js", () => ({
   getMinicawHome: () => tmpDir,
+  getActivePersonaHome: () => tmpDir,
 }));
+
+// Mock child_process — qmd IS installed
+vi.mock("node:child_process", async () => {
+  const actual = await vi.importActual<typeof import("node:child_process")>("node:child_process");
+  return {
+    ...actual,
+    execSync: (cmd: string, ...args: unknown[]) => {
+      if (typeof cmd === "string" && cmd.includes("which qmd")) {
+        return "/usr/local/bin/qmd";
+      }
+      if (typeof cmd === "string" && cmd.startsWith("qmd collection")) {
+        return "miniclaw-memory";
+      }
+      // @ts-ignore
+      return actual.execSync(cmd, ...args);
+    },
+    spawn: vi.fn(() => ({ unref: vi.fn() })),
+  };
+});
 
 const { saveMemory, readMemory, listMemories } = await import("@memory/store.js");
 
@@ -74,7 +94,6 @@ describe("memory store", () => {
     });
 
     it("returns empty array when memory directory does not exist", () => {
-      // Remove the memory directory to trigger the catch path
       fs.rmSync(path.join(tmpDir, "memory"), { recursive: true, force: true });
       expect(listMemories()).toEqual([]);
     });

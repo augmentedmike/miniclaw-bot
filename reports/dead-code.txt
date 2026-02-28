@@ -2,14 +2,26 @@
 ║           DEAD CODE REPORT                      ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  POTENTIALLY UNUSED EXPORTS (7):
-   agent.ts:17  export createTools
+⚠  POTENTIALLY UNUSED EXPORTS (17):
+   agent.ts:21  export createTools
    auth.ts:110  export writeCredentials
-   auth.ts:114  export readCredentials
-   auth.ts:118  export isExpired
-   conversation.ts:39  export appendToHistory
-   memory/store.ts:33  export readMemory
+   kb/embeddings.ts:32  export isModelLoaded
+   kb/embeddings.ts:37  export unloadModel
+   kb/index.ts:26  export closeKB
+   persona.ts:39  export formatPersona
+   setup.ts:55  export runSetup
+   telegram/access.ts:33  export saveAccess
+   telegram/access.ts:78  export revokeUser
    telegram/bot.ts:7  export startBot
+   tools/edit.ts:50  export editFileTool
+   tools/files.ts:95  export readFileTool
+   tools/files.ts:96  export writeFileTool
+   tools/files.ts:97  export listDirectoryTool
+   tools/glob.ts:57  export globTool
+   tools/grep.ts:75  export grepTool
+   web/server.ts:5  export startWebServer
 
 ⚠  ORPHAN FILES (not imported by anything):
+   setup.ts  (exports: runSetup)
    telegram/bot.ts  (exports: startBot)
+   web/server.ts  (exports: startWebServer)

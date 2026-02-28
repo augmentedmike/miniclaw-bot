@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
+import { formatToolError } from "./util.js";
 
 export const webFetchTool = tool({
   description:
@@ -40,8 +41,7 @@ export const webFetchTool = tool({
       }
       return text || "[empty response]";
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      return `[error] ${msg}`;
+      return formatToolError(err);
     }
   },
 });
@@ -81,8 +81,7 @@ export const webSearchTool = tool({
         .map((r, i) => `${i + 1}. ${r.title}\n   ${r.url}\n   ${r.snippet}`)
         .join("\n\n");
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      return `[error] ${msg}`;
+      return formatToolError(err);
     }
   },
 });

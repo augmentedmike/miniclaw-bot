@@ -14,7 +14,9 @@
       "@src/*": ["src/*"],
       "@tools/*": ["src/tools/*"],
       "@telegram/*": ["src/telegram/*"],
-      "@memory/*": ["src/memory/*"]
+      "@memory/*": ["src/memory/*"],
+      "@web/*": ["src/web/*"],
+      "@kb/*": ["src/kb/*"]
     }
   }
 }

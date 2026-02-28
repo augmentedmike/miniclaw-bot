@@ -5,15 +5,27 @@
 Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
 ───────────────────────────────────────────────────────────────────────────
   △  50      2         0          0         2     agent.ts
-  △  50      3         0          0         3     tools/files.ts
-  △  51      3         0          0         3     config.ts
+  △  50      2         0          0         2     tools/edit.ts
+  △  50      2         0          0         2     tools/glob.ts
+  △  50      2         0          0         2     tools/grep.ts
+  △  50      2         0          0         2     tools/util.ts
+  △  52      4         0          1         4     kb/embeddings.ts
+  △  53      2         0          2         2     kb/index.ts
   △  55      3         0          3         3     memory/store.ts
-  △  55      2         0          0         1     tools/memory.ts
+  △  55      4         0          4         4     snapshot.ts
   △  55      2         0          0         1     tools/vault.ts
   △  55      2         0          0         1     tools/web.ts
   △  56      2         0          4         2     telegram/format.ts
+  △  58      4         0          0         1     tools/kb.ts
+  △  58      4         0          0         1     tools/memory.ts
+  ✓  65      2         0         10         2     context.ts
+  ✓  65      5         0         10         5     memory/search.ts
+  ✓  68      6         0         20         4     tools/files.ts
   ✓  69      4         2          1         4     auth.ts
+  ✓  72      3         1          6         3     conversation.ts
+  ✓  73      7         4          3         6     persona.ts
   ✓  76      6         3          4         3     vault.ts
-  ✓  80      3         2          3         3     conversation.ts
+  ✓  77      9         7          3         8     telegram/access.ts
+  ✓  85      8         7          3         4     config.ts
 
-Average cohesion: 59/100
+Average cohesion: 61/100

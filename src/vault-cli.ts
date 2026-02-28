@@ -12,7 +12,7 @@
  */
 
 import { vaultSet, vaultGet, vaultDelete, vaultList, initVaultKey, getMasterPassword } from "./vault.js";
-import { ensureMinicawDirs } from "./config.js";
+import { ensureMinicawDirs, getActivePersonaHome } from "./config.js";
 import type { VaultCategory } from "./vault.js";
 import * as readline from "node:readline";
 
@@ -47,6 +47,74 @@ function prompt(question: string): Promise<string> {
   });
 }
 
+function handleInit(): void {
+  const key = initVaultKey();
+  console.log("Vault key created. Key (first 8 chars):", key.slice(0, 8) + "...");
+  console.log(`Stored in ${getActivePersonaHome()}/.vault-key (chmod 600)`);
+}
+
+async function handleSet(args: string[]): Promise<void> {
+  const [cat, name] = args;
+  if (!cat || !name) usage();
+  if (!CATEGORIES.includes(cat as VaultCategory)) {
+    console.error(`Invalid category: ${cat}. Must be one of: ${CATEGORIES.join(", ")}`);
+    process.exit(1);
+  }
+
+  const value = await prompt("Value: ");
+  if (!value) {
+    console.error("Empty value, aborting.");
+    process.exit(1);
+  }
+
+  const metaInput = await prompt("Metadata (key=val,key=val or blank): ");
+  const meta = metaInput
+    ? Object.fromEntries(metaInput.split(",").map((p) => p.trim().split("=")).filter((p) => p.length === 2) as [string, string][])
+    : undefined;
+
+  vaultSet(cat as VaultCategory, name, value, meta && Object.keys(meta).length > 0 ? meta : undefined);
+  console.log(`Stored: ${cat}/${name}`);
+}
+
+function handleGet(args: string[]): void {
+  const [cat, name] = args;
+  if (!cat || !name) usage();
+  const entry = vaultGet(cat as VaultCategory, name);
+  if (!entry) {
+    console.error(`Not found: ${cat}/${name}`);
+    process.exit(1);
+  }
+  // Output value to stdout (safe for piping)
+  process.stdout.write(entry.value);
+  if (entry.meta) {
+    console.error("\nMetadata:", JSON.stringify(entry.meta));
+  }
+}
+
+function handleList(args: string[]): void {
+  const [cat] = args;
+  const entries = vaultList(cat as VaultCategory | undefined);
+  if (entries.length === 0) {
+    console.log("Vault is empty.");
+  } else {
+    for (const e of entries) {
+      console.log(`${e.category}/${e.name}`);
+    }
+  }
+}
+
+function handleDelete(args: string[]): void {
+  const [cat, name] = args;
+  if (!cat || !name) usage();
+  const deleted = vaultDelete(cat as VaultCategory, name);
+  if (deleted) {
+    console.log(`Deleted: ${cat}/${name}`);
+  } else {
+    console.error(`Not found: ${cat}/${name}`);
+    process.exit(1);
+  }
+}
+
 async function main() {
   ensureMinicawDirs();
 
@@ -55,81 +123,12 @@ async function main() {
   if (!command) usage();
 
   switch (command) {
-    case "init": {
-      const key = initVaultKey();
-      console.log("Vault key created. Key (first 8 chars):", key.slice(0, 8) + "...");
-      console.log("Stored in ~/.miniclaw/.vault-key (chmod 600)");
-      break;
-    }
-
-    case "set": {
-      const [cat, name] = args;
-      if (!cat || !name) usage();
-      if (!CATEGORIES.includes(cat as VaultCategory)) {
-        console.error(`Invalid category: ${cat}. Must be one of: ${CATEGORIES.join(", ")}`);
-        process.exit(1);
-      }
-
-      const value = await prompt("Value: ");
-      if (!value) {
-        console.error("Empty value, aborting.");
-        process.exit(1);
-      }
-
-      const metaInput = await prompt("Metadata (key=val,key=val or blank): ");
-      const meta = metaInput
-        ? Object.fromEntries(metaInput.split(",").map((p) => p.trim().split("=")).filter((p) => p.length === 2) as [string, string][])
-        : undefined;
-
-      vaultSet(cat as VaultCategory, name, value, meta && Object.keys(meta).length > 0 ? meta : undefined);
-      console.log(`Stored: ${cat}/${name}`);
-      break;
-    }
-
-    case "get": {
-      const [cat, name] = args;
-      if (!cat || !name) usage();
-      const entry = vaultGet(cat as VaultCategory, name);
-      if (!entry) {
-        console.error(`Not found: ${cat}/${name}`);
-        process.exit(1);
-      }
-      // Output value to stdout (safe for piping)
-      process.stdout.write(entry.value);
-      if (entry.meta) {
-        console.error("\nMetadata:", JSON.stringify(entry.meta));
-      }
-      break;
-    }
-
-    case "list": {
-      const [cat] = args;
-      const entries = vaultList(cat as VaultCategory | undefined);
-      if (entries.length === 0) {
-        console.log("Vault is empty.");
-      } else {
-        for (const e of entries) {
-          console.log(`${e.category}/${e.name}`);
-        }
-      }
-      break;
-    }
-
-    case "delete": {
-      const [cat, name] = args;
-      if (!cat || !name) usage();
-      const deleted = vaultDelete(cat as VaultCategory, name);
-      if (deleted) {
-        console.log(`Deleted: ${cat}/${name}`);
-      } else {
-        console.error(`Not found: ${cat}/${name}`);
-        process.exit(1);
-      }
-      break;
-    }
-
-    default:
-      usage();
+    case "init":    handleInit(); break;
+    case "set":     await handleSet(args); break;
+    case "get":     handleGet(args); break;
+    case "list":    handleList(args); break;
+    case "delete":  handleDelete(args); break;
+    default:        usage();
   }
 }
 

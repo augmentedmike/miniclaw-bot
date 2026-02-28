@@ -6,30 +6,49 @@ FILE SCORES (worst first):
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
 ────────────────────────────────────────────────────────────────────────────────
-  C      58     36     87     0%     6    7    tools/files.ts
-  C      61     42    122     6%     5    5    tools/grep.ts
-  B      72     37    107     4%     7    3    agent.ts
-  B      75     39     92     8%     4    5    tools/glob.ts
-  B      75     37    110    10%     3    5    tools/web.ts
+  C      55     37    141     7%     7    5    kb/engine.ts
+  C      58     37    110     7%     6    5    kb-cli.ts
+  C      58     37     89     1%     6    8    tools/files.ts
+  C      62     30     80     4%     8    6    web/handler.ts
+  C      63     41    124     7%     5    6    tools/grep.ts
+  C      64     39    119     7%     8    5    agent.ts
+  C      64     36    114    10%     3    9    telegram/handlers.ts
+  C      66     46    123     0%     7    3    tools/memory.ts
+  B      70     40    120     5%     4    5    tools/kb.ts
+  B      72     26     83     1%     4    6    web/ui.ts
+  B      75     45    149     2%     0    7    tools/edit.ts
+  B      76     38     94     7%     4    6    tools/glob.ts
+  B      76     36    110    10%     3    5    tools/web.ts
+  B      78     30     93     0%     3    4    setup.ts
   B      78     34     92    15%     3    6    telegram/send.ts
   B      79     30    103    23%    12    4    vault.ts
-  B      81     38     87     0%     0    7    tools/shell.ts
   B      82     35     84     8%     3    3    auth.ts
-  B      84     39    112     6%     0    7    tools/claude-code.ts
-  A      85     37     78     8%     1    5    telegram/handlers.ts
-  A      85     45    147     0%     0    6    tools/edit.ts
-  A      86     30     79     5%     0    5    index.ts
+  B      82     46    119    16%     0    8    tools/shell.ts
+  B      83     35    121    20%     8    4    context.ts
+  B      83     32    109     7%     1    5    index.ts
   A      86     40    133    11%     1    6    tools/vault.ts
-  A      88     42    112     0%     1    4    tools/memory.ts
-  A      89     33    134     9%     1    6    vault-cli.ts
-  A      91     30     84     4%     3    3    config.ts
-  A      91     30     74    13%     0    4    telegram/bot.ts
-  A      94     48    231     0%     0    2    system-prompt.ts
-  A      95     29     81    12%     0    6    memory/search.ts
+  A      89     39    112     8%     0    6    tools/claude-code.ts
+  A      90     31     74    13%     0    4    telegram/bot.ts
+  A      91     34     76     3%     2    4    web/server.ts
+  A      92     33     92    23%     3    4    memory/search.ts
+  A      92     33    224     7%     0    4    persona-cli.ts
+  A      93     32    111    19%     1    5    snapshot.ts
+  A      94     33    105    10%     0    4    install-tui.ts
+  A      94     57    238     0%     0    3    system-prompt.ts
+  A      94     34    130     9%     1    4    vault-cli.ts
   A      96     40    103    24%     2    5    telegram/format.ts
-  A     100     31     80    23%     3    2    conversation.ts
-  A     100     25     68    16%     0    2    memory/store.ts
-  A     100     21     38     0%     0    1    types.ts
+  A      98     36     89    17%     3    4    conversation.ts
+  A     100     36    120    20%     2    3    config.ts
+  A     100     34     81    28%     3    2    kb/embeddings.ts
+  A     100     34     77    19%     0    2    kb/index.ts
+  A     100     23     74     0%     0    1    kb/types.ts
+  A     100     27     71    17%     0    2    memory/store.ts
+  A     100     35    110    26%     0    3    persona.ts
+  A     100     32     93    10%     0    3    snapshot-cli.ts
+  A     100     34    102     7%     0    3    telegram/access.ts
+  A     100     34     84    16%     0    3    tools/run-process.ts
+  A     100     37     85    32%     0    4    tools/util.ts
+  A     100     22     59     0%     0    1    types.ts
 
-Average readability score: 85/100
-Grades: A:14 B:8 C:2 D:0 F:0
+Average readability score: 84/100
+Grades: A:23 B:12 C:8 D:0 F:0

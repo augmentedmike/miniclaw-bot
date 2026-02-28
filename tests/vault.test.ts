@@ -7,6 +7,7 @@ let tmpDir: string;
 
 vi.mock("@src/config.js", () => ({
   getMinicawHome: () => tmpDir,
+  getActivePersonaHome: () => tmpDir,
 }));
 
 describe("vault", () => {

@@ -2,11 +2,25 @@
 ║           SOLID CHECK REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
-DIP (Dependency Inversion):
-  △ conversation.ts: Direct fs import — consider injecting via dependency
-  △ vault.ts: Direct fs import — consider injecting via dependency
-
 SRP (Single Responsibility):
+  △ config.ts: 8 exports — approaching too many responsibilities
+  △ kb/engine.ts: 377 lines — file is very long, consider extracting
+  △ kb-cli.ts: 303 lines — file is very long, consider extracting
+  △ persona.ts: 7 exports — approaching too many responsibilities
+  △ telegram/access.ts: 10 exports — approaching too many responsibilities
   △ vault.ts: 8 exports — approaching too many responsibilities
 
-Total: 0 errors, 3 warnings
+DIP (Dependency Inversion):
+  △ conversation.ts: Direct fs import — consider injecting via dependency
+  △ install-tui.ts: Direct fs import — consider injecting via dependency
+  △ kb/engine.ts: Direct fs import — consider injecting via dependency
+  △ kb-cli.ts: Direct fs import — consider injecting via dependency
+  △ persona-cli.ts: Direct fs import — consider injecting via dependency
+  △ persona.ts: Direct fs import — consider injecting via dependency
+  △ setup.ts: Direct child_process import — consider injecting via dependency
+  △ snapshot-cli.ts: Direct fs import — consider injecting via dependency
+  △ snapshot.ts: Direct fs import — consider injecting via dependency
+  △ telegram/access.ts: Direct fs import — consider injecting via dependency
+  △ vault.ts: Direct fs import — consider injecting via dependency
+
+Total: 0 errors, 17 warnings

@@ -1,9 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getMinicawHome } from "../config.js";
+import { getActivePersonaHome } from "../config.js";
+import { ensureQmdCollection, indexMemory } from "./search.js";
 
 function memoryDir(): string {
-  return path.join(getMinicawHome(), "memory");
+  return path.join(getActivePersonaHome(), "memory");
 }
 
 function sanitizeTopic(topic: string): string {
@@ -16,7 +17,8 @@ function sanitizeTopic(topic: string): string {
 }
 
 /**
- * Save content to a memory file under ~/.miniclaw/memory/{topic}.md
+ * Save content to a memory file under $MINICLAW_HOME/memory/{topic}.md
+ * and re-index with qmd if available.
  */
 export function saveMemory(topic: string, content: string): string {
   const dir = memoryDir();
@@ -24,6 +26,11 @@ export function saveMemory(topic: string, content: string): string {
   const filename = `${sanitizeTopic(topic)}.md`;
   const filePath = path.join(dir, filename);
   fs.writeFileSync(filePath, `# ${topic}\n\n${content}\n`);
+
+  // Index the new/updated file with qmd
+  ensureQmdCollection();
+  indexMemory();
+
   return filePath;
 }
 

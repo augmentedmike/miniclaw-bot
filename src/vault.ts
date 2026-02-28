@@ -5,8 +5,8 @@
  * payment cards, crypto keys, and other sensitive data. OS-agnostic
  * (macOS + Linux), never exposes plaintext to disk.
  *
- * Vault file: ~/.miniclaw/vault.enc (encrypted JSON)
- * Master key: MINICLAW_VAULT_PASS env var, or ~/.miniclaw/.vault-key (chmod 600)
+ * Vault file: $MINICLAW_HOME/vault.enc (encrypted JSON)
+ * Master key: MINICLAW_VAULT_PASS env var, or $MINICLAW_HOME/.vault-key (chmod 600)
  *
  * Categories: api-key, card, note, crypto, credential
  */
@@ -14,7 +14,7 @@
 import { scryptSync, randomBytes, createCipheriv, createDecipheriv } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { getMinicawHome } from "./config.js";
+import { getActivePersonaHome } from "./config.js";
 
 const VAULT_FILE = "vault.enc";
 const KEY_FILE = ".vault-key";
@@ -59,7 +59,7 @@ export function getMasterPassword(): string | null {
   if (envPass && envPass.length > 0) return envPass;
 
   // 2. Key file
-  const keyPath = path.join(getMinicawHome(), KEY_FILE);
+  const keyPath = path.join(getActivePersonaHome(), KEY_FILE);
   try {
     const key = fs.readFileSync(keyPath, "utf8").trim();
     if (key.length > 0) return key;
@@ -75,7 +75,7 @@ export function getMasterPassword(): string | null {
  * Sets permissions to 600 (owner read/write only).
  */
 export function initVaultKey(): string {
-  const keyPath = path.join(getMinicawHome(), KEY_FILE);
+  const keyPath = path.join(getActivePersonaHome(), KEY_FILE);
   const key = randomBytes(32).toString("hex");
   fs.writeFileSync(keyPath, key, { mode: 0o600 });
   return key;
@@ -126,7 +126,7 @@ function entryKey(category: VaultCategory, name: string): string {
  * Load the vault file from disk.
  */
 function loadVaultFile(): VaultFile | null {
-  const vaultPath = path.join(getMinicawHome(), VAULT_FILE);
+  const vaultPath = path.join(getActivePersonaHome(), VAULT_FILE);
   try {
     const raw = fs.readFileSync(vaultPath, "utf8");
     return JSON.parse(raw) as VaultFile;
@@ -139,7 +139,7 @@ function loadVaultFile(): VaultFile | null {
  * Save the vault file to disk (chmod 600).
  */
 function saveVaultFile(vault: VaultFile): void {
-  const vaultPath = path.join(getMinicawHome(), VAULT_FILE);
+  const vaultPath = path.join(getActivePersonaHome(), VAULT_FILE);
   fs.writeFileSync(vaultPath, JSON.stringify(vault, null, 2), { mode: 0o600 });
 }
 

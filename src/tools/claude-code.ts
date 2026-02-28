@@ -1,6 +1,6 @@
-import { spawn } from "node:child_process";
 import { z } from "zod";
 import { tool } from "ai";
+import { runProcess } from "./run-process.js";
 
 /**
  * Claude Code tool — delegates complex tasks to Claude Code CLI.
@@ -20,57 +20,43 @@ export const claudeCodeTool = tool({
     maxBudget: z.number().optional().describe("Max USD to spend on this task (default: no limit)"),
   }),
   execute: async ({ task, workdir, model, maxBudget }) => {
-    return new Promise<string>((resolve) => {
-      const args = [
-        "--print",
-        "--dangerously-skip-permissions",
-        "--output-format", "text",
-      ];
+    const args = [
+      "--print",
+      "--dangerously-skip-permissions",
+      "--output-format", "text",
+    ];
 
-      if (model) {
-        args.push("--model", model);
-      }
+    if (model) {
+      args.push("--model", model);
+    }
 
-      if (maxBudget) {
-        args.push("--max-budget-usd", String(maxBudget));
-      }
+    if (maxBudget) {
+      args.push("--max-budget-usd", String(maxBudget));
+    }
 
-      args.push(task);
+    args.push(task);
 
-      const proc = spawn("claude", args, {
+    return runProcess({
+      command: "claude",
+      args,
+      spawnOpts: {
         cwd: workdir ?? process.cwd(),
-        stdio: ["pipe", "pipe", "pipe"],
         env: process.env,
         // No timeout — Claude Code tasks can be long-running
-      });
-
-      let stdout = "";
-      let stderr = "";
-
-      proc.stdout.on("data", (data: Buffer) => {
-        stdout += data.toString();
-      });
-      proc.stderr.on("data", (data: Buffer) => {
-        stderr += data.toString();
-      });
-
-      proc.on("close", (exitCode) => {
+      },
+      formatResult: (stdout, stderr, exitCode) => {
         if (exitCode === 0 && stdout.trim()) {
-          resolve(stdout.trim());
-        } else {
-          const parts: string[] = [];
-          if (stdout.trim()) parts.push(stdout.trim());
-          if (stderr.trim()) parts.push(`[stderr] ${stderr.trim()}`);
-          if (exitCode !== 0 && exitCode !== null) {
-            parts.push(`[exit code: ${exitCode}]`);
-          }
-          resolve(parts.join("\n\n") || "[no output]");
+          return stdout.trim();
         }
-      });
-
-      proc.on("error", (err) => {
-        resolve(`[error] Failed to run claude: ${err.message}`);
-      });
+        const parts: string[] = [];
+        if (stdout.trim()) parts.push(stdout.trim());
+        if (stderr.trim()) parts.push(`[stderr] ${stderr.trim()}`);
+        if (exitCode !== 0 && exitCode !== null) {
+          parts.push(`[exit code: ${exitCode}]`);
+        }
+        return parts.join("\n\n") || "[no output]";
+      },
+      formatError: (err) => `[error] Failed to run claude: ${err.message}`,
     });
   },
 });

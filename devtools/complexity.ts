@@ -155,11 +155,14 @@ function findFunctions(content: string): FunctionInfo[] {
     }
   }
 
-  // Deduplicate by position
+  // Deduplicate by body position — different regexes can match the same
+  // function at different `start` offsets (e.g. METHOD_RE matches at the
+  // name while FUNCTION_RE matches at the `function` keyword), but the
+  // opening brace (`bodyStart`) is always the same for a given function.
   const seen = new Set<number>();
   return results.filter((f) => {
-    if (seen.has(f.start)) return false;
-    seen.add(f.start);
+    if (seen.has(f.bodyStart)) return false;
+    seen.add(f.bodyStart);
     return true;
   });
 }

@@ -8,6 +8,8 @@ export default defineConfig({
       "@tools": path.resolve(__dirname, "src/tools"),
       "@telegram": path.resolve(__dirname, "src/telegram"),
       "@memory": path.resolve(__dirname, "src/memory"),
+      "@web": path.resolve(__dirname, "src/web"),
+      "@kb": path.resolve(__dirname, "src/kb"),
     },
   },
   test: {

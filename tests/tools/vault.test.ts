@@ -8,6 +8,7 @@ const ctx = { toolCallId: "test", messages: [] as never[], abortSignal: new Abor
 
 vi.mock("@src/config.js", () => ({
   getMinicawHome: () => tmpDir,
+  getActivePersonaHome: () => tmpDir,
 }));
 
 describe("vault tools", () => {

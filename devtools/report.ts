@@ -21,6 +21,7 @@ import { formatReport as sideEffectsReport } from "./side-effects.js";
 import { formatReport as couplingReport } from "./coupling.js";
 import { formatReport as readabilityReport } from "./readability.js";
 import { formatReport as cohesionReport } from "./cohesion.js";
+import { extractFeatures, formatText as featuresText, formatMarkdown as featuresMd } from "./features.js";
 
 export type QualitySummary = {
   timestamp: string;
@@ -37,6 +38,8 @@ export type QualitySummary = {
   coupling: string;
   readability: string;
   cohesion: string;
+  features: string;
+  featuresMd: string;
 };
 
 export function generateReports(rootDir: string): QualitySummary {
@@ -57,6 +60,8 @@ export function generateReports(rootDir: string): QualitySummary {
     coupling: couplingReport(rootDir),
     readability: readabilityReport(rootDir),
     cohesion: cohesionReport(rootDir),
+    features: featuresText(extractFeatures(rootDir)),
+    featuresMd: featuresMd(extractFeatures(rootDir)),
   };
 }
 
@@ -86,6 +91,8 @@ export function writeReports(reports: QualitySummary, outDir: string): void {
   fs.writeFileSync(path.join(outDir, "coupling.txt"), reports.coupling);
   fs.writeFileSync(path.join(outDir, "readability.txt"), reports.readability);
   fs.writeFileSync(path.join(outDir, "cohesion.txt"), reports.cohesion);
+  fs.writeFileSync(path.join(outDir, "features.txt"), reports.features);
+  fs.writeFileSync(path.join(outDir, "FEATURES.md"), reports.featuresMd);
 
   // Mermaid diagrams (renderable on GitHub, IDEs, etc.)
   fs.writeFileSync(path.join(outDir, "depgraph.mermaid"), reports.depgraphMermaid);

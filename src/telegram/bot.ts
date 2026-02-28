@@ -32,7 +32,7 @@ export async function startBot(config: MinicawConfig): Promise<void> {
   const runner = run(bot, {
     runner: {
       fetch: {
-        allowed_updates: ["message"],
+        allowed_updates: ["message", "callback_query"],
       },
     },
   });

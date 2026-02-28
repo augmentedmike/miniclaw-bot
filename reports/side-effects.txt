@@ -8,44 +8,104 @@ IMPURE FUNCTIONS (have side effects):
     isExpired:118  [date]
     getAccessToken:127  [date]
   config.ts:
-    ensureMinicawDirs:24  [fs]
-    loadConfig:35  [fs] [env]
+    writeActivePersona:52  [fs]
+    ensureMinicawDirs:59  [fs]
+    ensurePersonaDirs:77  [fs]
+    loadConfig:99  [fs] [env]
+  context.ts:
+    saveContext:54  [date]
   conversation.ts:
-    loadHistory:14  [fs]
-    saveHistory:29  [fs]
+    loadHistory:52  [fs]
+    appendToHistory:68  [fs]
+    archiveRotatedMessages:91  [fs] [date]
   memory/search.ts:
-    searchMemory:15  [fs]
+    ensureQmdCollection:31  [fs] [child_process]
+    indexMemory:46  [child_process]
+    searchMemory:61  [child_process]
+    vectorSearchMemory:74  [child_process]
+    deepSearchMemory:87  [child_process]
   memory/store.ts:
-    saveMemory:21  [fs]
-    readMemory:33  [fs]
-    listMemories:46  [fs]
+    saveMemory:23  [fs]
+    readMemory:40  [fs]
+    listMemories:53  [fs]
+  persona.ts:
+    loadPersona:66  [fs]
+    savePersona:79  [fs]
+    listPersonas:88  [fs]
+    loadActivePersona:112  [fs] [console]
+  setup.ts:
+    runSetup:55  [process] [console]
+  snapshot.ts:
+    exportSnapshot:36  [fs] [date] [child_process]
+    listSnapshots:164  [fs]
+    showSnapshot:178  [child_process]
   system-prompt.ts:
-    buildSystemPrompt:3  [process] [env] [date]
+    buildSystemPrompt:4  [process] [env] [date]
+  telegram/access.ts:
+    loadAccess:24  [fs]
+    saveAccess:33  [fs]
+    addPending:56  [date]
   telegram/bot.ts:
     startBot:7  [console]
   telegram/handlers.ts:
-    registerHandlers:7  [console]
+    registerHandlers:15  [console]
+  tools/edit.ts:
+    createEditFileTool:6  [fs]
+  tools/files.ts:
+    createReadFileTool:7  [fs]
+    createWriteFileTool:36  [fs]
+    createListDirectoryTool:58  [fs]
+  tools/glob.ts:
+    createGlobTool:5  [fs] [process] [child_process]
+  tools/grep.ts:
+    createGrepTool:7  [process] [child_process]
+  tools/run-process.ts:
+    runProcess:18  [child_process]
   tools/shell.ts:
-    createShellTool:5  [process] [env] [child_process]
+    createShellTool:93  [process] [env]
+  tools/util.ts:
+    resolveJailed:24  [fs]
   vault.ts:
     getMasterPassword:56  [fs] [env]
     initVaultKey:77  [fs]
     vaultSet:178  [date]
+  web/server.ts:
+    startWebServer:5  [network] [process] [env] [console]
 
 PURE FUNCTIONS (no side effects):
 ──────────────────────────────────────────────────────────────────────
-  ✓ agent.ts:17  createTools
-  ✓ agent.ts:36  runAgent
+  ✓ agent.ts:21  createTools
+  ✓ agent.ts:47  runAgent
   ✓ auth.ts:110  writeCredentials
   ✓ auth.ts:114  readCredentials
-  ✓ config.ts:20  getMinicawHome
-  ✓ conversation.ts:39  appendToHistory
+  ✓ config.ts:18  getMinicawHome
+  ✓ config.ts:23  getSystemDir
+  ✓ config.ts:28  getUserDir
+  ✓ config.ts:37  getActivePersonaHome
+  ✓ context.ts:12  retrieveContext
+  ✓ kb/embeddings.ts:23  embed
+  ✓ kb/embeddings.ts:32  isModelLoaded
+  ✓ kb/embeddings.ts:37  unloadModel
+  ✓ kb/index.ts:13  getKB
+  ✓ kb/index.ts:26  closeKB
+  ✓ persona.ts:11  parsePersona
+  ✓ persona.ts:39  formatPersona
+  ✓ persona.ts:59  buildPersonaPrompt
+  ✓ snapshot.ts:118  restoreSnapshot
+  ✓ telegram/access.ts:37  claimOwner
+  ✓ telegram/access.ts:48  isAllowed
+  ✓ telegram/access.ts:52  isPending
+  ✓ telegram/access.ts:63  approveUser
+  ✓ telegram/access.ts:72  denyUser
+  ✓ telegram/access.ts:78  revokeUser
   ✓ telegram/format.ts:32  markdownToTelegramHtml
   ✓ telegram/format.ts:152  chunkText
   ✓ telegram/send.ts:11  sendResponse
+  ✓ tools/util.ts:9  formatToolError
   ✓ vault.ts:217  vaultGet
   ✓ vault.ts:236  vaultDelete
   ✓ vault.ts:256  vaultList
+  ✓ web/handler.ts:24  createRequestHandler
 
-Total: 29 functions, 12 pure (41%), 17 impure
-Effect frequency: fs(10), date(4), env(4), process(2), console(2), child_process(1)
+Total: 77 functions, 32 pure (42%), 45 impure
+Effect frequency: fs(27), child_process(10), date(8), process(6), env(5), console(5), network(1)

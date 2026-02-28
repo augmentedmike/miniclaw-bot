@@ -6,28 +6,46 @@
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Cmplx  LOC  Nest  Params  Function
 ────────────────────────────────────────────────────────────────────────────────
-  F      23    85    6      0     main (vault-cli.ts:50)
-  F      23    85    6      0     main (vault-cli.ts:50)
+  F      44   136    8      2     checkCommandJail (tools/shell.ts:12)
+  C      26    44    3      0     loadConfig (config.ts:99)
+  C      24    22    4      1     parseQmdJson (memory/search.ts:99)
+  F      23   154    4      0     main (install-tui.ts:34)
+  D      23    31    2      4     add (kb/engine.ts:98)
   D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
-  D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
-  D      22    77    5      1     switch (vault-cli.ts:57)
+  F      19   110    9      2     registerHandlers (telegram/handlers.ts:15)
+  F      19    66    6      1     createGrepTool (tools/grep.ts:7)
+  B      17    26    2      2     search (kb/engine.ts:179)
+  D      17    54    5      0     handleImportMemory (kb-cli.ts:157)
+  B      17     8    2      1     for (memory/search.ts:106)
+  F      17    54    7      2     createShellTool (tools/shell.ts:93)
+  F      17    92    6      1     createRequestHandler (web/handler.ts:24)
+  F      17    64    6      0     send (web/ui.ts:162)
   C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
-  C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
-  D      12    49    7      1     createShellTool (tools/shell.ts:5)
-  D      12    49    7      1     createShellTool (tools/shell.ts:5)
+  C      14    63    3      0     main (index.ts:5)
+  C      14    31    4      1     for (kb-cli.ts:176)
+  B      13    23    3      1     for (kb-cli.ts:183)
+  B      12    14    3      1     await (agent.ts:114)
+  C      12    24    4      1     extractTextTurns (conversation.ts:23)
+  B      12    19    2      0     main (kb-cli.ts:279)
+  D      12    50    3      6     buildSystemPrompt (system-prompt.ts:4)
   B      11    16    2      1     parseClaudeOauth (auth.ts:20)
-  B      11    16    2      1     parseClaudeOauth (auth.ts:20)
-  B      11    20    2      0     loadConfig (config.ts:35)
-  B      11    20    2      0     loadConfig (config.ts:35)
+  B      11    20    3      1     for (conversation.ts:25)
+  B      11    13    1      1     switch (kb-cli.ts:284)
+  D      11    52    4      1     handleCreate (persona-cli.ts:50)
   D      11    25    6      4     sendResponse (telegram/send.ts:11)
-  D      11    25    6      4     sendResponse (telegram/send.ts:11)
+  D      11    50    6      1     createGlobTool (tools/glob.ts:5)
+  A      10    17    2      2     update (kb/engine.ts:134)
+  A      10    18    2      0     main (persona-cli.ts:207)
+  C      10    77    4      1     exportSnapshot (snapshot.ts:36)
+  B      10    39    5      2     restoreSnapshot (snapshot.ts:118)
   B      10    20    5      1     for (telegram/send.ts:20)
+  B      10    24    4      1     while (web/ui.ts:190)
 
 SUMMARY:
-  Total functions: 189
-  A (simple):     166
-  B (moderate):   10
-  C (complex):    4
+  Total functions: 378
+  A (simple):     334
+  B (moderate):   19
+  C (complex):    11
   D (very complex): 7
-  F (needs refactor): 2
-  Avg complexity: 3.2
+  F (needs refactor): 7
+  Avg complexity: 3.4

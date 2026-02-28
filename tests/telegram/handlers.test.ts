@@ -11,19 +11,44 @@ vi.mock("@src/agent.js", () => ({
   })),
 }));
 
-// Mock conversation module
-vi.mock("@src/conversation.js", () => ({
-  loadHistory: vi.fn(() => []),
-  saveHistory: vi.fn(),
-}));
-
 // Mock send module
 vi.mock("@telegram/send.js", () => ({
   sendResponse: vi.fn(async () => {}),
 }));
 
+// Mock access module — default to owner already claimed with user 999
+vi.mock("@telegram/access.js", () => ({
+  loadAccess: vi.fn(() => ({
+    ownerId: 999,
+    ownerUsername: "testowner",
+    allowedUsers: [999],
+    pendingUsers: [],
+  })),
+  claimOwner: vi.fn((_id: number, _u: string | null) => ({
+    ownerId: 999,
+    ownerUsername: "testowner",
+    allowedUsers: [999],
+    pendingUsers: [],
+  })),
+  isAllowed: vi.fn((_state: unknown, userId: number) => userId === 999),
+  isPending: vi.fn(() => false),
+  addPending: vi.fn((state: unknown) => state),
+  approveUser: vi.fn((state: unknown) => state),
+  denyUser: vi.fn((state: unknown) => state),
+}));
+
+function makeCtx(overrides?: { text?: string; chatId?: number; userId?: number; username?: string; messageId?: number }) {
+  const userId = overrides?.userId ?? 999;
+  return {
+    message: { text: overrides?.text ?? "hello", message_id: overrides?.messageId ?? 42 },
+    chat: { id: overrides?.chatId ?? 123 },
+    from: { id: userId, username: overrides?.username ?? "testowner" },
+    api: { sendChatAction: vi.fn(async () => true) },
+  };
+}
+
 describe("telegram handlers", () => {
-  let registeredHandler: ((ctx: unknown) => Promise<void>) | null = null;
+  let registeredHandlers: Record<string, (ctx: unknown) => Promise<void>>;
   let mockBot: {
     on: ReturnType<typeof vi.fn>;
     api: { sendMessage: ReturnType<typeof vi.fn>; sendChatAction: ReturnType<typeof vi.fn> };
@@ -31,12 +56,10 @@ describe("telegram handlers", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    registeredHandler = null;
+    registeredHandlers = {};
     mockBot = {
       on: vi.fn((event: string, handler: (ctx: unknown) => Promise<void>) => {
-        if (event === "message:text") {
-          registeredHandler = handler;
-        }
+        registeredHandlers[event] = handler;
       }),
       api: {
         sendMessage: vi.fn(async () => ({ message_id: 1 })),
@@ -45,7 +68,7 @@ describe("telegram handlers", () => {
     };
   });
 
-  it("registers a message:text handler", async () => {
+  it("registers message:text and callback_query:data handlers", async () => {
     const { registerHandlers } = await import("@telegram/handlers.js");
     registerHandlers(mockBot as any, {
       model: "test",
@@ -53,11 +76,12 @@ describe("telegram handlers", () => {
       shellTimeout: 5000,
       conversationLimit: 50,
     });
+    expect(mockBot.on).toHaveBeenCalledWith("callback_query:data", expect.any(Function));
     expect(mockBot.on).toHaveBeenCalledWith("message:text", expect.any(Function));
-    expect(registeredHandler).not.toBeNull();
+    expect(registeredHandlers["message:text"]).not.toBeUndefined();
   });
 
-  it("calls runAgent and sends response", async () => {
+  it("calls runAgent with channel telegram and sends response", async () => {
     const { registerHandlers } = await import("@telegram/handlers.js");
     const { sendResponse } = await import("@telegram/send.js");
     const { runAgent } = await import("@src/agent.js");
@@ -69,16 +93,13 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    // Simulate a message
-    const ctx = {
-      message: { text: "hello", message_id: 42 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
+    await registeredHandlers["message:text"]!(makeCtx());
 
-    await registeredHandler!(ctx);
-
-    expect(runAgent).toHaveBeenCalled();
+    expect(runAgent).toHaveBeenCalledWith(
+      [{ role: "user", content: "hello" }],
+      expect.any(Object),
+      expect.objectContaining({ channel: "telegram", userId: "default" }),
+    );
     expect(sendResponse).toHaveBeenCalledWith(
       mockBot,
       123,
@@ -98,17 +119,10 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    const ctx = {
-      message: { text: "hello", message_id: 1 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
+    const ctx = makeCtx();
+    await registeredHandlers["message:text"]!(ctx);
 
-    await registeredHandler!(ctx);
-
-    // Should have called sendChatAction with "typing"
     expect(ctx.api.sendChatAction).toHaveBeenCalledWith(123, "typing");
-    // Should have cleared the typing interval
     expect(clearIntervalSpy).toHaveBeenCalled();
     clearIntervalSpy.mockRestore();
   });
@@ -132,13 +146,7 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    const ctx = {
-      message: { text: "hello", message_id: 42 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
-
-    await registeredHandler!(ctx);
+    await registeredHandlers["message:text"]!(makeCtx());
 
     expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
       123,
@@ -160,20 +168,12 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    const ctx = {
-      message: { text: "hello", message_id: 1 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
+    await registeredHandlers["message:text"]!(makeCtx());
 
-    // Should not throw
-    await registeredHandler!(ctx);
-
-    // Should send error message back
     expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
       123,
       expect.stringContaining("LLM failed"),
-      expect.objectContaining({ reply_to_message_id: 1 }),
+      expect.objectContaining({ reply_to_message_id: 42 }),
     );
   });
 
@@ -191,13 +191,7 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    const ctx = {
-      message: { text: "hello", message_id: 1 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
-
-    await registeredHandler!(ctx);
+    await registeredHandlers["message:text"]!(makeCtx());
 
     expect(clearIntervalSpy).toHaveBeenCalled();
     clearIntervalSpy.mockRestore();
@@ -216,18 +210,12 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    const ctx = {
-      message: { text: "hello", message_id: 1 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
-
-    await registeredHandler!(ctx);
+    await registeredHandlers["message:text"]!(makeCtx());
 
     expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
       123,
       expect.stringContaining("string error"),
-      expect.objectContaining({ reply_to_message_id: 1 }),
+      expect.objectContaining({ reply_to_message_id: 42 }),
     );
   });
 
@@ -245,15 +233,68 @@ describe("telegram handlers", () => {
       conversationLimit: 50,
     });
 
-    const ctx = {
-      message: { text: "hello", message_id: 1 },
-      chat: { id: 123 },
-      api: { sendChatAction: vi.fn(async () => true) },
-    };
-
-    // Should not throw even though sendMessage fails
-    await registeredHandler!(ctx);
+    await registeredHandlers["message:text"]!(makeCtx());
 
     expect(mockBot.api.sendMessage).toHaveBeenCalled();
+  });
+
+  it("blocks unapproved users and notifies owner", async () => {
+    const { registerHandlers } = await import("@telegram/handlers.js");
+    const { addPending } = await import("@telegram/access.js");
+
+    registerHandlers(mockBot as any, {
+      model: "test",
+      maxSteps: 1,
+      shellTimeout: 5000,
+      conversationLimit: 50,
+    });
+
+    // User 555 is not allowed (isAllowed mock returns false for non-999)
+    await registeredHandlers["message:text"]!(makeCtx({ userId: 555, username: "stranger" }));
+
+    expect(addPending).toHaveBeenCalled();
+    // Should notify owner with approve/deny buttons
+    expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
+      999,
+      expect.stringContaining("stranger"),
+      expect.objectContaining({ reply_markup: expect.any(Object) }),
+    );
+    // Should tell the user their request is pending
+    expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
+      123,
+      "Access requested. The bot owner has been notified.",
+      expect.objectContaining({ reply_to_message_id: 42 }),
+    );
+  });
+
+  it("claims ownership on first message when no owner set", async () => {
+    const { registerHandlers } = await import("@telegram/handlers.js");
+    const { loadAccess, claimOwner, isAllowed } = await import("@telegram/access.js");
+
+    // No owner yet
+    (loadAccess as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+      ownerId: null,
+      ownerUsername: null,
+      allowedUsers: [],
+      pendingUsers: [],
+    });
+    // After claiming, user is allowed
+    (isAllowed as ReturnType<typeof vi.fn>).mockReturnValueOnce(true);
+
+    registerHandlers(mockBot as any, {
+      model: "test",
+      maxSteps: 1,
+      shellTimeout: 5000,
+      conversationLimit: 50,
+    });
+
+    await registeredHandlers["message:text"]!(makeCtx({ userId: 777, username: "newowner" }));
+
+    expect(claimOwner).toHaveBeenCalledWith(777, "newowner");
+    expect(mockBot.api.sendMessage).toHaveBeenCalledWith(
+      123,
+      "You are now the owner of this bot.",
+      expect.objectContaining({ reply_to_message_id: 42 }),
+    );
   });
 });
