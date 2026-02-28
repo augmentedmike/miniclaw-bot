@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process";
+import { execSync, execFileSync } from "node:child_process";
 import path from "node:path";
 import { z } from "zod";
 import { tool } from "ai";
@@ -52,14 +52,14 @@ export function createGrepTool(jailDir?: string) {
       }
 
       try {
-        const fullCmd = `${cmd} ${args.map((a) => `'${a.replace(/'/g, "'\\''")}'`).join(" ")} 2>/dev/null | head -${limit}`;
-        const result = execSync(fullCmd, {
+        const result = execFileSync(cmd, args, {
           encoding: "utf8",
           timeout: 15_000,
           maxBuffer: 1024 * 1024,
           cwd: dir,
         });
-        return result.trim() || `No matches for "${pattern}"`;
+        const lines = result.split("\n").slice(0, limit).join("\n");
+        return lines.trim() || `No matches for "${pattern}"`;
       } catch (err) {
         // grep/rg exit code 1 = no matches (not an error)
         if (err && typeof err === "object" && "status" in err && err.status === 1) {

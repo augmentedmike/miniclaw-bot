@@ -163,7 +163,6 @@ async function main() {
     const key = initVaultKey();
 
     vaultSpinner.stop("Vault initialized");
-    p.log.info(`Key (first 8 chars): ${key.slice(0, 8)}...`);
   }
 
   // ── Summary ───────────────────────────────────────────────────

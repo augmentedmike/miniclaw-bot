@@ -3,9 +3,10 @@
 ╚══════════════════════════════════════════════════╝
 
 SRP (Single Responsibility):
+  ✗ kb/engine.ts: 505 lines — file is very long, consider extracting
   △ config.ts: 8 exports — approaching too many responsibilities
-  △ kb/engine.ts: 377 lines — file is very long, consider extracting
-  △ kb-cli.ts: 303 lines — file is very long, consider extracting
+  △ kb/types.ts: 8 exports — approaching too many responsibilities
+  △ kb-cli.ts: 404 lines — file is very long, consider extracting
   △ persona.ts: 7 exports — approaching too many responsibilities
   △ telegram/access.ts: 10 exports — approaching too many responsibilities
   △ vault.ts: 8 exports — approaching too many responsibilities
@@ -23,4 +24,4 @@ DIP (Dependency Inversion):
   △ telegram/access.ts: Direct fs import — consider injecting via dependency
   △ vault.ts: Direct fs import — consider injecting via dependency
 
-Total: 0 errors, 17 warnings
+Total: 1 errors, 17 warnings

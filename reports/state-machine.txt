@@ -188,6 +188,7 @@
 │
 │  attempt ──[no error]──▶ success
 │  attempt ──[catch]──▶ caught
+│  caught ──[retry]──▶ attempt
 └───
 
 ┌─── telegram/bot.ts :: process_events ───
@@ -499,4 +500,4 @@
 │  attempt ──[catch]──▶ caught
 └───
 
-Total: 44 state machines, 170 states, 151 transitions
+Total: 44 state machines, 170 states, 152 transitions

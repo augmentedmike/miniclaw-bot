@@ -1,4 +1,4 @@
-Quality Report — 2026-02-28T22:09:42.382Z
+Quality Report — 2026-02-28T23:05:33.779Z
 ==================================================
 
 ╔══════════════════════════════════════════════════╗
@@ -29,9 +29,9 @@ Quality Report — 2026-02-28T22:09:42.382Z
 
 ┌─── kb/ ──────────────────────────────────────┐
 │  embeddings.ts                  in:1 out:0
-│  engine.ts                      in:2 out:2
+│  engine.ts                      in:2 out:3
 │  index.ts                       in:3 out:2
-│  types.ts                       in:3 out:0
+│  types.ts                       in:4 out:0 ★ hub
 │
 │  → depends on: .
 └──────────────────────────────────────────────┘
@@ -78,7 +78,7 @@ Quality Report — 2026-02-28T22:09:42.382Z
 │  → depends on: .
 └──────────────────────────────────────────────┘
 
-Modules: 6  Files: 43  Dependencies: 85  Cycles: 0
+Modules: 6  Files: 43  Dependencies: 86  Cycles: 0
 
 ╔══════════════════════════════════════════════════╗
 ║           COMPLEXITY REPORT                     ║
@@ -89,57 +89,62 @@ Modules: 6  Files: 43  Dependencies: 85  Cycles: 0
 Grade  Cmplx  LOC  Nest  Params  Function
 ────────────────────────────────────────────────────────────────────────────────
   F      44   136    8      2     checkCommandJail (tools/shell.ts:12)
+  C      39    35    2      3     add (kb/engine.ts:149)
+  C      28    46    3      2     search (kb/engine.ts:239)
   C      26    44    3      0     loadConfig (config.ts:99)
-  C      24    22    4      1     parseQmdJson (memory/search.ts:99)
-  F      23   154    4      0     main (install-tui.ts:34)
-  D      23    31    2      4     add (kb/engine.ts:98)
+  D      26    61    3      1     handleAdd (kb-cli.ts:74)
+  C      24    19    4      1     parseQmdJson (memory/search.ts:99)
+  F      23   153    4      0     main (install-tui.ts:34)
   D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
-  F      19   110    9      2     registerHandlers (telegram/handlers.ts:15)
+  C      21    21    2      3     update (kb/engine.ts:185)
+  F      20   116    9      2     registerHandlers (telegram/handlers.ts:15)
   F      19    66    6      1     createGrepTool (tools/grep.ts:7)
-  B      17    26    2      2     search (kb/engine.ts:179)
-  D      17    54    5      0     handleImportMemory (kb-cli.ts:157)
+  D      17    55    5      0     handleImportMemory (kb-cli.ts:249)
   B      17     8    2      1     for (memory/search.ts:106)
   F      17    54    7      2     createShellTool (tools/shell.ts:93)
   F      17    92    6      1     createRequestHandler (web/handler.ts:24)
   F      17    64    6      0     send (web/ui.ts:162)
   C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
   C      14    63    3      0     main (index.ts:5)
-  C      14    31    4      1     for (kb-cli.ts:176)
-  B      13    23    3      1     for (kb-cli.ts:183)
+  C      14    32    4      1     for (kb-cli.ts:268)
+  B      13    24    3      1     for (kb-cli.ts:275)
   B      12    14    3      1     await (agent.ts:114)
   C      12    24    4      1     extractTextTurns (conversation.ts:23)
-  B      12    19    2      0     main (kb-cli.ts:279)
+  B      12    19    2      0     main (kb-cli.ts:380)
   D      12    50    3      6     buildSystemPrompt (system-prompt.ts:4)
   B      11    16    2      1     parseClaudeOauth (auth.ts:20)
   B      11    20    3      1     for (conversation.ts:25)
-  B      11    13    1      1     switch (kb-cli.ts:284)
+  C      11    32    3      4     keywordSearch (kb/engine.ts:312)
+  B      11    13    1      1     switch (kb-cli.ts:385)
   D      11    52    4      1     handleCreate (persona-cli.ts:50)
   D      11    25    6      4     sendResponse (telegram/send.ts:11)
-  D      11    50    6      1     createGlobTool (tools/glob.ts:5)
-  A      10    17    2      2     update (kb/engine.ts:134)
+  F      11    52    6      1     createGlobTool (tools/glob.ts:5)
+  A      10    12    1      1     switch (kb/engine.ts:247)
+  B      10    25    3      4     vectorSearch (kb/engine.ts:286)
   A      10    18    2      0     main (persona-cli.ts:207)
-  C      10    77    4      1     exportSnapshot (snapshot.ts:36)
-  B      10    39    5      2     restoreSnapshot (snapshot.ts:118)
+  C      10    80    4      1     exportSnapshot (snapshot.ts:36)
+  B      10    39    5      2     restoreSnapshot (snapshot.ts:121)
   B      10    20    5      1     for (telegram/send.ts:20)
   B      10    24    4      1     while (web/ui.ts:190)
 
 SUMMARY:
-  Total functions: 378
-  A (simple):     334
-  B (moderate):   19
-  C (complex):    11
-  D (very complex): 7
-  F (needs refactor): 7
-  Avg complexity: 3.4
+  Total functions: 393
+  A (simple):     342
+  B (moderate):   22
+  C (complex):    15
+  D (very complex): 6
+  F (needs refactor): 8
+  Avg complexity: 3.6
 
 ╔══════════════════════════════════════════════════╗
 ║           SOLID CHECK REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
 SRP (Single Responsibility):
+  ✗ kb/engine.ts: 505 lines — file is very long, consider extracting
   △ config.ts: 8 exports — approaching too many responsibilities
-  △ kb/engine.ts: 377 lines — file is very long, consider extracting
-  △ kb-cli.ts: 303 lines — file is very long, consider extracting
+  △ kb/types.ts: 8 exports — approaching too many responsibilities
+  △ kb-cli.ts: 404 lines — file is very long, consider extracting
   △ persona.ts: 7 exports — approaching too many responsibilities
   △ telegram/access.ts: 10 exports — approaching too many responsibilities
   △ vault.ts: 8 exports — approaching too many responsibilities
@@ -157,7 +162,7 @@ DIP (Dependency Inversion):
   △ telegram/access.ts: Direct fs import — consider injecting via dependency
   △ vault.ts: Direct fs import — consider injecting via dependency
 
-Total: 0 errors, 17 warnings
+Total: 1 errors, 17 warnings
 
 ╔══════════════════════════════════════════════════╗
 ║           COUPLING MATRIX                       ║
@@ -191,18 +196,18 @@ FILE SCORES (worst first):
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
 ────────────────────────────────────────────────────────────────────────────────
-  C      55     37    141     7%     7    5    kb/engine.ts
-  C      58     37    110     7%     6    5    kb-cli.ts
+  C      57     40    176     8%    12    5    kb/engine.ts
+  C      57     40    117     5%     6    5    kb-cli.ts
   C      58     37     89     1%     6    8    tools/files.ts
   C      62     30     80     4%     8    6    web/handler.ts
-  C      63     41    124     7%     5    6    tools/grep.ts
+  C      63     41    116     7%     5    6    tools/grep.ts
   C      64     39    119     7%     8    5    agent.ts
   C      64     36    114    10%     3    9    telegram/handlers.ts
   C      66     46    123     0%     7    3    tools/memory.ts
-  B      70     40    120     5%     4    5    tools/kb.ts
+  C      68     45    175     5%     4    5    tools/kb.ts
+  B      70     38     94     7%     6    6    tools/glob.ts
   B      72     26     83     1%     4    6    web/ui.ts
   B      75     45    149     2%     0    7    tools/edit.ts
-  B      76     38     94     7%     4    6    tools/glob.ts
   B      76     36    110    10%     3    5    tools/web.ts
   B      78     30     93     0%     3    4    setup.ts
   B      78     34     92    15%     3    6    telegram/send.ts
@@ -212,31 +217,31 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   B      83     35    121    20%     8    4    context.ts
   B      83     32    109     7%     1    5    index.ts
   A      86     40    133    11%     1    6    tools/vault.ts
+  A      89     34    101    24%     3    4    memory/search.ts
   A      89     39    112     8%     0    6    tools/claude-code.ts
+  A      90     32     97    19%     1    5    snapshot.ts
   A      90     31     74    13%     0    4    telegram/bot.ts
   A      91     34     76     3%     2    4    web/server.ts
-  A      92     33     92    23%     3    4    memory/search.ts
   A      92     33    224     7%     0    4    persona-cli.ts
-  A      93     32    111    19%     1    5    snapshot.ts
   A      94     33    105    10%     0    4    install-tui.ts
   A      94     57    238     0%     0    3    system-prompt.ts
-  A      94     34    130     9%     1    4    vault-cli.ts
+  A      94     33    130     9%     1    4    vault-cli.ts
   A      96     40    103    24%     2    5    telegram/format.ts
-  A      98     36     89    17%     3    4    conversation.ts
+  A      96     34     84    12%     2    4    tools/run-process.ts
+  A      98     37     91    17%     3    4    conversation.ts
   A     100     36    120    20%     2    3    config.ts
   A     100     34     81    28%     3    2    kb/embeddings.ts
   A     100     34     77    19%     0    2    kb/index.ts
-  A     100     23     74     0%     0    1    kb/types.ts
-  A     100     27     71    17%     0    2    memory/store.ts
+  A     100     26     96     9%     0    1    kb/types.ts
+  A     100     27     76    17%     0    2    memory/store.ts
   A     100     35    110    26%     0    3    persona.ts
   A     100     32     93    10%     0    3    snapshot-cli.ts
-  A     100     34    102     7%     0    3    telegram/access.ts
-  A     100     34     84    16%     0    3    tools/run-process.ts
+  A     100     35    102    15%     0    3    telegram/access.ts
   A     100     37     85    32%     0    4    tools/util.ts
   A     100     22     59     0%     0    1    types.ts
 
 Average readability score: 84/100
-Grades: A:23 B:12 C:8 D:0 F:0
+Grades: A:23 B:11 C:9 D:0 F:0
 
 ╔══════════════════════════════════════════════════╗
 ║           MODULE COHESION REPORT                ║
@@ -258,14 +263,14 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   △  56      2         0          4         2     telegram/format.ts
   △  58      4         0          0         1     tools/kb.ts
   △  58      4         0          0         1     tools/memory.ts
+  △  64      5         0         10         5     memory/search.ts
   ✓  65      2         0         10         2     context.ts
-  ✓  65      5         0         10         5     memory/search.ts
   ✓  68      6         0         20         4     tools/files.ts
   ✓  69      4         2          1         4     auth.ts
   ✓  72      3         1          6         3     conversation.ts
   ✓  73      7         4          3         6     persona.ts
   ✓  76      6         3          4         3     vault.ts
-  ✓  77      9         7          3         8     telegram/access.ts
+  ✓  80      9         8          3         8     telegram/access.ts
   ✓  85      8         7          3         4     config.ts
 
 Average cohesion: 61/100
@@ -291,11 +296,8 @@ IMPURE FUNCTIONS (have side effects):
     appendToHistory:68  [fs]
     archiveRotatedMessages:91  [fs] [date]
   memory/search.ts:
-    ensureQmdCollection:31  [fs] [child_process]
+    ensureQmdCollection:31  [fs]
     indexMemory:46  [child_process]
-    searchMemory:61  [child_process]
-    vectorSearchMemory:74  [child_process]
-    deepSearchMemory:87  [child_process]
   memory/store.ts:
     saveMemory:23  [fs]
     readMemory:40  [fs]
@@ -308,15 +310,15 @@ IMPURE FUNCTIONS (have side effects):
   setup.ts:
     runSetup:55  [process] [console]
   snapshot.ts:
-    exportSnapshot:36  [fs] [date] [child_process]
-    listSnapshots:164  [fs]
-    showSnapshot:178  [child_process]
+    exportSnapshot:36  [fs] [date]
+    listSnapshots:167  [fs]
   system-prompt.ts:
     buildSystemPrompt:4  [process] [env] [date]
   telegram/access.ts:
     loadAccess:24  [fs]
     saveAccess:33  [fs]
-    addPending:56  [date]
+    claimOwner:41  [fs]
+    addPending:86  [date]
   telegram/bot.ts:
     startBot:7  [console]
   telegram/handlers.ts:
@@ -328,11 +330,11 @@ IMPURE FUNCTIONS (have side effects):
     createWriteFileTool:36  [fs]
     createListDirectoryTool:58  [fs]
   tools/glob.ts:
-    createGlobTool:5  [fs] [process] [child_process]
+    createGlobTool:5  [fs] [process]
   tools/grep.ts:
     createGrepTool:7  [process] [child_process]
   tools/run-process.ts:
-    runProcess:18  [child_process]
+    runProcess:20  [child_process]
   tools/shell.ts:
     createShellTool:93  [process] [env]
   tools/util.ts:
@@ -360,16 +362,19 @@ PURE FUNCTIONS (no side effects):
   ✓ kb/embeddings.ts:37  unloadModel
   ✓ kb/index.ts:13  getKB
   ✓ kb/index.ts:26  closeKB
+  ✓ memory/search.ts:61  searchMemory
+  ✓ memory/search.ts:74  vectorSearchMemory
+  ✓ memory/search.ts:87  deepSearchMemory
   ✓ persona.ts:11  parsePersona
   ✓ persona.ts:39  formatPersona
   ✓ persona.ts:59  buildPersonaPrompt
-  ✓ snapshot.ts:118  restoreSnapshot
-  ✓ telegram/access.ts:37  claimOwner
-  ✓ telegram/access.ts:48  isAllowed
-  ✓ telegram/access.ts:52  isPending
-  ✓ telegram/access.ts:63  approveUser
-  ✓ telegram/access.ts:72  denyUser
-  ✓ telegram/access.ts:78  revokeUser
+  ✓ snapshot.ts:121  restoreSnapshot
+  ✓ snapshot.ts:181  showSnapshot
+  ✓ telegram/access.ts:78  isAllowed
+  ✓ telegram/access.ts:82  isPending
+  ✓ telegram/access.ts:93  approveUser
+  ✓ telegram/access.ts:102  denyUser
+  ✓ telegram/access.ts:108  revokeUser
   ✓ telegram/format.ts:32  markdownToTelegramHtml
   ✓ telegram/format.ts:152  chunkText
   ✓ telegram/send.ts:11  sendResponse
@@ -379,8 +384,8 @@ PURE FUNCTIONS (no side effects):
   ✓ vault.ts:256  vaultList
   ✓ web/handler.ts:24  createRequestHandler
 
-Total: 77 functions, 32 pure (42%), 45 impure
-Effect frequency: fs(27), child_process(10), date(8), process(6), env(5), console(5), network(1)
+Total: 77 functions, 35 pure (45%), 42 impure
+Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process(3), network(1)
 
 ╔══════════════════════════════════════════════════╗
 ║           STATE MACHINE MAP                     ║
@@ -572,6 +577,7 @@ Effect frequency: fs(27), child_process(10), date(8), process(6), env(5), consol
 │
 │  attempt ──[no error]──▶ success
 │  attempt ──[catch]──▶ caught
+│  caught ──[retry]──▶ attempt
 └───
 
 ┌─── telegram/bot.ts :: process_events ───
@@ -883,7 +889,7 @@ Effect frequency: fs(27), child_process(10), date(8), process(6), env(5), consol
 │  attempt ──[catch]──▶ caught
 └───
 
-Total: 44 state machines, 170 states, 151 transitions
+Total: 44 state machines, 170 states, 152 transitions
 
 ╔══════════════════════════════════════════════════╗
 ║           DUPLICATION REPORT                    ║
@@ -911,7 +917,7 @@ Total: 44 state machines, 170 states, 151 transitions
     config.ts:46
     memory/store.ts:45
     persona.ts:71
-    snapshot.ts:186
+    snapshot.ts:189
     vault.ts:133
     Preview:   } catch {
 
@@ -929,13 +935,13 @@ Total: 44 state machines, 170 states, 151 transitions
     conversation.ts:58
     memory/store.ts:59
     persona.ts:98
-    snapshot.ts:170
+    snapshot.ts:173
     Preview:   } catch {
 
   Block (5 lines) found in 3 files:
     conversation.ts:59
     persona.ts:99
-    snapshot.ts:171
+    snapshot.ts:174
     Preview:     return [];
 
   Block (5 lines) found in 2 files:
@@ -969,43 +975,42 @@ Total: 44 state machines, 170 states, 151 transitions
     Preview: 
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:187
-    kb-cli.ts:297
+    install-tui.ts:186
+    kb-cli.ts:398
     persona-cli.ts:224
     snapshot-cli.ts:128
     vault-cli.ts:133
     Preview: }
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:188
-    kb-cli.ts:298
+    install-tui.ts:187
+    kb-cli.ts:399
     persona-cli.ts:225
     snapshot-cli.ts:129
     vault-cli.ts:134
     Preview: 
 
-  Block (5 lines) found in 3 files:
-    kb/engine.ts:201
-    tools/web.ts:160
-    vault.ts:269
-    Preview:     }
+  Block (5 lines) found in 2 files:
+    kb-cli.ts:24
+    tools/kb.ts:13
+    Preview: 
 
   Block (5 lines) found in 4 files:
-    kb-cli.ts:280
+    kb-cli.ts:381
     persona-cli.ts:209
     snapshot-cli.ts:115
     vault-cli.ts:121
     Preview:   const [command, ...args] = process.argv.slice(2);
 
   Block (5 lines) found in 4 files:
-    kb-cli.ts:295
+    kb-cli.ts:396
     persona-cli.ts:222
     snapshot-cli.ts:126
     vault-cli.ts:131
     Preview:     default:                   usage();
 
   Block (5 lines) found in 4 files:
-    kb-cli.ts:296
+    kb-cli.ts:397
     persona-cli.ts:223
     snapshot-cli.ts:127
     vault-cli.ts:132
@@ -1026,13 +1031,13 @@ Total: 44 state machines, 170 states, 151 transitions
    persona.ts:39  export formatPersona
    setup.ts:55  export runSetup
    telegram/access.ts:33  export saveAccess
-   telegram/access.ts:78  export revokeUser
+   telegram/access.ts:108  export revokeUser
    telegram/bot.ts:7  export startBot
    tools/edit.ts:50  export editFileTool
    tools/files.ts:95  export readFileTool
    tools/files.ts:96  export writeFileTool
    tools/files.ts:97  export listDirectoryTool
-   tools/glob.ts:57  export globTool
+   tools/glob.ts:59  export globTool
    tools/grep.ts:75  export grepTool
    web/server.ts:5  export startWebServer
 
@@ -1099,8 +1104,9 @@ Total: 44 state machines, 170 states, 151 transitions
 │  function   getAccessToken → agent
 └
 
-┌─── kb/engine.ts (1 exports, 2 consumers)
+┌─── kb/engine.ts (2 exports, 2 consumers)
 │  class      KBEngine → index, kb-cli
+│  type       AddOptions → UNUSED
 └
 
 ┌─── persona.ts (7 exports, 2 consumers)
@@ -1139,6 +1145,17 @@ Total: 44 state machines, 170 states, 151 transitions
 ┌─── kb/index.ts (2 exports, 1 consumers)
 │  function   getKB → kb
 │  function   closeKB → UNUSED
+└
+
+┌─── kb/types.ts (8 exports, 1 consumers)
+│  const      ORIGIN_WEIGHTS → engine
+│  type       KBCategory → UNUSED
+│  type       KBOrigin → UNUSED
+│  type       KBVolatility → UNUSED
+│  type       KBEntry → UNUSED
+│  type       KBSearchResult → UNUSED
+│  type       KBSearchOptions → UNUSED
+│  type       KBStats → UNUSED
 └
 
 ┌─── snapshot.ts (5 exports, 1 consumers)
@@ -1243,14 +1260,6 @@ Total: 44 state machines, 170 states, 151 transitions
 │  const      HTML → handler
 └
 
-┌─── kb/types.ts (5 exports, 0 consumers)
-│  type       KBCategory → UNUSED
-│  type       KBEntry → UNUSED
-│  type       KBSearchResult → UNUSED
-│  type       KBSearchOptions → UNUSED
-│  type       KBStats → UNUSED
-└
-
 ┌─── setup.ts (1 exports, 0 consumers)
 │  function   runSetup → UNUSED
 └
@@ -1271,4 +1280,4 @@ Total: 44 state machines, 170 states, 151 transitions
 │  function   startWebServer → UNUSED
 └
 
-Total: 37 modules, 115 exports, 33 potentially unused
+Total: 37 modules, 119 exports, 36 potentially unused

@@ -31,18 +31,48 @@ export function loadAccess(): AccessState {
 }
 
 export function saveAccess(state: AccessState): void {
-  fs.writeFileSync(accessPath(), JSON.stringify(state, null, 2), "utf8");
+  fs.writeFileSync(accessPath(), JSON.stringify(state, null, 2), { encoding: "utf8", mode: 0o600 });
 }
 
-export function claimOwner(userId: number, username: string | null): AccessState {
-  const state: AccessState = {
-    ownerId: userId,
-    ownerUsername: username,
-    allowedUsers: [userId],
-    pendingUsers: [],
-  };
-  saveAccess(state);
-  return state;
+/**
+ * Atomically claim ownership. Uses O_EXCL write to a lock file
+ * to prevent race conditions when two users message simultaneously.
+ */
+export function claimOwner(userId: number, username: string | null): AccessState | null {
+  const lockPath = accessPath() + ".lock";
+  let fd: number;
+  try {
+    // O_CREAT | O_EXCL — fails if lock file already exists
+    fd = fs.openSync(lockPath, fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_WRONLY);
+    fs.closeSync(fd);
+  } catch {
+    // Lock file exists — another claim is in progress or already completed
+    // Re-read state to check if owner was set
+    const current = loadAccess();
+    if (current.ownerId !== null) return null; // Already claimed
+    // Stale lock — remove and retry once
+    try { fs.unlinkSync(lockPath); } catch { /* ignore */ }
+    return claimOwner(userId, username);
+  }
+
+  try {
+    // Double-check: re-read state under lock
+    const current = loadAccess();
+    if (current.ownerId !== null) {
+      return null; // Already claimed between our check and lock
+    }
+
+    const state: AccessState = {
+      ownerId: userId,
+      ownerUsername: username,
+      allowedUsers: [userId],
+      pendingUsers: [],
+    };
+    saveAccess(state);
+    return state;
+  } finally {
+    try { fs.unlinkSync(lockPath); } catch { /* ignore */ }
+  }
 }
 
 export function isAllowed(state: AccessState, userId: number): boolean {

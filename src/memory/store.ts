@@ -25,7 +25,7 @@ export function saveMemory(topic: string, content: string): string {
   fs.mkdirSync(dir, { recursive: true });
   const filename = `${sanitizeTopic(topic)}.md`;
   const filePath = path.join(dir, filename);
-  fs.writeFileSync(filePath, `# ${topic}\n\n${content}\n`);
+  fs.writeFileSync(filePath, `# ${topic}\n\n${content}\n`, { mode: 0o600 });
 
   // Index the new/updated file with qmd
   ensureQmdCollection();

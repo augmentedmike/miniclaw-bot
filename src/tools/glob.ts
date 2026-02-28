@@ -37,13 +37,15 @@ export function createGlobTool(jailDir?: string) {
         return result;
       } catch (err) {
         // Fallback: use shell find for older Node versions
-        const { execSync } = await import("node:child_process");
+        const { execFileSync } = await import("node:child_process");
         try {
-          const result = execSync(
-            `find . -path './${pattern}' -type f 2>/dev/null | head -500`,
-            { cwd: dir, encoding: "utf8", timeout: 10_000 },
+          const result = execFileSync(
+            "find",
+            [".", "-path", `./${pattern}`, "-type", "f"],
+            { cwd: dir, encoding: "utf8", timeout: 10_000, maxBuffer: 1024 * 1024 },
           );
-          return result.trim() || `No files matching "${pattern}" in ${dir}`;
+          const lines = result.trim().split("\n").filter(Boolean).slice(0, 500);
+          return lines.join("\n") || `No files matching "${pattern}" in ${dir}`;
         } catch {
           const msg = err instanceof Error ? err.message : String(err);
           return `[error] ${msg}`;

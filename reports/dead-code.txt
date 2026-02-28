@@ -11,13 +11,13 @@
    persona.ts:39  export formatPersona
    setup.ts:55  export runSetup
    telegram/access.ts:33  export saveAccess
-   telegram/access.ts:78  export revokeUser
+   telegram/access.ts:108  export revokeUser
    telegram/bot.ts:7  export startBot
    tools/edit.ts:50  export editFileTool
    tools/files.ts:95  export readFileTool
    tools/files.ts:96  export writeFileTool
    tools/files.ts:97  export listDirectoryTool
-   tools/glob.ts:57  export globTool
+   tools/glob.ts:59  export globTool
    tools/grep.ts:75  export grepTool
    web/server.ts:5  export startWebServer
 

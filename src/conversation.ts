@@ -80,7 +80,7 @@ export function appendToHistory(
 
   const dir = historyDir();
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(historyPath(userId), JSON.stringify(trimmed, null, 2));
+  fs.writeFileSync(historyPath(userId), JSON.stringify(trimmed, null, 2), { mode: 0o600 });
   return discarded;
 }
 

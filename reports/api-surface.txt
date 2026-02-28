@@ -56,8 +56,9 @@
 │  function   getAccessToken → agent
 └
 
-┌─── kb/engine.ts (1 exports, 2 consumers)
+┌─── kb/engine.ts (2 exports, 2 consumers)
 │  class      KBEngine → index, kb-cli
+│  type       AddOptions → UNUSED
 └
 
 ┌─── persona.ts (7 exports, 2 consumers)
@@ -96,6 +97,17 @@
 ┌─── kb/index.ts (2 exports, 1 consumers)
 │  function   getKB → kb
 │  function   closeKB → UNUSED
+└
+
+┌─── kb/types.ts (8 exports, 1 consumers)
+│  const      ORIGIN_WEIGHTS → engine
+│  type       KBCategory → UNUSED
+│  type       KBOrigin → UNUSED
+│  type       KBVolatility → UNUSED
+│  type       KBEntry → UNUSED
+│  type       KBSearchResult → UNUSED
+│  type       KBSearchOptions → UNUSED
+│  type       KBStats → UNUSED
 └
 
 ┌─── snapshot.ts (5 exports, 1 consumers)
@@ -200,14 +212,6 @@
 │  const      HTML → handler
 └
 
-┌─── kb/types.ts (5 exports, 0 consumers)
-│  type       KBCategory → UNUSED
-│  type       KBEntry → UNUSED
-│  type       KBSearchResult → UNUSED
-│  type       KBSearchOptions → UNUSED
-│  type       KBStats → UNUSED
-└
-
 ┌─── setup.ts (1 exports, 0 consumers)
 │  function   runSetup → UNUSED
 └
@@ -228,4 +232,4 @@
 │  function   startWebServer → UNUSED
 └
 
-Total: 37 modules, 115 exports, 33 potentially unused
+Total: 37 modules, 119 exports, 36 potentially unused

@@ -41,11 +41,21 @@ describe("kb tools", () => {
   it("kb_add stores an entry and returns confirmation", async () => {
     const { kbAddTool } = await import("@tools/kb.js");
     const result = await kbAddTool.execute(
-      { category: "personality", content: "I am friendly and helpful", tags: undefined, source: undefined },
+      { category: "personality", content: "I am friendly and helpful", origin: undefined, confidence: undefined, volatility: undefined, expires_at: undefined, tags: undefined, source: undefined },
       ctx,
     );
     expect(result).toContain("Stored in KB");
     expect(result).toContain("personality");
+  });
+
+  it("kb_add accepts origin and confidence", async () => {
+    const { kbAddTool } = await import("@tools/kb.js");
+    const result = await kbAddTool.execute(
+      { category: "procedure", content: "Always validate input", origin: "scholastic", confidence: 1.0, volatility: undefined, expires_at: undefined, tags: undefined, source: undefined },
+      ctx,
+    );
+    expect(result).toContain("scholastic");
+    expect(result).toContain("conf=1.0");
   });
 
   it("kb_search finds stored entries", async () => {
@@ -55,13 +65,13 @@ describe("kb tools", () => {
     await kb.add("fact", "The user works with TypeScript");
 
     const { kbSearchTool } = await import("@tools/kb.js");
-    const result = await kbSearchTool.execute({ query: "dark mode", category: undefined, limit: undefined }, ctx);
+    const result = await kbSearchTool.execute({ query: "dark mode", category: undefined, origin: undefined, limit: undefined }, ctx);
     expect(result).toContain("dark mode");
   });
 
   it("kb_search returns empty message when no matches", async () => {
     const { kbSearchTool } = await import("@tools/kb.js");
-    const result = await kbSearchTool.execute({ query: "nonexistent topic", category: undefined, limit: undefined }, ctx);
+    const result = await kbSearchTool.execute({ query: "nonexistent topic", category: undefined, origin: undefined, limit: undefined }, ctx);
     expect(result).toContain("No KB matches");
   });
 
@@ -72,7 +82,7 @@ describe("kb tools", () => {
     await kb.add("fact", "User likes coffee");
 
     const { kbListTool } = await import("@tools/kb.js");
-    const result = await kbListTool.execute({ category: undefined }, ctx);
+    const result = await kbListTool.execute({ category: undefined, origin: undefined }, ctx);
     expect(result).toContain("personality/");
     expect(result).toContain("fact/");
   });
@@ -84,15 +94,15 @@ describe("kb tools", () => {
     await kb.add("fact", "User likes tea");
 
     const { kbListTool } = await import("@tools/kb.js");
-    const result = await kbListTool.execute({ category: "fact" }, ctx);
+    const result = await kbListTool.execute({ category: "fact", origin: undefined }, ctx);
     expect(result).toContain("fact/");
     expect(result).not.toContain("personality/");
   });
 
   it("kb_list shows empty message", async () => {
     const { kbListTool } = await import("@tools/kb.js");
-    const result = await kbListTool.execute({ category: undefined }, ctx);
-    expect(result).toContain("empty");
+    const result = await kbListTool.execute({ category: undefined, origin: undefined }, ctx);
+    expect(result).toContain("No entries");
   });
 
   it("kb_remove deletes an entry", async () => {

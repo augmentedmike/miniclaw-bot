@@ -1,4 +1,4 @@
-import { execSync, spawn } from "node:child_process";
+import { execSync, execFileSync, spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { getActivePersonaHome } from "../config.js";
@@ -30,12 +30,12 @@ function requireQmd(): void {
  */
 export function ensureQmdCollection(): void {
   requireQmd();
-  const status = execSync("qmd collection list", { encoding: "utf8", stdio: "pipe" });
+  const status = execFileSync("qmd", ["collection", "list"], { encoding: "utf8", stdio: "pipe" });
   if (status.includes("miniclaw-memory")) return;
 
   const memDir = path.join(getActivePersonaHome(), "memory");
   fs.mkdirSync(memDir, { recursive: true });
-  execSync(`qmd collection add "${memDir}" --name miniclaw-memory`, { stdio: "pipe" });
+  execFileSync("qmd", ["collection", "add", memDir, "--name", "miniclaw-memory"], { stdio: "pipe" });
 }
 
 /**
@@ -46,7 +46,7 @@ export function ensureQmdCollection(): void {
 export function indexMemory(): void {
   requireQmd();
   // Synchronous re-scan so BM25 is immediately up to date
-  execSync("qmd update", { stdio: "pipe", timeout: 15_000 });
+  execFileSync("qmd", ["update"], { stdio: "pipe", timeout: 15_000 });
   // Vector embeddings update lazily in background
   const child = spawn("qmd", ["embed"], {
     stdio: "ignore",
@@ -60,8 +60,8 @@ export function indexMemory(): void {
  */
 export function searchMemory(query: string, maxResults: number = 10): SearchResult[] {
   requireQmd();
-  const result = execSync(
-    `qmd search ${shellEscape(query)} -n ${maxResults} -c miniclaw-memory --json`,
+  const result = execFileSync(
+    "qmd", ["search", query, "-n", String(maxResults), "-c", "miniclaw-memory", "--json"],
     { encoding: "utf8", stdio: "pipe", timeout: 15_000 },
   );
   return parseQmdJson(result);
@@ -73,8 +73,8 @@ export function searchMemory(query: string, maxResults: number = 10): SearchResu
  */
 export function vectorSearchMemory(query: string, maxResults: number = 10): SearchResult[] {
   requireQmd();
-  const result = execSync(
-    `qmd vsearch ${shellEscape(query)} -n ${maxResults} -c miniclaw-memory --json`,
+  const result = execFileSync(
+    "qmd", ["vsearch", query, "-n", String(maxResults), "-c", "miniclaw-memory", "--json"],
     { encoding: "utf8", stdio: "pipe", timeout: 30_000 },
   );
   return parseQmdJson(result);
@@ -86,8 +86,8 @@ export function vectorSearchMemory(query: string, maxResults: number = 10): Sear
  */
 export function deepSearchMemory(query: string, maxResults: number = 10): SearchResult[] {
   requireQmd();
-  const result = execSync(
-    `qmd query ${shellEscape(query)} -n ${maxResults} -c miniclaw-memory --json`,
+  const result = execFileSync(
+    "qmd", ["query", query, "-n", String(maxResults), "-c", "miniclaw-memory", "--json"],
     { encoding: "utf8", stdio: "pipe", timeout: 60_000 },
   );
   return parseQmdJson(result);
@@ -114,6 +114,3 @@ function parseQmdJson(raw: string): SearchResult[] {
   return results;
 }
 
-function shellEscape(s: string): string {
-  return `'${s.replace(/'/g, "'\\''")}'`;
-}

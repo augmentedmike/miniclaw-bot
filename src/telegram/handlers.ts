@@ -53,11 +53,17 @@ export function registerHandlers(bot: Bot, config: MinicawConfig): void {
 
     // First user claims ownership
     if (state.ownerId === null) {
-      state = claimOwner(userId, username);
-      console.log(`Owner claimed: ${username ?? userId}`);
-      await bot.api.sendMessage(chatId, "You are now the owner of this bot.", {
-        reply_to_message_id: messageId,
-      });
+      const claimed = claimOwner(userId, username);
+      if (claimed) {
+        state = claimed;
+        console.log(`Owner claimed: ${username ?? userId}`);
+        await bot.api.sendMessage(chatId, "You are now the owner of this bot.", {
+          reply_to_message_id: messageId,
+        });
+      } else {
+        // Race lost — re-read state
+        state = loadAccess();
+      }
       // Fall through to handle the message normally
     }
 
@@ -113,7 +119,7 @@ export function registerHandlers(bot: Bot, config: MinicawConfig): void {
       const errMsg = err instanceof Error ? err.message : String(err);
       console.error("Agent error:", errMsg);
       try {
-        await bot.api.sendMessage(chatId, `Error: ${errMsg}`, {
+        await bot.api.sendMessage(chatId, "Something went wrong. Check server logs for details.", {
           reply_to_message_id: messageId,
         });
       } catch {

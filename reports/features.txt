@@ -100,7 +100,7 @@
     · Knowledge Base tools for the agent
     · Add an entry to the knowledge base
     · Search the knowledge base using hybrid semantic + keyword search
-    · List entries in the knowledge base, optionally filtered by category
+    · List entries in the knowledge base, optionally filtered by category or origin
     · ... and 1 more
 
     Files: context.ts, kb/engine.ts, tools/kb.ts
