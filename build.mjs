@@ -55,4 +55,22 @@ await build({
   outfile: "dist/kb-cli.mjs",
 });
 
-console.log("Build complete → dist/miniclaw.mjs, dist/vault-cli.mjs, dist/persona-cli.mjs, dist/snapshot-cli.mjs, dist/install-tui.mjs, dist/kb-cli.mjs");
+await build({
+  ...shared,
+  entryPoints: ["src/kanban-cli.ts"],
+  outfile: "dist/kanban-cli.mjs",
+});
+
+await build({
+  ...shared,
+  entryPoints: ["src/service-cli.ts"],
+  outfile: "dist/service-cli.mjs",
+});
+
+await build({
+  ...shared,
+  entryPoints: ["src/dispatch-cli.ts"],
+  outfile: "dist/dispatch-cli.mjs",
+});
+
+console.log("Build complete → dist/miniclaw.mjs, dist/vault-cli.mjs, dist/persona-cli.mjs, dist/snapshot-cli.mjs, dist/install-tui.mjs, dist/kb-cli.mjs, dist/kanban-cli.mjs, dist/service-cli.mjs, dist/dispatch-cli.mjs");

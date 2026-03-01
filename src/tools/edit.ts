@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { z } from "zod";
 import { tool } from "ai";
-import { formatToolError, resolveJailed } from "./util.js";
+import { formatToolError, resolveJailed, isProtectedPath } from "./util.js";
 
 export function createEditFileTool(jailDir?: string) {
   return tool({
@@ -18,6 +18,8 @@ export function createEditFileTool(jailDir?: string) {
     execute: async ({ path: filePath, old_string, new_string, replace_all }) => {
       try {
         const resolved = resolveJailed(filePath, jailDir);
+        const zone = isProtectedPath(resolved);
+        if (zone) return `[error] Cannot edit ${resolved} — protected ${zone} zone. Use ${zone} tools instead.`;
         const content = fs.readFileSync(resolved, "utf8");
 
         if (!content.includes(old_string)) {

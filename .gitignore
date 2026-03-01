@@ -37,5 +37,8 @@ Thumbs.db
 .idea/
 .vscode/
 
+# Deploy scripts (machine-specific)
+deploy_to_*.sh
+
 # Runtime data
 ~/.miniclaw/

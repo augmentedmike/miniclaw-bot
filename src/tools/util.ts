@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { getKanbanDir } from "../kanban.js";
 
 /**
  * Format an unknown caught error into a consistent `[error] ...` string.
@@ -62,4 +63,64 @@ export function resolveJailed(filePath: string, jailDir?: string): string {
     throw new Error(`Path ${logical} is outside jail directory ${jailDir}`);
   }
   return logical;
+}
+
+/**
+ * Directories that are protected from direct file/shell writes.
+ * Mutations must go through the dedicated tools (e.g. kanban tools).
+ * Array-based so future zones (memory, config) can be added trivially.
+ */
+function getProtectedDirs(): { dir: string; name: string }[] {
+  try {
+    const raw = getKanbanDir();
+    let resolved: string;
+    try {
+      resolved = fs.realpathSync(raw);
+    } catch {
+      resolved = raw;
+    }
+    return [{ dir: resolved, name: "kanban" }];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Resolve a path to its real location, walking up to the nearest
+ * existing ancestor when the target doesn't exist yet (same strategy
+ * as resolveJailed). Handles macOS /tmp → /private/tmp symlink.
+ */
+function realResolve(p: string): string {
+  try {
+    return fs.realpathSync(p);
+  } catch {
+    // Target doesn't exist — walk up to nearest existing ancestor
+    let ancestor = path.dirname(p);
+    let tail = path.basename(p);
+    while (ancestor !== "/" && ancestor !== ".") {
+      try {
+        return path.join(fs.realpathSync(ancestor), tail);
+      } catch {
+        tail = path.join(path.basename(ancestor), tail);
+        ancestor = path.dirname(ancestor);
+      }
+    }
+    return p;
+  }
+}
+
+/**
+ * Check if a resolved path falls inside a protected directory.
+ * Returns the zone name (e.g. "kanban") if blocked, null if allowed.
+ */
+export function isProtectedPath(resolvedPath: string): string | null {
+  const realPath = realResolve(resolvedPath);
+
+  for (const { dir, name } of getProtectedDirs()) {
+    const normalized = dir.endsWith("/") ? dir : dir + "/";
+    if (realPath === dir || realPath.startsWith(normalized)) {
+      return name;
+    }
+  }
+  return null;
 }

@@ -2,26 +2,39 @@
 ║           DUPLICATION REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  DUPLICATED BLOCKS (33):
+⚠  DUPLICATED BLOCKS (68):
 
-  Block (5 lines) found in 2 files:
-    agent.ts:135
-    config.ts:114
+  Block (5 lines) found in 4 files:
+    agent.ts:143
+    config.ts:125
+    dispatch.ts:164
+    kanban.ts:804
     Preview:     } catch {
 
   Block (5 lines) found in 2 files:
-    agent.ts:156
-    config.ts:130
+    agent.ts:161
+    dispatch.ts:295
+    Preview:         }
+
+  Block (5 lines) found in 3 files:
+    agent.ts:162
+    dispatch.ts:163
+    kanban.ts:803
+    Preview:       }
+
+  Block (5 lines) found in 2 files:
+    agent.ts:164
+    config.ts:141
     Preview:       // Non-fatal
 
   Block (5 lines) found in 2 files:
     auth.ts:11
-    types.ts:22
+    types.ts:26
     Preview:   accessToken: string;
 
   Block (5 lines) found in 6 files:
     auth.ts:45
-    config.ts:46
+    config.ts:49
     memory/store.ts:45
     persona.ts:71
     snapshot.ts:189
@@ -29,98 +42,101 @@
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
+    auth.ts:86
+    dispatch.ts:66
+    Preview:     return true;
+
+  Block (5 lines) found in 3 files:
     auth.ts:87
+    dispatch.ts:67
     install-tui.ts:22
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
-    conversation.ts:43
-    tools/files.ts:110
+    context.ts:21
+    dispatch.ts:296
     Preview:     }
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 2 files:
+    context.ts:38
+    kanban.ts:768
+    Preview:     } catch {
+
+  Block (5 lines) found in 2 files:
+    conversation.ts:43
+    tools/files.ts:112
+    Preview:     }
+
+  Block (5 lines) found in 6 files:
     conversation.ts:58
+    dispatch.ts:263
     memory/store.ts:59
     persona.ts:98
     snapshot.ts:173
+    tools/util.ts:83
     Preview:   } catch {
 
-  Block (5 lines) found in 3 files:
+  Block (5 lines) found in 4 files:
     conversation.ts:59
     persona.ts:99
     snapshot.ts:174
+    tools/util.ts:84
     Preview:     return [];
 
   Block (5 lines) found in 2 files:
-    index.ts:70
-    web/handler.ts:93
-    Preview:   try {
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:133
-    persona-cli.ts:82
-    Preview:   } else {
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:134
-    persona-cli.ts:83
-    Preview:     // Copy template
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:135
-    persona-cli.ts:84
-    Preview:     const templatePath = path.join(getSystemDir(), "templates", "persona.md");
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:144
-    persona-cli.ts:95
-    Preview:   }
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:145
-    persona-cli.ts:96
+    dispatch-cli.ts:33
+    service-cli.ts:32
     Preview: 
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:186
-    kb-cli.ts:398
-    persona-cli.ts:224
-    snapshot-cli.ts:128
-    vault-cli.ts:133
+    dispatch-cli.ts:125
+    persona-cli.ts:205
+    service-cli.ts:116
+    snapshot-cli.ts:111
+    vault-cli.ts:140
     Preview: }
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:187
-    kb-cli.ts:399
-    persona-cli.ts:225
-    snapshot-cli.ts:129
-    vault-cli.ts:134
+    dispatch-cli.ts:126
+    persona-cli.ts:206
+    service-cli.ts:117
+    snapshot-cli.ts:112
+    vault-cli.ts:141
     Preview: 
 
-  Block (5 lines) found in 2 files:
-    kb-cli.ts:24
-    tools/kb.ts:13
-    Preview: 
+  Block (5 lines) found in 5 files:
+    dispatch-cli.ts:128
+    persona-cli.ts:208
+    service-cli.ts:119
+    snapshot-cli.ts:114
+    vault-cli.ts:143
+    Preview:   ensureMinicawDirs();
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 6 files:
+    dispatch-cli.ts:130
     kb-cli.ts:381
     persona-cli.ts:209
+    service-cli.ts:121
     snapshot-cli.ts:115
-    vault-cli.ts:121
+    vault-cli.ts:145
     Preview:   const [command, ...args] = process.argv.slice(2);
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 6 files:
+    dispatch-cli.ts:140
     kb-cli.ts:396
     persona-cli.ts:222
+    service-cli.ts:131
     snapshot-cli.ts:126
-    vault-cli.ts:131
-    Preview:     default:                   usage();
+    vault-cli.ts:155
+    Preview:     default:          usage();
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 6 files:
+    dispatch-cli.ts:141
     kb-cli.ts:397
     persona-cli.ts:223
+    service-cli.ts:132
     snapshot-cli.ts:127
-    vault-cli.ts:132
+    vault-cli.ts:156
     Preview:   }
 
-  ... and 13 more
+  ... and 48 more

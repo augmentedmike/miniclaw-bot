@@ -8,16 +8,38 @@ IMPURE FUNCTIONS (have side effects):
     isExpired:118  [date]
     getAccessToken:127  [date]
   config.ts:
-    writeActivePersona:52  [fs]
-    ensureMinicawDirs:59  [fs]
-    ensurePersonaDirs:77  [fs]
-    loadConfig:99  [fs] [env]
+    writeActivePersona:55  [fs]
+    ensureMinicawDirs:67  [fs]
+    ensurePersonaDirs:87  [fs]
+    loadConfig:110  [fs] [env]
   context.ts:
     saveContext:54  [date]
   conversation.ts:
     loadHistory:52  [fs]
     appendToHistory:68  [fs]
     archiveRotatedMessages:91  [fs] [date]
+  dispatch.ts:
+    acquireLock:41  [fs] [date]
+    releaseLock:56  [fs]
+    cleanStaleLocks:72  [fs]
+    countActiveLocks:95  [fs]
+    getActiveLocks:101  [fs]
+    ensureKanbanCollection:208  [fs]
+    indexKanban:224  [child_process]
+    createAuditWriter:322  [fs] [date]
+    getAuditLogs:333  [fs]
+    runDispatchCycle:479  [console]
+  kanban.ts:
+    initBoard:165  [fs] [date]
+    parseTaskFile:192  [date]
+    addTask:425  [fs] [date]
+    getTask:459  [fs]
+    moveTask:536  [fs] [date]
+    editTask:597  [fs] [date]
+    appendNote:633  [fs] [date]
+    listTasks:654  [fs]
+    boardSummary:696  [date]
+    archiveShipped:785  [fs] [date]
   memory/search.ts:
     ensureQmdCollection:31  [fs]
     indexMemory:46  [child_process]
@@ -30,13 +52,20 @@ IMPURE FUNCTIONS (have side effects):
     savePersona:79  [fs]
     listPersonas:88  [fs]
     loadActivePersona:112  [fs] [console]
+  service.ts:
+    getServicePaths:39  [env]
+    installService:123  [fs]
+    uninstallService:145  [fs]
+    getDispatchPaths:201  [env]
+    installDispatch:282  [fs]
+    uninstallDispatch:307  [fs]
   setup.ts:
     runSetup:55  [process] [console]
   snapshot.ts:
     exportSnapshot:36  [fs] [date]
     listSnapshots:167  [fs]
   system-prompt.ts:
-    buildSystemPrompt:4  [process] [env] [date]
+    buildSystemPrompt:5  [process] [env] [date]
   telegram/access.ts:
     loadAccess:24  [fs]
     saveAccess:33  [fs]
@@ -51,7 +80,7 @@ IMPURE FUNCTIONS (have side effects):
   tools/files.ts:
     createReadFileTool:7  [fs]
     createWriteFileTool:36  [fs]
-    createListDirectoryTool:58  [fs]
+    createListDirectoryTool:60  [fs]
   tools/glob.ts:
     createGlobTool:5  [fs] [process]
   tools/grep.ts:
@@ -59,9 +88,9 @@ IMPURE FUNCTIONS (have side effects):
   tools/run-process.ts:
     runProcess:20  [child_process]
   tools/shell.ts:
-    createShellTool:93  [process] [env]
+    createShellTool:100  [process] [env]
   tools/util.ts:
-    resolveJailed:24  [fs]
+    resolveJailed:25  [fs]
   vault.ts:
     getMasterPassword:56  [fs] [env]
     initVaultKey:77  [fs]
@@ -71,15 +100,37 @@ IMPURE FUNCTIONS (have side effects):
 
 PURE FUNCTIONS (no side effects):
 ──────────────────────────────────────────────────────────────────────
-  ✓ agent.ts:21  createTools
-  ✓ agent.ts:47  runAgent
+  ✓ agent.ts:22  createTools
+  ✓ agent.ts:54  runAgent
   ✓ auth.ts:110  writeCredentials
   ✓ auth.ts:114  readCredentials
-  ✓ config.ts:18  getMinicawHome
-  ✓ config.ts:23  getSystemDir
-  ✓ config.ts:28  getUserDir
-  ✓ config.ts:37  getActivePersonaHome
+  ✓ config.ts:21  getMinicawHome
+  ✓ config.ts:26  getSystemDir
+  ✓ config.ts:31  getUserDir
+  ✓ config.ts:40  getActivePersonaHome
+  ✓ config.ts:62  getLogsDir
   ✓ context.ts:12  retrieveContext
+  ✓ dispatch.ts:131  selectNextTask
+  ✓ dispatch.ts:240  searchRelatedTickets
+  ✓ dispatch.ts:283  buildDispatchContext
+  ✓ dispatch.ts:426  runDispatchLoop
+  ✓ kanban.ts:82  validateTransition
+  ✓ kanban.ts:86  isValidState
+  ✓ kanban.ts:90  isValidPriority
+  ✓ kanban.ts:94  isValidType
+  ✓ kanban.ts:98  isValidSize
+  ✓ kanban.ts:102  isValidStatus
+  ✓ kanban.ts:108  extractSection
+  ✓ kanban.ts:126  isSectionFilled
+  ✓ kanban.ts:131  isForwardTransition
+  ✓ kanban.ts:137  getKanbanDir
+  ✓ kanban.ts:151  slugify
+  ✓ kanban.ts:284  formatTaskFile
+  ✓ kanban.ts:468  checkTransitionGates
+  ✓ kanban.ts:683  taskHistory
+  ✓ kanban.ts:692  getChildren
+  ✓ kanban.ts:740  boardSummaryText
+  ✓ kanban.ts:814  searchTasks
   ✓ kb/embeddings.ts:23  embed
   ✓ kb/embeddings.ts:32  isModelLoaded
   ✓ kb/embeddings.ts:37  unloadModel
@@ -91,6 +142,14 @@ PURE FUNCTIONS (no side effects):
   ✓ persona.ts:11  parsePersona
   ✓ persona.ts:39  formatPersona
   ✓ persona.ts:59  buildPersonaPrompt
+  ✓ service.ts:24  detectPlatform
+  ✓ service.ts:54  generatePlist
+  ✓ service.ts:93  generateUnit
+  ✓ service.ts:168  serviceStatus
+  ✓ service.ts:217  generateDispatchPlist
+  ✓ service.ts:253  generateDispatchUnit
+  ✓ service.ts:267  generateDispatchTimer
+  ✓ service.ts:324  dispatchStatus
   ✓ snapshot.ts:121  restoreSnapshot
   ✓ snapshot.ts:181  showSnapshot
   ✓ telegram/access.ts:78  isAllowed
@@ -101,11 +160,13 @@ PURE FUNCTIONS (no side effects):
   ✓ telegram/format.ts:32  markdownToTelegramHtml
   ✓ telegram/format.ts:152  chunkText
   ✓ telegram/send.ts:11  sendResponse
-  ✓ tools/util.ts:9  formatToolError
+  ✓ tools/audit.ts:6  createAuditLogTool
+  ✓ tools/util.ts:10  formatToolError
+  ✓ tools/util.ts:116  isProtectedPath
   ✓ vault.ts:217  vaultGet
   ✓ vault.ts:236  vaultDelete
   ✓ vault.ts:256  vaultList
-  ✓ web/handler.ts:24  createRequestHandler
+  ✓ web/handler.ts:26  createRequestHandler
 
-Total: 77 functions, 35 pure (45%), 42 impure
-Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process(3), network(1)
+Total: 135 functions, 67 pure (50%), 68 impure
+Effect frequency: fs(48), date(18), env(7), console(6), process(6), child_process(4), network(1)

@@ -11,7 +11,6 @@
  * then applies trust weighting: origin_weight * confidence * freshness_decay.
  */
 
-import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";
 import { embed, EMBEDDING_DIM } from "./embeddings.js";
@@ -21,7 +20,7 @@ import type {
 } from "./types.js";
 import { ORIGIN_WEIGHTS } from "./types.js";
 
-const require = createRequire(import.meta.url);
+// createRequire + require are provided by the esbuild banner
 
 // ── ULID ────────────────────────────────────────────────────────────────────
 

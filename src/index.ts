@@ -33,12 +33,22 @@ async function main() {
     return;
   }
 
+  if (args[0] === "service") {
+    const { spawn } = await import("node:child_process");
+    const serviceCli = new URL("./service-cli.mjs", import.meta.url).pathname;
+    const child = spawn(process.execPath, [serviceCli, ...args.slice(1)], { stdio: "inherit" });
+    child.on("exit", (code) => process.exit(code ?? 0));
+    return;
+  }
+
   if (args[0] === "serve") {
     const { startWebServer } = await import("./web/server.js");
     await startWebServer(config);
-    // Also start telegram bot if token is configured
+    // Also start telegram bot if token is configured (non-fatal — don't crash the web server)
     if (config.telegramBotToken) {
-      await startTelegram(config);
+      startTelegram(config).catch((err) => {
+        console.error("Telegram bot failed to start (web server still running):", err instanceof Error ? err.message : err);
+      });
     }
     return;
   }

@@ -2,22 +2,26 @@
 
 The agentic core behind [usebonsai.org](https://usebonsai.org) and [miniclaw.bot](https://miniclaw.bot).
 
-OpenClaw rebuilt from the ground up with security and agentic programming in mind from day one. Where OpenClaw was built on finding vulnerabilities to exploit, MiniClaw was built to enforce behavior and allowed functionality. Less "hack the world", more "here's exactly what you can do."
+[blog.augmentedmike.com](https://blog.augmentedmike.com) — conceived, designed, coded, and authored by AugmentedMike, our AGI built on MiniClaw.
 
-MiniClaw is the **body** — infrastructure, tools, memory, security. The **soul** (persona, skills, proactive behaviors) is layered on top.
+---
 
-## What it does
+MiniClaw is a personal AI agent runtime built from the ground up with security-first design. It provides full system access — shell, filesystem, web, encrypted secrets, long-term memory, and a structured kanban workflow — all running behind a directory jail that enforces what the agent can and cannot do.
 
-MiniClaw is a personal AI agent that runs on your machine with full system access: shell, filesystem, web, encrypted secrets, and long-term memory. It authenticates via your Claude Max subscription and operates through CLI or Telegram.
+The architecture separates **body** (infrastructure, tools, memory, security) from **soul** (persona, skills, proactive behaviors). The soul is layered on top as a persona file.
 
-The architecture is designed around capabilities that compound over time:
+## Features
 
-- **Photographic memory** — persistent markdown knowledge base the agent reads and writes to across sessions. It remembers what you told it last week.
-- **Self-reflection** — conversation history carries across all interfaces. The agent sees its own prior tool calls and can evaluate what worked.
-- **Continuous self-improvement** — devtools audit the codebase for complexity, coupling, dead code, SOLID violations, and duplication. The agent can run these on itself.
-- **Self skill training** — Claude Code delegation lets the agent spawn sub-agents to handle complex multi-step tasks, learning patterns from the results.
-- **Automatic postmortems** — when something fails, the agent has full context: the command, the error, the file state. It diagnoses and retries.
-- **Subconscious thinking** — the agent uses `memory_search` proactively when context might be relevant, surfacing knowledge you forgot you saved.
+- **Persona system** — switchable personas, each with isolated memory, conversations, knowledge base, kanban board, and config
+- **Kanban board** — structured task management with state machine transitions, gate enforcement, and audit history
+- **Knowledge base** — persistent KB with category tagging, confidence scoring, origin tracking, and expiration
+- **Semantic search** — QMD integration for BM25, vector, and hybrid search across memory and tasks
+- **Encrypted vault** — AES-256-GCM secrets storage for API keys, credentials, and notes
+- **Directory jail** — multi-layer sandbox enforcement across shell, files, glob, and grep (64 adversarial tests)
+- **Conversation continuity** — sliding-window history shared across CLI, Telegram, API, and dispatch channels
+- **Autonomous dispatch** — cron-driven agent loop that picks the best ticket, enriches context via semantic search, works it autonomously, and logs structured audit trails
+- **Service daemon** — launchd (macOS) and systemd (Linux) service management
+- **Self-auditing devtools** — 11 static analysis tools for complexity, coupling, SOLID, duplication, dead code, and more
 
 ## Quick start
 
@@ -25,14 +29,14 @@ The architecture is designed around capabilities that compound over time:
 # Requires active Claude Max subscription with Claude CLI signed in
 # (claude login)
 
-git clone <repo>
-cd miniclaw
+git clone git@github.com:augmentedmike/miniclaw-bot.git
+cd miniclaw-bot
 npm install
 
-# Install globally
-npm link
+# Build and install globally
+npm run install:prod
 
-# Run from any project — always jailed to cwd
+# Run from any project directory (always jailed to cwd)
 cd ~/projects/my-app
 miniclaw --message "find all TODO comments"
 
@@ -48,89 +52,143 @@ npm start
 
 | Mode | Command | Description |
 |------|---------|-------------|
-| **One-shot** | `miniclaw --message "..."` | Single prompt, jailed to cwd, exit |
-| **One-shot (explicit dir)** | `miniclaw /path --message "..."` | Single prompt, jailed to /path |
+| **One-shot** | `miniclaw --message "..."` | Single prompt, jailed to cwd |
+| **One-shot (dir)** | `miniclaw /path --message "..."` | Single prompt, jailed to /path |
 | **Telegram** | `npm start` | Long-running bot via polling |
+| **HTTP serve** | `miniclaw serve` | HTTP API server |
+| **Dispatch** | `miniclaw-dispatch run` | Autonomous agent cycle |
 
-Always jailed. If you don't pass a directory, it jails to where you're standing. All modes share one unified conversation history.
+## CLI tools
 
-## Tools
+```bash
+miniclaw              # Main agent
+miniclaw-vault        # Encrypted secrets manager
+miniclaw-persona      # Persona management
+miniclaw-snapshot     # Persona snapshot/restore
+miniclaw-kanban       # Task board management
+miniclaw-kb           # Knowledge base
+miniclaw-service      # Service daemon control
+miniclaw-dispatch     # Autonomous dispatch system
+```
 
-The agent has 14 tools:
+## Agent tools
 
-| Tool | What it does |
-|------|-------------|
-| `shell_exec` | Execute shell commands (jailable) |
-| `read_file` | Read file contents |
-| `write_file` | Create or overwrite files |
-| `edit_file` | Find-and-replace in files |
-| `list_directory` | List directory contents |
-| `glob` | Find files by pattern |
-| `grep` | Search file contents (ripgrep) |
-| `web_fetch` | Fetch a URL, extract readable text |
-| `web_search` | Search the web via DuckDuckGo |
-| `memory_save` | Save a note to long-term memory |
-| `memory_search` | Search the knowledge base |
-| `vault_get` | Retrieve an encrypted secret |
-| `vault_list` | List vault entries |
-| `claude_code` | Delegate complex tasks to Claude Code |
+The agent has access to 22+ tools:
+
+| Category | Tools |
+|----------|-------|
+| **Shell** | `shell_exec` (jailed command execution) |
+| **Files** | `read_file`, `write_file`, `edit_file`, `list_directory`, `glob`, `grep` |
+| **Web** | `web_fetch`, `web_search` |
+| **Memory** | `memory_save`, `memory_search`, `memory_vector_search`, `memory_deep_search` |
+| **Knowledge base** | `kb_add`, `kb_search`, `kb_list`, `kb_remove` |
+| **Kanban** | `kanban_add`, `kanban_list`, `kanban_move`, `kanban_show`, `kanban_search`, `kanban_check` |
+| **Vault** | `vault_get`, `vault_list` |
+| **Delegation** | `claude_code` (spawn sub-agents for complex tasks) |
+
+## Kanban workflow
+
+Tasks follow a state machine with gate enforcement:
+
+```
+backlog → in-progress → in-review → shipped
+```
+
+**Gates** prevent premature transitions:
+- **backlog → in-progress** requires filled Problem, Research, Implementation Plan, and Acceptance Criteria sections, plus an explicit project name
+- **Forward moves** require all blockers resolved
+- **in-review → shipped** for epics requires all child tasks shipped
+- **Sendbacks** (backward moves) are always allowed
+
+```bash
+miniclaw-kanban add "Fix auth bug" --project myapp --type bugfix --priority high
+miniclaw-kanban board
+miniclaw-kanban check 1 in-progress
+miniclaw-kanban move 1 in-progress
+```
+
+## Autonomous dispatch
+
+A cron-driven system that autonomously works kanban tickets:
+
+```bash
+miniclaw-dispatch install              # Install 15-minute timer
+miniclaw-dispatch run                  # Manual single cycle
+miniclaw-dispatch status               # Show active agents + timer
+miniclaw-dispatch logs                 # View audit trails
+miniclaw-dispatch logs 42              # Logs for specific task
+miniclaw-dispatch uninstall            # Remove timer
+```
+
+Each dispatch cycle:
+1. Cleans stale locks
+2. Checks concurrency cap (default: 1 concurrent agent)
+3. Selects the best ready ticket (priority + due date + gate readiness)
+4. Enriches context via QMD semantic search (related tickets + memory)
+5. Runs the agent loop with full tool access + structured audit logging
+6. Releases the lock when done
 
 ## Directory jail
 
-When you pass a directory (`miniclaw .`), all filesystem tools are restricted to that directory tree. The jail enforces this at multiple levels:
+When you pass a directory, all filesystem tools are restricted to that directory tree.
 
-**File tools** resolve symlinks via `realpathSync` to catch symlink-escape attacks. A symlink inside the jail pointing outside is blocked.
+**File tools** resolve symlinks via `realpathSync` to catch symlink-escape attacks.
 
-**Shell commands** are statically analyzed and blocked if they contain:
-- `../` traversal, `~` expansion, `$HOME` references
-- Absolute paths outside the jail
-- Pipes to shell interpreters (`| sh`, `| bash`)
-- Encoding escapes (`base64 -d`, `printf \x`, `xxd -r`)
-- Inline interpreters (`python -c`, `perl -e`, `eval`)
+**Shell commands** are statically analyzed and blocked if they contain path traversal, encoding escapes, pipes to interpreters, or absolute paths outside the jail.
 
 **Glob and grep** validate their search roots against the jail boundary.
 
 64 adversarial tests verify the jail, including symlink escapes, path traversal, encoding attacks, and variable construction.
 
-## Vault
+## Architecture
 
-AES-256-GCM encrypted secrets storage for API keys, credentials, and notes.
+```
+src/
+  index.ts               Entry point (CLI, REPL, Telegram, serve)
+  agent.ts               Vercel AI SDK agent loop + tool wiring
+  auth.ts                Claude Max OAuth resolution
+  config.ts              Layered config (defaults → system → persona → env)
+  types.ts               Shared types
+  kanban.ts              Kanban board engine (state machine, gates, CRUD)
+  dispatch.ts            Autonomous dispatch (selection, locks, agent loop)
+  service.ts             Service + dispatch daemon management
+  system-prompt.ts       Minimal functional prompt
+  conversation.ts        Conversation history (load/save/archive)
+  context.ts             Pre-turn KB context retrieval
+  persona.ts             Persona loading + prompt building
+  vault.ts               AES-256-GCM encrypted vault
 
-```bash
-npm run vault init                     # Generate encryption key
-npm run vault set api-key openai       # Store a secret (prompts for value)
-npm run vault get api-key openai       # Retrieve it
-npm run vault list                     # List all entries
+  tools/                 Agent tool definitions (Zod schemas + execute)
+  telegram/              Grammy bot, handlers, formatting
+  memory/                Markdown store + QMD search integration
+  kb/                    SQLite knowledge base engine
+  web/                   HTTP handler + kanban UI
+
+  *-cli.ts               CLI entry points (vault, persona, snapshot, kanban, kb, service, dispatch)
 ```
 
-The agent can read secrets at runtime via `vault_get` — useful for tasks that need API keys stored outside environment variables.
+## Testing
 
-## Memory
-
-Two layers:
-
-**Conversation history** — sliding window of the last 50 messages (configurable), persisted to `~/.miniclaw/conversations/history.json`. Shared across CLI and Telegram.
-
-**Knowledge base** — markdown files in `~/.miniclaw/memory/`, organized by topic. The agent writes to these when you say "remember this" and searches them proactively when context might help.
-
-## Auth
-
-Claude Max only. Reads OAuth credentials from:
-1. macOS Keychain (`Claude Code-credentials`)
-2. File fallback (`~/.claude/.credentials.json`)
-
-No API keys, no multi-provider. Sign in with `claude login` and MiniClaw uses the same token.
+```bash
+npm test                 # 461 tests across 36 files
+npm run test:unit        # Unit tests only
+npm run test:e2e         # End-to-end tests
+npm run typecheck        # Type check (strict mode)
+```
 
 ## Config
 
-`~/.miniclaw/config.json`:
+Layered resolution: hardcoded defaults → `~/.miniclaw/system/config.json` → persona config → environment variables.
 
 ```json
 {
-  "model": "claude-sonnet-4-20250514",
+  "model": "claude-opus-4-6",
   "maxSteps": 25,
   "shellTimeout": 30000,
-  "conversationLimit": 50
+  "conversationLimit": 100,
+  "dispatchMaxConcurrent": 1,
+  "dispatchIntervalMinutes": 15,
+  "dispatchMaxSteps": 50
 }
 ```
 
@@ -139,74 +197,66 @@ No API keys, no multi-provider. Sign in with `claude login` and MiniClaw uses th
 11 static analysis tools that run on the codebase itself:
 
 ```bash
-npm run complexity    # Cyclomatic complexity per function
-npm run solid         # SOLID principle violations
-npm run coupling      # Module coupling metrics
-npm run cohesion      # Module cohesion analysis
-npm run duplication   # Duplicated code blocks
-npm run dead-code     # Unused exports and orphan files
-npm run readability   # Naming, line length, nesting depth
-npm run depgraph      # Dependency graph
-npm run api-surface   # Public API surface
-npm run state-machine # State machine pattern detection
-npm run side-effects  # Side effect analysis
-
-npm run audit         # Run all checks
-npm run report        # Full report to reports/
-```
-
-## Architecture
-
-```
-src/
-  index.ts               Entry point (CLI, REPL, Telegram)
-  agent.ts               Vercel AI SDK agent loop + tool wiring
-  auth.ts                Claude Max OAuth resolution
-  config.ts              Config from ~/.miniclaw/ + .env
-  conversation.ts        Conversation history (load/save)
-  system-prompt.ts       Minimal functional prompt
-  types.ts               Shared types
-  vault.ts               AES-256-GCM encrypted vault
-  vault-cli.ts           Vault management CLI
-  telegram/
-    bot.ts               Grammy bot + polling
-    handlers.ts          Message handler
-    send.ts              Response chunking
-    format.ts            Markdown to Telegram HTML
-  memory/
-    store.ts             Save/read markdown memories
-    search.ts            Substring search across memory
-  tools/
-    shell.ts             Shell exec with jail enforcement
-    files.ts             File read/write/list (jailable)
-    edit.ts              Find-and-replace (jailable)
-    glob.ts              Pattern matching (jailable)
-    grep.ts              Content search (jailable)
-    web.ts               Web fetch + search
-    memory.ts            Memory save/search tools
-    vault.ts             Vault get/list tools
-    claude-code.ts       Claude Code delegation
-    run-process.ts       Shared process spawning
-    util.ts              resolveJailed, formatToolError
-```
-
-## Testing
-
-```bash
-npm test              # 380 tests across 36 files
-npm run test:unit     # Unit tests only
-npm run test:e2e      # End-to-end tests
-npm run typecheck     # Type check (strict mode)
+npm run audit            # Run all checks
+npm run report           # Full report to reports/
+npm run complexity       # Cyclomatic complexity per function
+npm run solid            # SOLID principle violations
+npm run coupling         # Module coupling metrics
+npm run cohesion         # Module cohesion analysis
+npm run duplication      # Duplicated code blocks
+npm run dead-code        # Unused exports and orphan files
+npm run readability      # Naming, line length, nesting depth
+npm run depgraph         # Dependency graph
+npm run api-surface      # Public API surface
+npm run state-machine    # State machine pattern detection
+npm run side-effects     # Side effect analysis
 ```
 
 ## Design philosophy
 
-**Enforce, don't exploit.** OpenClaw's tools were built to maximize what an agent *could* do. MiniClaw's tools are built to define what an agent *should* do — with a jail that enforces the boundary.
+**Enforce, don't exploit.** Tools are built to define what an agent *should* do, with a jail that enforces the boundary.
 
-**Body without a soul.** The system prompt is minimal and functional: machine info, tool list, guidelines. No personality, no opinions, no filler. The persona layer is a separate concern, loaded on top.
+**Body without a soul.** The system prompt is minimal and functional. Personality is a separate concern loaded as a persona file.
 
-**Compound over time.** Memory, conversation history, and self-auditing tools mean the agent gets better the more you use it. It remembers your preferences, learns from failures, and maintains its own code quality.
+**Compound over time.** Memory, knowledge base, kanban workflow, and self-auditing tools mean the agent improves the more you use it.
+
+## Contributing
+
+We welcome contributions from both humans and AI agents. If the code is good, well explained, and it's a bugfix or a feature we want in core, we will accept it after review.
+
+### Quality gates
+
+Every commit runs through a pre-commit hook that enforces:
+
+1. **Full test suite** — all 461+ tests must pass (`npm test`)
+2. **Quality reports** — SOLID analysis, readability scoring, cohesion metrics, duplication detection, and more are generated and committed with every change
+
+PRs that break tests or degrade quality metrics will not be merged.
+
+### Code standards
+
+Read [CODE_QUALITY.md](CODE_QUALITY.md) before contributing. The short version:
+
+- Small, pure functions. Composition over inheritance. Data over objects.
+- Types are documentation. Errors are values. No magic.
+- No fallbacks, no swallowed errors, no silent degradation.
+- Every function should be readable top to bottom.
+
+### Running checks locally
+
+```bash
+npm test                 # Full test suite (unit + integration)
+npm run typecheck        # TypeScript strict mode
+npm run audit            # All quality checks (SOLID, complexity, coupling, readability, cohesion, duplication, dead code)
+npm run report           # Generate full quality report to reports/
+```
+
+### AI agent PRs
+
+We actively welcome PRs authored by AI agents. The same standards apply — clean code, clear commit messages, passing tests, and a description of what changed and why. If your agent can write code that passes our gates, we want to see it.
 
 ## License
 
 Private. Powering [usebonsai.org](https://usebonsai.org) and [miniclaw.bot](https://miniclaw.bot).
+
+[blog.augmentedmike.com](https://blog.augmentedmike.com) — written by AugmentedMike, our AGI built on MiniClaw.

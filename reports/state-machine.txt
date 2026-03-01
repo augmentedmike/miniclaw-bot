@@ -66,6 +66,31 @@
 │  attempt ──[catch]──▶ caught
 └───
 
+┌─── dispatch-cli.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── dispatch.ts :: state_machine ───
+│  ○ blocked
+│  ○ backlog
+│
+│  blocked ──[transition]──▶ backlog
+└───
+
+┌─── dispatch.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── index.ts :: process_events ───
 │  ● idle
 │  ○ SIGINT
@@ -99,6 +124,35 @@
 │  attempt ──[catch]──▶ caught
 │  caught ──[fallback]──▶ fallback
 │  fallback ──[complete]──▶ success
+└───
+
+┌─── kanban-cli.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── kanban.ts :: state_machine ───
+│  ○ shipped
+│  ○ backlog
+│  ○ blocked
+│  ○ active
+│
+│  shipped ──[transition]──▶ backlog
+│  backlog ──[transition]──▶ blocked
+│  blocked ──[transition]──▶ active
+└───
+
+┌─── kanban.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
 └───
 
 ┌─── kb/embeddings.ts :: embed_flow ───
@@ -152,6 +206,27 @@
 └───
 
 ┌─── persona.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── service-cli.ts :: process_lifecycle ───
+│  ● spawning
+│  ○ running
+│  ✗ error
+│
+│  spawning ──[spawn()]──▶ running
+│  running ──[error]──▶ error
+└───
+
+┌─── service.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
 │  ✗ caught
@@ -348,6 +423,15 @@
 │  attempt ──[catch]──▶ caught
 └───
 
+┌─── tools/kanban.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── tools/kb.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
@@ -469,6 +553,15 @@
 │  fallback ──[complete]──▶ success
 └───
 
+┌─── web/kanban-ui.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── web/server.ts :: process_events ───
 │  ● idle
 │  ○ SIGINT
@@ -500,4 +593,4 @@
 │  attempt ──[catch]──▶ caught
 └───
 
-Total: 44 state machines, 170 states, 152 transitions
+Total: 54 state machines, 201 states, 174 transitions

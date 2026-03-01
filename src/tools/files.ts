@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { tool } from "ai";
-import { formatToolError, resolveJailed } from "./util.js";
+import { formatToolError, resolveJailed, isProtectedPath } from "./util.js";
 
 export function createReadFileTool(jailDir?: string) {
   return tool({
@@ -45,6 +45,8 @@ export function createWriteFileTool(jailDir?: string) {
     execute: async ({ path: filePath, content }) => {
       try {
         const resolved = resolveJailed(filePath, jailDir);
+        const zone = isProtectedPath(resolved);
+        if (zone) return `[error] Cannot write to ${resolved} — protected ${zone} zone. Use ${zone} tools instead.`;
         fs.mkdirSync(path.dirname(resolved), { recursive: true });
         fs.writeFileSync(resolved, content);
         return `Wrote ${content.length} bytes to ${resolved}`;

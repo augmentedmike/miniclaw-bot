@@ -1,6 +1,6 @@
 # Feature Map — miniclaw v0.1.0
 
-> 17 features | 43 source files | 60 capabilities
+> 18 features | 52 source files | 69 capabilities
 
 ## Agent Personas
 
@@ -12,6 +12,21 @@ Named agent profiles with custom instructions, personality, and per-persona memo
 
 **Files:** `kb/index.ts`, `persona.ts`
 
+## Agent Tools
+
+Log a progress entry to the dispatch audit trail. Add a task to the kanban backlog. List tasks on the kanban board
+
+**Capabilities:**
+- Log a progress entry to the dispatch audit trail
+- Add a task to the kanban backlog
+- List tasks on the kanban board
+- Move a task to a new state on the kanban board
+- Show full detail for a kanban task, including notes, transition history, and child tasks (if epic).
+- Search kanban tasks by title, body, project, or type
+- Check if a task is ready to move to a target state
+
+**Files:** `tools/audit.ts`, `tools/kanban.ts`
+
 ## AI Assistant
 
 Conversational AI agent that reasons through problems step-by-step, uses tools to take action, and maintains context across interactions.
@@ -20,9 +35,11 @@ Conversational AI agent that reasons through problems step-by-step, uses tools t
 - Claude language model (Anthropic)
 - Multi-step reasoning with tool use
 - Structured tool parameter validation
+- Dispatch System — autonomous cron-driven agent loop
 - Local embedding via @huggingface/transformers
+- Service Manager — register miniclaw serve as a system daemon
 
-**Files:** `agent.ts`, `index.ts`, `kb/embeddings.ts`, `system-prompt.ts`
+**Files:** `agent.ts`, `dispatch.ts`, `index.ts`, `kanban.ts`, `kb/embeddings.ts`, `service.ts`, `system-prompt.ts`
 
 **Dependencies:** @ai-sdk/anthropic, ai, zod
 
@@ -196,4 +213,4 @@ Fetch web pages and search the internet. Reads articles, documentation, and API 
 
 Browser-based UI for interacting with the agent. HTTP server with route handling and UI components.
 
-**Files:** `web/handler.ts`, `web/server.ts`, `web/ui.ts`
+**Files:** `web/handler.ts`, `web/kanban-ui.ts`, `web/server.ts`, `web/ui.ts`

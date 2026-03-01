@@ -1,6 +1,6 @@
 import type { CoreMessage } from "ai";
 
-export type Channel = "cli" | "telegram" | "email" | "api";
+export type Channel = "cli" | "telegram" | "email" | "api" | "dispatch";
 
 export type Persona = {
   name: string;
@@ -16,6 +16,10 @@ export type MinicawConfig = {
   telegramBotToken?: string;
   jailDir?: string;
   activePersona?: string;
+  dispatchMaxConcurrent?: number;
+  dispatchIntervalMinutes?: number;
+  dispatchMaxSteps?: number;
+  dispatchWorkDir?: string;
 };
 
 export type OAuthCredentials = {

@@ -12,6 +12,9 @@ const DEFAULTS: MinicawConfig = {
   maxSteps: 25,
   shellTimeout: 30_000,
   conversationLimit: 100,
+  dispatchMaxConcurrent: 1,
+  dispatchIntervalMinutes: 15,
+  dispatchMaxSteps: 50,
 };
 
 /** Root: ~/.miniclaw */
@@ -55,6 +58,11 @@ export function writeActivePersona(name: string): void {
   fs.writeFileSync(path.join(userDir, "active-persona"), name, "utf8");
 }
 
+/** Logs dir: ~/.miniclaw/logs/ */
+export function getLogsDir(): string {
+  return path.join(MINICLAW_HOME, "logs");
+}
+
 /** Create the full directory structure */
 export function ensureMinicawDirs(): void {
   const dirs = [
@@ -63,6 +71,8 @@ export function ensureMinicawDirs(): void {
     path.join(getSystemDir(), "bin"),
     path.join(getSystemDir(), "lib"),
     path.join(getSystemDir(), "templates"),
+    // Logs
+    getLogsDir(),
     // User
     getUserDir(),
     path.join(getUserDir(), "personas"),
@@ -81,6 +91,7 @@ export function ensurePersonaDirs(name: string): string {
     path.join(personaDir, "memory"),
     path.join(personaDir, "conversations"),
     path.join(personaDir, "kb"),
+    path.join(personaDir, "kanban"),
     path.join(personaDir, "bin"),
   ];
   for (const dir of dirs) {
@@ -138,5 +149,9 @@ export function loadConfig(): MinicawConfig {
     conversationLimit: personaConfig.conversationLimit ?? systemConfig.conversationLimit ?? DEFAULTS.conversationLimit,
     telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ?? personaConfig.telegramBotToken ?? systemConfig.telegramBotToken,
     activePersona,
+    dispatchMaxConcurrent: personaConfig.dispatchMaxConcurrent ?? systemConfig.dispatchMaxConcurrent ?? DEFAULTS.dispatchMaxConcurrent,
+    dispatchIntervalMinutes: personaConfig.dispatchIntervalMinutes ?? systemConfig.dispatchIntervalMinutes ?? DEFAULTS.dispatchIntervalMinutes,
+    dispatchMaxSteps: personaConfig.dispatchMaxSteps ?? systemConfig.dispatchMaxSteps ?? DEFAULTS.dispatchMaxSteps,
+    dispatchWorkDir: personaConfig.dispatchWorkDir ?? systemConfig.dispatchWorkDir,
   };
 }

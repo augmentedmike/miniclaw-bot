@@ -4,20 +4,20 @@
 
              root     kb memory telegr  tools    web
 ────────────────────────────────────────────────────
-root            ·      2      5      ·     10      ·
+root            ·      2      5      ·     12      ·
 kb              1      ·      ·      ·      ·      ·
 memory          2      ·      ·      ·      ·      ·
 telegram        4      ·      ·      ·      ·      ·
-tools           2      2      2      ·      ·      ·
-web             3      ·      ·      ·      ·      ·
+tools           4      2      2      ·      ·      ·
+web             4      ·      ·      ·      ·      ·
 
 STRONGEST COUPLING:
-  root ↔ tools  score:12 (root→tools:10, tools→root:2) ⚠ BIDIRECTIONAL
+  root ↔ tools  score:16 (root→tools:12, tools→root:4) ⚠ BIDIRECTIONAL
   root ↔ memory  score:7 (root→memory:5, memory→root:2) ⚠ BIDIRECTIONAL
   root ↔ telegram  score:4 (root→telegram:0, telegram→root:4)
+  root ↔ web  score:4 (root→web:0, web→root:4)
   root ↔ kb  score:3 (root→kb:2, kb→root:1) ⚠ BIDIRECTIONAL
-  root ↔ web  score:3 (root→web:0, web→root:3)
   kb ↔ tools  score:2 (kb→tools:0, tools→kb:2)
   memory ↔ tools  score:2 (memory→tools:0, tools→memory:2)
 
-Total: 6 modules, 33 import edges, 3 bidirectional pairs
+Total: 6 modules, 38 import edges, 3 bidirectional pairs

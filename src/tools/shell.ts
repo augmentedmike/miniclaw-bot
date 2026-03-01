@@ -2,7 +2,7 @@ import path from "node:path";
 import { z } from "zod";
 import { tool } from "ai";
 import { runProcess } from "./run-process.js";
-import { resolveJailed } from "./util.js";
+import { resolveJailed, isProtectedPath } from "./util.js";
 
 /**
  * Check if a shell command tries to escape the jail by referencing
@@ -80,7 +80,14 @@ function checkCommandJail(command: string, jailDir: string): string | null {
     // Allow standard command paths and /dev/null
     if (absPath.startsWith("/dev/") || absPath === "/dev") continue;
     // Allow paths inside jail
-    if (absPath === jailDir || absPath.startsWith(normalizedJail)) continue;
+    if (absPath === jailDir || absPath.startsWith(normalizedJail)) {
+      // Path is inside jail, but check if it targets a protected zone
+      const zone = isProtectedPath(absPath);
+      if (zone) {
+        return `[error] Command references path '${absPath}' inside protected ${zone} zone. Use ${zone} tools instead.`;
+      }
+      continue;
+    }
     // Allow common bin paths that are just commands, not data access
     if (/^\/(usr\/)?(local\/)?s?bin\//.test(absPath)) continue;
     // Block everything else

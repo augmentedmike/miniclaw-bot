@@ -3,21 +3,27 @@
 ╚══════════════════════════════════════════════════╝
 
 ┌─── root/ ────────────────────────────────────┐
-│  agent.ts                       in:3 out:16
+│  agent.ts                       in:4 out:17 ★ hub
 │  auth.ts                        in:2 out:1
-│  config.ts                      in:15 out:1 ★ hub
+│  config.ts                      in:20 out:1 ★ hub
 │  context.ts                     in:1 out:6
 │  conversation.ts                in:1 out:2
+│  dispatch-cli.ts                in:0 out:3 ← entry
+│  dispatch.ts                    in:1 out:5
 │  index.ts                       in:0 out:5 ← entry
 │  install-tui.ts                 in:0 out:2 ← entry
+│  kanban-cli.ts                  in:0 out:1 ← entry
+│  kanban.ts                      in:6 out:1 ★ hub
 │  kb-cli.ts                      in:0 out:3 ← entry
 │  persona-cli.ts                 in:0 out:2 ← entry
 │  persona.ts                     in:2 out:2
+│  service-cli.ts                 in:0 out:2 ← entry
+│  service.ts                     in:2 out:1
 │  setup.ts                       in:1 out:3
 │  snapshot-cli.ts                in:0 out:2 ← entry
 │  snapshot.ts                    in:1 out:1
-│  system-prompt.ts               in:1 out:1
-│  types.ts                       in:10 out:0 ★ hub
+│  system-prompt.ts               in:1 out:2
+│  types.ts                       in:11 out:0 ★ hub
 │  vault-cli.ts                   in:0 out:3 ← entry
 │  vault.ts                       in:5 out:1 ★ hub
 │
@@ -51,28 +57,31 @@
 └──────────────────────────────────────────────┘
 
 ┌─── tools/ ───────────────────────────────────┐
+│  audit.ts                       in:1 out:0
 │  claude-code.ts                 in:1 out:1
 │  edit.ts                        in:1 out:1
 │  files.ts                       in:1 out:1
 │  glob.ts                        in:1 out:1
 │  grep.ts                        in:1 out:1
+│  kanban.ts                      in:1 out:1
 │  kb.ts                          in:1 out:2
 │  memory.ts                      in:1 out:2
 │  run-process.ts                 in:2 out:0
 │  shell.ts                       in:1 out:2
-│  util.ts                        in:6 out:0 ★ hub
+│  util.ts                        in:6 out:1 ★ hub
 │  vault.ts                       in:1 out:2
 │  web.ts                         in:1 out:1
 │
-│  → depends on: kb, memory, .
+│  → depends on: ., kb, memory
 └──────────────────────────────────────────────┘
 
 ┌─── web/ ─────────────────────────────────────┐
-│  handler.ts                     in:1 out:3
+│  handler.ts                     in:1 out:5
+│  kanban-ui.ts                   in:1 out:0
 │  server.ts                      in:1 out:2
 │  ui.ts                          in:1 out:0
 │
 │  → depends on: .
 └──────────────────────────────────────────────┘
 
-Modules: 6  Files: 43  Dependencies: 86  Cycles: 0
+Modules: 6  Files: 52  Dependencies: 105  Cycles: 0

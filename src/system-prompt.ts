@@ -1,5 +1,6 @@
 import os from "node:os";
 import type { Channel } from "./types.js";
+import { boardSummaryText } from "./kanban.js";
 
 export function buildSystemPrompt(
   toolNames: string[],
@@ -40,6 +41,8 @@ You are responding via ${channel ?? "cli"}.
 ## Prior Context
 ${contextFromMemory || "No prior context."}
 
+${boardSummaryText()}
+
 ## Available Tools
 ${toolList}
 
@@ -55,6 +58,7 @@ ${toolList}
 - Only use memory_search or memory_vector_search for information outside the current conversation window or from other channels.
 - After completing a task or learning something important, save key facts with memory_save for long-term recall. Do this silently.
 - The knowledge base is shared across all channels and persists beyond the conversation window.
+- For task management, always use the kanban tools (kanban_add, kanban_list, kanban_move, kanban_show, kanban_search). Never use file tools to directly modify kanban data files.
 - Keep responses focused. Don't explain what you're about to do — just do it and report results.
 `;
 }

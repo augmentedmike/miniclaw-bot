@@ -2,20 +2,76 @@
 ║           API SURFACE MAP                       ║
 ╚══════════════════════════════════════════════════╝
 
-┌─── config.ts (8 exports, 15 consumers) ⚠ STABLE (many dependents)
-│  function   getMinicawHome → persona
+┌─── config.ts (9 exports, 20 consumers) ⚠ STABLE (many dependents)
+│  function   getMinicawHome → dispatch-cli, dispatch, persona, service-cli, service
 │  function   getSystemDir → install-tui, persona-cli, snapshot
 │  function   getUserDir → install-tui, persona-cli, persona, snapshot-cli, snapshot
-│  function   getActivePersonaHome → conversation, index, kb-cli, search, store, access, vault-cli, vault
+│  function   getActivePersonaHome → conversation, dispatch, kanban, index, kb-cli, search, store, access, vault-cli, vault
 │  function   writeActivePersona → install-tui, persona-cli
-│  function   ensureMinicawDirs → index, persona-cli, setup, snapshot-cli, vault-cli
+│  function   getLogsDir → UNUSED
+│  function   ensureMinicawDirs → dispatch-cli, index, persona-cli, service-cli, setup, snapshot-cli, vault-cli
 │  function   ensurePersonaDirs → install-tui, kb-cli, persona-cli
-│  function   loadConfig → index, kb-cli, persona-cli
+│  function   loadConfig → dispatch-cli, dispatch, index, kb-cli, persona-cli
 └
 
-┌─── tools/util.ts (2 exports, 6 consumers) ⚠ STABLE (many dependents)
+┌─── kanban.ts (46 exports, 6 consumers) ⚠ STABLE (many dependents)
+│  function   validateTransition → UNUSED
+│  function   isValidState → kanban-cli, kanban
+│  function   isValidPriority → kanban-cli, kanban
+│  function   isValidType → kanban-cli, kanban
+│  function   isValidSize → kanban-cli, kanban
+│  function   isValidStatus → kanban-cli, kanban
+│  function   extractSection → UNUSED
+│  function   isSectionFilled → UNUSED
+│  function   isForwardTransition → UNUSED
+│  function   getKanbanDir → util
+│  function   slugify → UNUSED
+│  function   initBoard → kanban-cli
+│  function   parseTaskFile → UNUSED
+│  function   formatTaskFile → UNUSED
+│  function   addTask → kanban-cli, kanban
+│  function   getTask → dispatch, kanban-cli, kanban
+│  function   checkTransitionGates → dispatch, kanban-cli, kanban
+│  function   moveTask → kanban-cli, kanban
+│  function   editTask → kanban-cli, kanban
+│  function   appendNote → kanban-cli, kanban
+│  function   listTasks → dispatch, kanban-cli, kanban, handler
+│  function   taskHistory → kanban-cli
+│  function   getChildren → kanban-cli, kanban
+│  function   boardSummary → kanban-cli, handler
+│  function   boardSummaryText → system-prompt
+│  function   archiveShipped → kanban-cli
+│  function   searchTasks → kanban-cli, kanban
+│  const      STATES → kanban-cli
+│  const      TYPES → kanban-cli
+│  const      SIZES → kanban-cli
+│  const      STATUSES → UNUSED
+│  const      VALID_TRANSITIONS → dispatch
+│  const      REQUIRED_SECTIONS → UNUSED
+│  type       KanbanState → UNUSED
+│  type       Priority → UNUSED
+│  type       TaskType → UNUSED
+│  type       TaskStatus → UNUSED
+│  type       TaskSize → UNUSED
+│  type       TransitionEntry → UNUSED
+│  type       KanbanTask → UNUSED
+│  type       BoardMeta → UNUSED
+│  type       BoardSummaryResult → UNUSED
+│  type       GateViolation → UNUSED
+│  type       GateResult → UNUSED
+│  type       AddTaskOpts → UNUSED
+│  type       EditTaskUpdates → UNUSED
+└
+
+┌─── tools/util.ts (3 exports, 6 consumers) ⚠ STABLE (many dependents)
 │  function   formatToolError → edit, files, glob, grep, web
 │  function   resolveJailed → edit, files, glob, grep, shell
+│  function   isProtectedPath → edit, files, shell
+└
+
+┌─── agent.ts (2 exports, 4 consumers) ⚠ STABLE (many dependents)
+│  function   createTools → UNUSED
+│  function   runAgent → dispatch, index, handlers, handler
 └
 
 ┌─── memory/search.ts (6 exports, 4 consumers) ⚠ STABLE (many dependents)
@@ -25,11 +81,6 @@
 │  function   vectorSearchMemory → context, memory
 │  function   deepSearchMemory → memory
 │  type       SearchResult → UNUSED
-└
-
-┌─── agent.ts (2 exports, 3 consumers)
-│  function   createTools → UNUSED
-│  function   runAgent → index, handlers, handler
 └
 
 ┌─── memory/store.ts (3 exports, 3 consumers)
@@ -71,6 +122,27 @@
 │  function   loadActivePersona → agent
 └
 
+┌─── service.ts (18 exports, 2 consumers)
+│  function   detectPlatform → dispatch-cli, service-cli
+│  function   getServicePaths → service-cli
+│  function   generatePlist → UNUSED
+│  function   generateUnit → UNUSED
+│  function   installService → service-cli
+│  function   uninstallService → service-cli
+│  function   serviceStatus → service-cli
+│  function   getDispatchPaths → dispatch-cli
+│  function   generateDispatchPlist → UNUSED
+│  function   generateDispatchUnit → UNUSED
+│  function   generateDispatchTimer → UNUSED
+│  function   installDispatch → dispatch-cli
+│  function   uninstallDispatch → dispatch-cli
+│  function   dispatchStatus → dispatch-cli
+│  type       Platform → UNUSED
+│  interface  ServicePaths → UNUSED
+│  interface  ServiceStatus → UNUSED
+│  interface  DispatchPaths → UNUSED
+└
+
 ┌─── tools/run-process.ts (2 exports, 2 consumers)
 │  function   runProcess → claude-code, shell
 │  type       RunProcessOptions → UNUSED
@@ -85,6 +157,25 @@
 │  function   loadHistory → agent
 │  function   appendToHistory → agent
 │  function   archiveRotatedMessages → agent
+└
+
+┌─── dispatch.ts (16 exports, 1 consumers)
+│  function   acquireLock → UNUSED
+│  function   releaseLock → UNUSED
+│  function   cleanStaleLocks → UNUSED
+│  function   countActiveLocks → UNUSED
+│  function   getActiveLocks → dispatch-cli
+│  function   selectNextTask → UNUSED
+│  function   ensureKanbanCollection → UNUSED
+│  function   indexKanban → UNUSED
+│  function   searchRelatedTickets → UNUSED
+│  function   buildDispatchContext → UNUSED
+│  function   createAuditWriter → UNUSED
+│  function   getAuditLogs → dispatch-cli
+│  function   runDispatchLoop → UNUSED
+│  function   runDispatchCycle → dispatch-cli
+│  type       LockInfo → UNUSED
+│  type       QmdSearchResult → UNUSED
 └
 
 ┌─── kb/embeddings.ts (4 exports, 1 consumers)
@@ -148,6 +239,11 @@
 │  function   sendResponse → handlers
 └
 
+┌─── tools/audit.ts (2 exports, 1 consumers)
+│  function   createAuditLogTool → dispatch
+│  type       AuditWriter → UNUSED
+└
+
 ┌─── tools/claude-code.ts (1 exports, 1 consumers)
 │  const      claudeCodeTool → agent
 └
@@ -174,6 +270,15 @@
 ┌─── tools/grep.ts (2 exports, 1 consumers)
 │  function   createGrepTool → agent
 │  const      grepTool → UNUSED
+└
+
+┌─── tools/kanban.ts (6 exports, 1 consumers)
+│  const      kanbanAddTool → agent
+│  const      kanbanListTool → agent
+│  const      kanbanMoveTool → agent
+│  const      kanbanShowTool → agent
+│  const      kanbanSearchTool → agent
+│  const      kanbanCheckTool → agent
 └
 
 ┌─── tools/kb.ts (4 exports, 1 consumers)
@@ -208,6 +313,10 @@
 │  function   createRequestHandler → server
 └
 
+┌─── web/kanban-ui.ts (1 exports, 1 consumers)
+│  const      KANBAN_HTML → handler
+└
+
 ┌─── web/ui.ts (1 exports, 1 consumers)
 │  const      HTML → handler
 └
@@ -232,4 +341,4 @@
 │  function   startWebServer → UNUSED
 └
 
-Total: 37 modules, 119 exports, 36 potentially unused
+Total: 43 modules, 210 exports, 82 potentially unused

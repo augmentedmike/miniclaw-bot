@@ -1,4 +1,4 @@
-Quality Report — 2026-02-28T23:05:33.779Z
+Quality Report — 2026-03-01T03:30:07.549Z
 ==================================================
 
 ╔══════════════════════════════════════════════════╗
@@ -6,21 +6,27 @@ Quality Report — 2026-02-28T23:05:33.779Z
 ╚══════════════════════════════════════════════════╝
 
 ┌─── root/ ────────────────────────────────────┐
-│  agent.ts                       in:3 out:16
+│  agent.ts                       in:4 out:17 ★ hub
 │  auth.ts                        in:2 out:1
-│  config.ts                      in:15 out:1 ★ hub
+│  config.ts                      in:20 out:1 ★ hub
 │  context.ts                     in:1 out:6
 │  conversation.ts                in:1 out:2
+│  dispatch-cli.ts                in:0 out:3 ← entry
+│  dispatch.ts                    in:1 out:5
 │  index.ts                       in:0 out:5 ← entry
 │  install-tui.ts                 in:0 out:2 ← entry
+│  kanban-cli.ts                  in:0 out:1 ← entry
+│  kanban.ts                      in:6 out:1 ★ hub
 │  kb-cli.ts                      in:0 out:3 ← entry
 │  persona-cli.ts                 in:0 out:2 ← entry
 │  persona.ts                     in:2 out:2
+│  service-cli.ts                 in:0 out:2 ← entry
+│  service.ts                     in:2 out:1
 │  setup.ts                       in:1 out:3
 │  snapshot-cli.ts                in:0 out:2 ← entry
 │  snapshot.ts                    in:1 out:1
-│  system-prompt.ts               in:1 out:1
-│  types.ts                       in:10 out:0 ★ hub
+│  system-prompt.ts               in:1 out:2
+│  types.ts                       in:11 out:0 ★ hub
 │  vault-cli.ts                   in:0 out:3 ← entry
 │  vault.ts                       in:5 out:1 ★ hub
 │
@@ -54,31 +60,34 @@ Quality Report — 2026-02-28T23:05:33.779Z
 └──────────────────────────────────────────────┘
 
 ┌─── tools/ ───────────────────────────────────┐
+│  audit.ts                       in:1 out:0
 │  claude-code.ts                 in:1 out:1
 │  edit.ts                        in:1 out:1
 │  files.ts                       in:1 out:1
 │  glob.ts                        in:1 out:1
 │  grep.ts                        in:1 out:1
+│  kanban.ts                      in:1 out:1
 │  kb.ts                          in:1 out:2
 │  memory.ts                      in:1 out:2
 │  run-process.ts                 in:2 out:0
 │  shell.ts                       in:1 out:2
-│  util.ts                        in:6 out:0 ★ hub
+│  util.ts                        in:6 out:1 ★ hub
 │  vault.ts                       in:1 out:2
 │  web.ts                         in:1 out:1
 │
-│  → depends on: kb, memory, .
+│  → depends on: ., kb, memory
 └──────────────────────────────────────────────┘
 
 ┌─── web/ ─────────────────────────────────────┐
-│  handler.ts                     in:1 out:3
+│  handler.ts                     in:1 out:5
+│  kanban-ui.ts                   in:1 out:0
 │  server.ts                      in:1 out:2
 │  ui.ts                          in:1 out:0
 │
 │  → depends on: .
 └──────────────────────────────────────────────┘
 
-Modules: 6  Files: 43  Dependencies: 86  Cycles: 0
+Modules: 6  Files: 52  Dependencies: 105  Cycles: 0
 
 ╔══════════════════════════════════════════════════╗
 ║           COMPLEXITY REPORT                     ║
@@ -88,39 +97,57 @@ Modules: 6  Files: 43  Dependencies: 86  Cycles: 0
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Cmplx  LOC  Nest  Params  Function
 ────────────────────────────────────────────────────────────────────────────────
-  F      44   136    8      2     checkCommandJail (tools/shell.ts:12)
-  C      39    35    2      3     add (kb/engine.ts:149)
-  C      28    46    3      2     search (kb/engine.ts:239)
-  C      26    44    3      0     loadConfig (config.ts:99)
+  F      63   255    6      1     parseQmdJson (dispatch.ts:268)
+  F      45   143    8      2     checkCommandJail (tools/shell.ts:12)
+  C      40    48    3      0     loadConfig (config.ts:110)
+  C      39    35    2      3     add (kb/engine.ts:148)
+  C      28    46    3      2     search (kb/engine.ts:238)
   D      26    61    3      1     handleAdd (kb-cli.ts:74)
+  C      25    33    2      2     addTask (kanban.ts:425)
   C      24    19    4      1     parseQmdJson (memory/search.ts:99)
   F      23   153    4      0     main (install-tui.ts:34)
+  F      23   115    6      1     createRequestHandler (web/handler.ts:26)
   D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
-  C      21    21    2      3     update (kb/engine.ts:185)
+  C      21    21    2      3     update (kb/engine.ts:184)
+  C      20    35    2      2     editTask (kanban.ts:597)
   F      20   116    9      2     registerHandlers (telegram/handlers.ts:15)
+  D      19    73    4      0     main (index.ts:5)
+  C      19    42    2      1     parseTaskFile (kanban.ts:192)
   F      19    66    6      1     createGrepTool (tools/grep.ts:7)
+  F      18    67    8      2     checkTransitionGates (kanban.ts:468)
+  C      17    71    3      1     handleEdit (kanban-cli.ts:291)
   D      17    55    5      0     handleImportMemory (kb-cli.ts:249)
   B      17     8    2      1     for (memory/search.ts:106)
-  F      17    54    7      2     createShellTool (tools/shell.ts:93)
-  F      17    92    6      1     createRequestHandler (web/handler.ts:24)
+  F      17    54    7      2     createShellTool (tools/shell.ts:100)
   F      17    64    6      0     send (web/ui.ts:162)
   C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
-  C      14    63    3      0     main (index.ts:5)
   C      14    32    4      1     for (kb-cli.ts:268)
+  D      14    54    4      1     showDetail (web/kanban-ui.ts:462)
+  D      13    34    6      1     handleLogs (dispatch-cli.ts:71)
+  C      13    45    4      1     handleShow (kanban-cli.ts:221)
+  B      13    21    2      0     main (kanban-cli.ts:478)
   B      13    24    3      1     for (kb-cli.ts:275)
-  B      12    14    3      1     await (agent.ts:114)
+  B      13    23    3      1     handleSet (vault-cli.ts:79)
+  B      12    14    3      1     await (agent.ts:122)
   C      12    24    4      1     extractTextTurns (conversation.ts:23)
+  C      12    43    3      1     runDispatchCycle (dispatch.ts:479)
+  B      12    14    1      1     switch (kanban-cli.ts:484)
   B      12    19    2      0     main (kb-cli.ts:380)
-  D      12    50    3      6     buildSystemPrompt (system-prompt.ts:4)
+  D      12    53    3      6     buildSystemPrompt (system-prompt.ts:5)
   B      11    16    2      1     parseClaudeOauth (auth.ts:20)
   B      11    20    3      1     for (conversation.ts:25)
-  C      11    32    3      4     keywordSearch (kb/engine.ts:312)
+  C      11    44    4      0     selectNextTask (dispatch.ts:131)
+  C      11    32    3      4     keywordSearch (kb/engine.ts:311)
   B      11    13    1      1     switch (kb-cli.ts:385)
   D      11    52    4      1     handleCreate (persona-cli.ts:50)
   D      11    25    6      4     sendResponse (telegram/send.ts:11)
   F      11    52    6      1     createGlobTool (tools/glob.ts:5)
-  A      10    12    1      1     switch (kb/engine.ts:247)
-  B      10    25    3      4     vectorSearch (kb/engine.ts:286)
+  C      11    53    2      1     renderCard (web/kanban-ui.ts:408)
+  B      10    47    5      2     runDispatchLoop (dispatch.ts:426)
+  B      10    50    3      1     handleAdd (kanban-cli.ts:106)
+  B      10    29    5      1     handleList (kanban-cli.ts:157)
+  A      10    12    1      1     switch (kb/engine.ts:246)
+  B      10    25    3      4     vectorSearch (kb/engine.ts:285)
   A      10    18    2      0     main (persona-cli.ts:207)
   C      10    80    4      1     exportSnapshot (snapshot.ts:36)
   B      10    39    5      2     restoreSnapshot (snapshot.ts:121)
@@ -128,41 +155,58 @@ Grade  Cmplx  LOC  Nest  Params  Function
   B      10    24    4      1     while (web/ui.ts:190)
 
 SUMMARY:
-  Total functions: 393
-  A (simple):     342
-  B (moderate):   22
-  C (complex):    15
-  D (very complex): 6
-  F (needs refactor): 8
-  Avg complexity: 3.6
+  Total functions: 677
+  A (simple):     590
+  B (moderate):   46
+  C (complex):    22
+  D (very complex): 9
+  F (needs refactor): 10
+  Avg complexity: 3.5
 
 ╔══════════════════════════════════════════════════╗
 ║           SOLID CHECK REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
 SRP (Single Responsibility):
-  ✗ kb/engine.ts: 505 lines — file is very long, consider extracting
-  △ config.ts: 8 exports — approaching too many responsibilities
+  ✗ dispatch.ts: 16 exports — consider splitting into focused modules
+  ✗ dispatch.ts: 522 lines — file is very long, consider extracting
+  ✗ kanban-cli.ts: 501 lines — file is very long, consider extracting
+  ✗ kanban.ts: 46 exports — consider splitting into focused modules
+  ✗ kanban.ts: 824 lines — file is very long, consider extracting
+  ✗ kb/engine.ts: 504 lines — file is very long, consider extracting
+  ✗ service.ts: 18 exports — consider splitting into focused modules
+  ✗ web/kanban-ui.ts: 542 lines — file is very long, consider extracting
+  △ config.ts: 9 exports — approaching too many responsibilities
   △ kb/types.ts: 8 exports — approaching too many responsibilities
   △ kb-cli.ts: 404 lines — file is very long, consider extracting
   △ persona.ts: 7 exports — approaching too many responsibilities
+  △ service.ts: 338 lines — file is very long, consider extracting
   △ telegram/access.ts: 10 exports — approaching too many responsibilities
   △ vault.ts: 8 exports — approaching too many responsibilities
 
 DIP (Dependency Inversion):
   △ conversation.ts: Direct fs import — consider injecting via dependency
+  △ dispatch-cli.ts: Direct fs import — consider injecting via dependency
+  △ dispatch.ts: Direct fs import — consider injecting via dependency
   △ install-tui.ts: Direct fs import — consider injecting via dependency
+  △ kanban.ts: Direct fs import — consider injecting via dependency
   △ kb/engine.ts: Direct fs import — consider injecting via dependency
   △ kb-cli.ts: Direct fs import — consider injecting via dependency
   △ persona-cli.ts: Direct fs import — consider injecting via dependency
   △ persona.ts: Direct fs import — consider injecting via dependency
+  △ service-cli.ts: Direct child_process import — consider injecting via dependency
+  △ service.ts: Direct fs import — consider injecting via dependency
   △ setup.ts: Direct child_process import — consider injecting via dependency
   △ snapshot-cli.ts: Direct fs import — consider injecting via dependency
   △ snapshot.ts: Direct fs import — consider injecting via dependency
   △ telegram/access.ts: Direct fs import — consider injecting via dependency
   △ vault.ts: Direct fs import — consider injecting via dependency
 
-Total: 1 errors, 17 warnings
+ISP (Interface Segregation):
+  △ kanban-cli.ts: Importing 28 names from one module — interface may be too broad
+  △ tools/kanban.ts: Importing 17 names from one module — interface may be too broad
+
+Total: 8 errors, 25 warnings
 
 ╔══════════════════════════════════════════════════╗
 ║           COUPLING MATRIX                       ║
@@ -170,23 +214,23 @@ Total: 1 errors, 17 warnings
 
              root     kb memory telegr  tools    web
 ────────────────────────────────────────────────────
-root            ·      2      5      ·     10      ·
+root            ·      2      5      ·     12      ·
 kb              1      ·      ·      ·      ·      ·
 memory          2      ·      ·      ·      ·      ·
 telegram        4      ·      ·      ·      ·      ·
-tools           2      2      2      ·      ·      ·
-web             3      ·      ·      ·      ·      ·
+tools           4      2      2      ·      ·      ·
+web             4      ·      ·      ·      ·      ·
 
 STRONGEST COUPLING:
-  root ↔ tools  score:12 (root→tools:10, tools→root:2) ⚠ BIDIRECTIONAL
+  root ↔ tools  score:16 (root→tools:12, tools→root:4) ⚠ BIDIRECTIONAL
   root ↔ memory  score:7 (root→memory:5, memory→root:2) ⚠ BIDIRECTIONAL
   root ↔ telegram  score:4 (root→telegram:0, telegram→root:4)
+  root ↔ web  score:4 (root→web:0, web→root:4)
   root ↔ kb  score:3 (root→kb:2, kb→root:1) ⚠ BIDIRECTIONAL
-  root ↔ web  score:3 (root→web:0, web→root:3)
   kb ↔ tools  score:2 (kb→tools:0, tools→kb:2)
   memory ↔ tools  score:2 (memory→tools:0, tools→memory:2)
 
-Total: 6 modules, 33 import edges, 3 bidirectional pairs
+Total: 6 modules, 38 import edges, 3 bidirectional pairs
 
 ╔══════════════════════════════════════════════════╗
 ║           READABILITY REPORT                    ║
@@ -196,26 +240,34 @@ FILE SCORES (worst first):
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
 ────────────────────────────────────────────────────────────────────────────────
+  D      53     35    146     5%    15    8    kanban.ts
   C      57     40    176     8%    12    5    kb/engine.ts
   C      57     40    117     5%     6    5    kb-cli.ts
-  C      58     37     89     1%     6    8    tools/files.ts
-  C      62     30     80     4%     8    6    web/handler.ts
+  C      58     38    116     1%     6    8    tools/files.ts
+  C      61     29    171     2%    18    4    web/kanban-ui.ts
+  C      62     32    120     7%     4    6    dispatch.ts
+  C      62     30     80     5%    11    6    web/handler.ts
   C      63     41    116     7%     5    6    tools/grep.ts
-  C      64     39    119     7%     8    5    agent.ts
+  C      64     39    133     7%     8    5    agent.ts
   C      64     36    114    10%     3    9    telegram/handlers.ts
   C      66     46    123     0%     7    3    tools/memory.ts
   C      68     45    175     5%     4    5    tools/kb.ts
+  C      69     34    102     4%     6    4    service.ts
   B      70     38     94     7%     6    6    tools/glob.ts
+  B      72     35    100     7%     8    6    dispatch-cli.ts
   B      72     26     83     1%     4    6    web/ui.ts
-  B      75     45    149     2%     0    7    tools/edit.ts
+  B      74     34    155     4%     0    5    kanban-cli.ts
+  B      75     47    149     2%     0    7    tools/edit.ts
   B      76     36    110    10%     3    5    tools/web.ts
   B      78     30     93     0%     3    4    setup.ts
   B      78     34     92    15%     3    6    telegram/send.ts
+  B      79     30     87     8%     6    4    service-cli.ts
   B      79     30    103    23%    12    4    vault.ts
+  B      80     38    131     0%     0    5    tools/kanban.ts
   B      82     35     84     8%     3    3    auth.ts
-  B      82     46    119    16%     0    8    tools/shell.ts
+  B      82     46    120    16%     0    8    tools/shell.ts
   B      83     35    121    20%     8    4    context.ts
-  B      83     32    109     7%     1    5    index.ts
+  B      83     34    124     7%     1    5    index.ts
   A      86     40    133    11%     1    6    tools/vault.ts
   A      89     34    101    24%     3    4    memory/search.ts
   A      89     39    112     8%     0    6    tools/claude-code.ts
@@ -223,13 +275,14 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   A      90     31     74    13%     0    4    telegram/bot.ts
   A      91     34     76     3%     2    4    web/server.ts
   A      92     33    224     7%     0    4    persona-cli.ts
+  A      92     59    238     0%     0    3    system-prompt.ts
   A      94     33    105    10%     0    4    install-tui.ts
-  A      94     57    238     0%     0    3    system-prompt.ts
-  A      94     33    130     9%     1    4    vault-cli.ts
+  A      94     38     86     0%     0    4    tools/audit.ts
   A      96     40    103    24%     2    5    telegram/format.ts
   A      96     34     84    12%     2    4    tools/run-process.ts
+  A      97     35    130    12%     1    4    vault-cli.ts
+  A      98     38    143    19%     4    3    config.ts
   A      98     37     91    17%     3    4    conversation.ts
-  A     100     36    120    20%     2    3    config.ts
   A     100     34     81    28%     3    2    kb/embeddings.ts
   A     100     34     77    19%     0    2    kb/index.ts
   A     100     26     96     9%     0    1    kb/types.ts
@@ -237,11 +290,11 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   A     100     35    110    26%     0    3    persona.ts
   A     100     32     93    10%     0    3    snapshot-cli.ts
   A     100     35    102    15%     0    3    telegram/access.ts
-  A     100     37     85    32%     0    4    tools/util.ts
-  A     100     22     59     0%     0    1    types.ts
+  A     100     33     85    28%     0    4    tools/util.ts
+  A     100     23     72     0%     0    1    types.ts
 
-Average readability score: 84/100
-Grades: A:23 B:11 C:9 D:0 F:0
+Average readability score: 82/100
+Grades: A:24 B:15 C:12 D:1 F:0
 
 ╔══════════════════════════════════════════════════╗
 ║           MODULE COHESION REPORT                ║
@@ -253,7 +306,7 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   △  50      2         0          0         2     tools/edit.ts
   △  50      2         0          0         2     tools/glob.ts
   △  50      2         0          0         2     tools/grep.ts
-  △  50      2         0          0         2     tools/util.ts
+  △  51      3         0          1         3     tools/util.ts
   △  52      4         0          1         4     kb/embeddings.ts
   △  53      2         0          2         2     kb/index.ts
   △  55      3         0          3         3     memory/store.ts
@@ -261,6 +314,7 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   △  55      2         0          0         1     tools/vault.ts
   △  55      2         0          0         1     tools/web.ts
   △  56      2         0          4         2     telegram/format.ts
+  △  58      6         0          0         1     tools/kanban.ts
   △  58      4         0          0         1     tools/kb.ts
   △  58      4         0          0         1     tools/memory.ts
   △  64      5         0         10         5     memory/search.ts
@@ -269,11 +323,14 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   ✓  69      4         2          1         4     auth.ts
   ✓  72      3         1          6         3     conversation.ts
   ✓  73      7         4          3         6     persona.ts
+  ✓  76     14        11          3        12     dispatch.ts
   ✓  76      6         3          4         3     vault.ts
   ✓  80      9         8          3         8     telegram/access.ts
-  ✓  85      8         7          3         4     config.ts
+  ✓  81     33        38          2        23     kanban.ts
+  ✓  86      9         8          3         4     config.ts
+  ✓  88     14        17          5         7     service.ts
 
-Average cohesion: 61/100
+Average cohesion: 63/100
 
 ╔══════════════════════════════════════════════════╗
 ║           SIDE-EFFECT TRACE                     ║
@@ -285,16 +342,38 @@ IMPURE FUNCTIONS (have side effects):
     isExpired:118  [date]
     getAccessToken:127  [date]
   config.ts:
-    writeActivePersona:52  [fs]
-    ensureMinicawDirs:59  [fs]
-    ensurePersonaDirs:77  [fs]
-    loadConfig:99  [fs] [env]
+    writeActivePersona:55  [fs]
+    ensureMinicawDirs:67  [fs]
+    ensurePersonaDirs:87  [fs]
+    loadConfig:110  [fs] [env]
   context.ts:
     saveContext:54  [date]
   conversation.ts:
     loadHistory:52  [fs]
     appendToHistory:68  [fs]
     archiveRotatedMessages:91  [fs] [date]
+  dispatch.ts:
+    acquireLock:41  [fs] [date]
+    releaseLock:56  [fs]
+    cleanStaleLocks:72  [fs]
+    countActiveLocks:95  [fs]
+    getActiveLocks:101  [fs]
+    ensureKanbanCollection:208  [fs]
+    indexKanban:224  [child_process]
+    createAuditWriter:322  [fs] [date]
+    getAuditLogs:333  [fs]
+    runDispatchCycle:479  [console]
+  kanban.ts:
+    initBoard:165  [fs] [date]
+    parseTaskFile:192  [date]
+    addTask:425  [fs] [date]
+    getTask:459  [fs]
+    moveTask:536  [fs] [date]
+    editTask:597  [fs] [date]
+    appendNote:633  [fs] [date]
+    listTasks:654  [fs]
+    boardSummary:696  [date]
+    archiveShipped:785  [fs] [date]
   memory/search.ts:
     ensureQmdCollection:31  [fs]
     indexMemory:46  [child_process]
@@ -307,13 +386,20 @@ IMPURE FUNCTIONS (have side effects):
     savePersona:79  [fs]
     listPersonas:88  [fs]
     loadActivePersona:112  [fs] [console]
+  service.ts:
+    getServicePaths:39  [env]
+    installService:123  [fs]
+    uninstallService:145  [fs]
+    getDispatchPaths:201  [env]
+    installDispatch:282  [fs]
+    uninstallDispatch:307  [fs]
   setup.ts:
     runSetup:55  [process] [console]
   snapshot.ts:
     exportSnapshot:36  [fs] [date]
     listSnapshots:167  [fs]
   system-prompt.ts:
-    buildSystemPrompt:4  [process] [env] [date]
+    buildSystemPrompt:5  [process] [env] [date]
   telegram/access.ts:
     loadAccess:24  [fs]
     saveAccess:33  [fs]
@@ -328,7 +414,7 @@ IMPURE FUNCTIONS (have side effects):
   tools/files.ts:
     createReadFileTool:7  [fs]
     createWriteFileTool:36  [fs]
-    createListDirectoryTool:58  [fs]
+    createListDirectoryTool:60  [fs]
   tools/glob.ts:
     createGlobTool:5  [fs] [process]
   tools/grep.ts:
@@ -336,9 +422,9 @@ IMPURE FUNCTIONS (have side effects):
   tools/run-process.ts:
     runProcess:20  [child_process]
   tools/shell.ts:
-    createShellTool:93  [process] [env]
+    createShellTool:100  [process] [env]
   tools/util.ts:
-    resolveJailed:24  [fs]
+    resolveJailed:25  [fs]
   vault.ts:
     getMasterPassword:56  [fs] [env]
     initVaultKey:77  [fs]
@@ -348,15 +434,37 @@ IMPURE FUNCTIONS (have side effects):
 
 PURE FUNCTIONS (no side effects):
 ──────────────────────────────────────────────────────────────────────
-  ✓ agent.ts:21  createTools
-  ✓ agent.ts:47  runAgent
+  ✓ agent.ts:22  createTools
+  ✓ agent.ts:54  runAgent
   ✓ auth.ts:110  writeCredentials
   ✓ auth.ts:114  readCredentials
-  ✓ config.ts:18  getMinicawHome
-  ✓ config.ts:23  getSystemDir
-  ✓ config.ts:28  getUserDir
-  ✓ config.ts:37  getActivePersonaHome
+  ✓ config.ts:21  getMinicawHome
+  ✓ config.ts:26  getSystemDir
+  ✓ config.ts:31  getUserDir
+  ✓ config.ts:40  getActivePersonaHome
+  ✓ config.ts:62  getLogsDir
   ✓ context.ts:12  retrieveContext
+  ✓ dispatch.ts:131  selectNextTask
+  ✓ dispatch.ts:240  searchRelatedTickets
+  ✓ dispatch.ts:283  buildDispatchContext
+  ✓ dispatch.ts:426  runDispatchLoop
+  ✓ kanban.ts:82  validateTransition
+  ✓ kanban.ts:86  isValidState
+  ✓ kanban.ts:90  isValidPriority
+  ✓ kanban.ts:94  isValidType
+  ✓ kanban.ts:98  isValidSize
+  ✓ kanban.ts:102  isValidStatus
+  ✓ kanban.ts:108  extractSection
+  ✓ kanban.ts:126  isSectionFilled
+  ✓ kanban.ts:131  isForwardTransition
+  ✓ kanban.ts:137  getKanbanDir
+  ✓ kanban.ts:151  slugify
+  ✓ kanban.ts:284  formatTaskFile
+  ✓ kanban.ts:468  checkTransitionGates
+  ✓ kanban.ts:683  taskHistory
+  ✓ kanban.ts:692  getChildren
+  ✓ kanban.ts:740  boardSummaryText
+  ✓ kanban.ts:814  searchTasks
   ✓ kb/embeddings.ts:23  embed
   ✓ kb/embeddings.ts:32  isModelLoaded
   ✓ kb/embeddings.ts:37  unloadModel
@@ -368,6 +476,14 @@ PURE FUNCTIONS (no side effects):
   ✓ persona.ts:11  parsePersona
   ✓ persona.ts:39  formatPersona
   ✓ persona.ts:59  buildPersonaPrompt
+  ✓ service.ts:24  detectPlatform
+  ✓ service.ts:54  generatePlist
+  ✓ service.ts:93  generateUnit
+  ✓ service.ts:168  serviceStatus
+  ✓ service.ts:217  generateDispatchPlist
+  ✓ service.ts:253  generateDispatchUnit
+  ✓ service.ts:267  generateDispatchTimer
+  ✓ service.ts:324  dispatchStatus
   ✓ snapshot.ts:121  restoreSnapshot
   ✓ snapshot.ts:181  showSnapshot
   ✓ telegram/access.ts:78  isAllowed
@@ -378,14 +494,16 @@ PURE FUNCTIONS (no side effects):
   ✓ telegram/format.ts:32  markdownToTelegramHtml
   ✓ telegram/format.ts:152  chunkText
   ✓ telegram/send.ts:11  sendResponse
-  ✓ tools/util.ts:9  formatToolError
+  ✓ tools/audit.ts:6  createAuditLogTool
+  ✓ tools/util.ts:10  formatToolError
+  ✓ tools/util.ts:116  isProtectedPath
   ✓ vault.ts:217  vaultGet
   ✓ vault.ts:236  vaultDelete
   ✓ vault.ts:256  vaultList
-  ✓ web/handler.ts:24  createRequestHandler
+  ✓ web/handler.ts:26  createRequestHandler
 
-Total: 77 functions, 35 pure (45%), 42 impure
-Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process(3), network(1)
+Total: 135 functions, 67 pure (50%), 68 impure
+Effect frequency: fs(48), date(18), env(7), console(6), process(6), child_process(4), network(1)
 
 ╔══════════════════════════════════════════════════╗
 ║           STATE MACHINE MAP                     ║
@@ -455,6 +573,31 @@ Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process
 │  attempt ──[catch]──▶ caught
 └───
 
+┌─── dispatch-cli.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── dispatch.ts :: state_machine ───
+│  ○ blocked
+│  ○ backlog
+│
+│  blocked ──[transition]──▶ backlog
+└───
+
+┌─── dispatch.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── index.ts :: process_events ───
 │  ● idle
 │  ○ SIGINT
@@ -488,6 +631,35 @@ Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process
 │  attempt ──[catch]──▶ caught
 │  caught ──[fallback]──▶ fallback
 │  fallback ──[complete]──▶ success
+└───
+
+┌─── kanban-cli.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── kanban.ts :: state_machine ───
+│  ○ shipped
+│  ○ backlog
+│  ○ blocked
+│  ○ active
+│
+│  shipped ──[transition]──▶ backlog
+│  backlog ──[transition]──▶ blocked
+│  blocked ──[transition]──▶ active
+└───
+
+┌─── kanban.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
 └───
 
 ┌─── kb/embeddings.ts :: embed_flow ───
@@ -541,6 +713,27 @@ Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process
 └───
 
 ┌─── persona.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│  ○ fallback
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+│  caught ──[fallback]──▶ fallback
+│  fallback ──[complete]──▶ success
+└───
+
+┌─── service-cli.ts :: process_lifecycle ───
+│  ● spawning
+│  ○ running
+│  ✗ error
+│
+│  spawning ──[spawn()]──▶ running
+│  running ──[error]──▶ error
+└───
+
+┌─── service.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
 │  ✗ caught
@@ -737,6 +930,15 @@ Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process
 │  attempt ──[catch]──▶ caught
 └───
 
+┌─── tools/kanban.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── tools/kb.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
@@ -858,6 +1060,15 @@ Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process
 │  fallback ──[complete]──▶ success
 └───
 
+┌─── web/kanban-ui.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
 ┌─── web/server.ts :: process_events ───
 │  ● idle
 │  ○ SIGINT
@@ -889,32 +1100,45 @@ Effect frequency: fs(28), date(8), process(6), env(5), console(5), child_process
 │  attempt ──[catch]──▶ caught
 └───
 
-Total: 44 state machines, 170 states, 152 transitions
+Total: 54 state machines, 201 states, 174 transitions
 
 ╔══════════════════════════════════════════════════╗
 ║           DUPLICATION REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  DUPLICATED BLOCKS (33):
+⚠  DUPLICATED BLOCKS (68):
 
-  Block (5 lines) found in 2 files:
-    agent.ts:135
-    config.ts:114
+  Block (5 lines) found in 4 files:
+    agent.ts:143
+    config.ts:125
+    dispatch.ts:164
+    kanban.ts:804
     Preview:     } catch {
 
   Block (5 lines) found in 2 files:
-    agent.ts:156
-    config.ts:130
+    agent.ts:161
+    dispatch.ts:295
+    Preview:         }
+
+  Block (5 lines) found in 3 files:
+    agent.ts:162
+    dispatch.ts:163
+    kanban.ts:803
+    Preview:       }
+
+  Block (5 lines) found in 2 files:
+    agent.ts:164
+    config.ts:141
     Preview:       // Non-fatal
 
   Block (5 lines) found in 2 files:
     auth.ts:11
-    types.ts:22
+    types.ts:26
     Preview:   accessToken: string;
 
   Block (5 lines) found in 6 files:
     auth.ts:45
-    config.ts:46
+    config.ts:49
     memory/store.ts:45
     persona.ts:71
     snapshot.ts:189
@@ -922,121 +1146,148 @@ Total: 44 state machines, 170 states, 152 transitions
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
+    auth.ts:86
+    dispatch.ts:66
+    Preview:     return true;
+
+  Block (5 lines) found in 3 files:
     auth.ts:87
+    dispatch.ts:67
     install-tui.ts:22
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
-    conversation.ts:43
-    tools/files.ts:110
+    context.ts:21
+    dispatch.ts:296
     Preview:     }
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 2 files:
+    context.ts:38
+    kanban.ts:768
+    Preview:     } catch {
+
+  Block (5 lines) found in 2 files:
+    conversation.ts:43
+    tools/files.ts:112
+    Preview:     }
+
+  Block (5 lines) found in 6 files:
     conversation.ts:58
+    dispatch.ts:263
     memory/store.ts:59
     persona.ts:98
     snapshot.ts:173
+    tools/util.ts:83
     Preview:   } catch {
 
-  Block (5 lines) found in 3 files:
+  Block (5 lines) found in 4 files:
     conversation.ts:59
     persona.ts:99
     snapshot.ts:174
+    tools/util.ts:84
     Preview:     return [];
 
   Block (5 lines) found in 2 files:
-    index.ts:70
-    web/handler.ts:93
-    Preview:   try {
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:133
-    persona-cli.ts:82
-    Preview:   } else {
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:134
-    persona-cli.ts:83
-    Preview:     // Copy template
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:135
-    persona-cli.ts:84
-    Preview:     const templatePath = path.join(getSystemDir(), "templates", "persona.md");
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:144
-    persona-cli.ts:95
-    Preview:   }
-
-  Block (5 lines) found in 2 files:
-    install-tui.ts:145
-    persona-cli.ts:96
+    dispatch-cli.ts:33
+    service-cli.ts:32
     Preview: 
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:186
-    kb-cli.ts:398
-    persona-cli.ts:224
-    snapshot-cli.ts:128
-    vault-cli.ts:133
+    dispatch-cli.ts:125
+    persona-cli.ts:205
+    service-cli.ts:116
+    snapshot-cli.ts:111
+    vault-cli.ts:140
     Preview: }
 
   Block (5 lines) found in 5 files:
-    install-tui.ts:187
-    kb-cli.ts:399
-    persona-cli.ts:225
-    snapshot-cli.ts:129
-    vault-cli.ts:134
+    dispatch-cli.ts:126
+    persona-cli.ts:206
+    service-cli.ts:117
+    snapshot-cli.ts:112
+    vault-cli.ts:141
     Preview: 
 
-  Block (5 lines) found in 2 files:
-    kb-cli.ts:24
-    tools/kb.ts:13
-    Preview: 
+  Block (5 lines) found in 5 files:
+    dispatch-cli.ts:128
+    persona-cli.ts:208
+    service-cli.ts:119
+    snapshot-cli.ts:114
+    vault-cli.ts:143
+    Preview:   ensureMinicawDirs();
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 6 files:
+    dispatch-cli.ts:130
     kb-cli.ts:381
     persona-cli.ts:209
+    service-cli.ts:121
     snapshot-cli.ts:115
-    vault-cli.ts:121
+    vault-cli.ts:145
     Preview:   const [command, ...args] = process.argv.slice(2);
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 6 files:
+    dispatch-cli.ts:140
     kb-cli.ts:396
     persona-cli.ts:222
+    service-cli.ts:131
     snapshot-cli.ts:126
-    vault-cli.ts:131
-    Preview:     default:                   usage();
+    vault-cli.ts:155
+    Preview:     default:          usage();
 
-  Block (5 lines) found in 4 files:
+  Block (5 lines) found in 6 files:
+    dispatch-cli.ts:141
     kb-cli.ts:397
     persona-cli.ts:223
+    service-cli.ts:132
     snapshot-cli.ts:127
-    vault-cli.ts:132
+    vault-cli.ts:156
     Preview:   }
 
-  ... and 13 more
+  ... and 48 more
 
 ╔══════════════════════════════════════════════════╗
 ║           DEAD CODE REPORT                      ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  POTENTIALLY UNUSED EXPORTS (17):
-   agent.ts:21  export createTools
+⚠  POTENTIALLY UNUSED EXPORTS (41):
+   agent.ts:22  export createTools
    auth.ts:110  export writeCredentials
+   config.ts:62  export getLogsDir
+   dispatch.ts:41  export acquireLock
+   dispatch.ts:56  export releaseLock
+   dispatch.ts:72  export cleanStaleLocks
+   dispatch.ts:95  export countActiveLocks
+   dispatch.ts:131  export selectNextTask
+   dispatch.ts:208  export ensureKanbanCollection
+   dispatch.ts:224  export indexKanban
+   dispatch.ts:240  export searchRelatedTickets
+   dispatch.ts:283  export buildDispatchContext
+   dispatch.ts:322  export createAuditWriter
+   dispatch.ts:426  export runDispatchLoop
+   kanban.ts:82  export validateTransition
+   kanban.ts:108  export extractSection
+   kanban.ts:126  export isSectionFilled
+   kanban.ts:131  export isForwardTransition
+   kanban.ts:151  export slugify
+   kanban.ts:192  export parseTaskFile
+   kanban.ts:284  export formatTaskFile
    kb/embeddings.ts:32  export isModelLoaded
    kb/embeddings.ts:37  export unloadModel
    kb/index.ts:26  export closeKB
    persona.ts:39  export formatPersona
+   service.ts:54  export generatePlist
+   service.ts:93  export generateUnit
+   service.ts:217  export generateDispatchPlist
+   service.ts:253  export generateDispatchUnit
+   service.ts:267  export generateDispatchTimer
    setup.ts:55  export runSetup
    telegram/access.ts:33  export saveAccess
    telegram/access.ts:108  export revokeUser
    telegram/bot.ts:7  export startBot
-   tools/edit.ts:50  export editFileTool
-   tools/files.ts:95  export readFileTool
-   tools/files.ts:96  export writeFileTool
-   tools/files.ts:97  export listDirectoryTool
+   tools/edit.ts:52  export editFileTool
+   tools/files.ts:97  export readFileTool
+   tools/files.ts:98  export writeFileTool
+   tools/files.ts:99  export listDirectoryTool
    tools/glob.ts:59  export globTool
    tools/grep.ts:75  export grepTool
    web/server.ts:5  export startWebServer
@@ -1050,20 +1301,76 @@ Total: 44 state machines, 170 states, 152 transitions
 ║           API SURFACE MAP                       ║
 ╚══════════════════════════════════════════════════╝
 
-┌─── config.ts (8 exports, 15 consumers) ⚠ STABLE (many dependents)
-│  function   getMinicawHome → persona
+┌─── config.ts (9 exports, 20 consumers) ⚠ STABLE (many dependents)
+│  function   getMinicawHome → dispatch-cli, dispatch, persona, service-cli, service
 │  function   getSystemDir → install-tui, persona-cli, snapshot
 │  function   getUserDir → install-tui, persona-cli, persona, snapshot-cli, snapshot
-│  function   getActivePersonaHome → conversation, index, kb-cli, search, store, access, vault-cli, vault
+│  function   getActivePersonaHome → conversation, dispatch, kanban, index, kb-cli, search, store, access, vault-cli, vault
 │  function   writeActivePersona → install-tui, persona-cli
-│  function   ensureMinicawDirs → index, persona-cli, setup, snapshot-cli, vault-cli
+│  function   getLogsDir → UNUSED
+│  function   ensureMinicawDirs → dispatch-cli, index, persona-cli, service-cli, setup, snapshot-cli, vault-cli
 │  function   ensurePersonaDirs → install-tui, kb-cli, persona-cli
-│  function   loadConfig → index, kb-cli, persona-cli
+│  function   loadConfig → dispatch-cli, dispatch, index, kb-cli, persona-cli
 └
 
-┌─── tools/util.ts (2 exports, 6 consumers) ⚠ STABLE (many dependents)
+┌─── kanban.ts (46 exports, 6 consumers) ⚠ STABLE (many dependents)
+│  function   validateTransition → UNUSED
+│  function   isValidState → kanban-cli, kanban
+│  function   isValidPriority → kanban-cli, kanban
+│  function   isValidType → kanban-cli, kanban
+│  function   isValidSize → kanban-cli, kanban
+│  function   isValidStatus → kanban-cli, kanban
+│  function   extractSection → UNUSED
+│  function   isSectionFilled → UNUSED
+│  function   isForwardTransition → UNUSED
+│  function   getKanbanDir → util
+│  function   slugify → UNUSED
+│  function   initBoard → kanban-cli
+│  function   parseTaskFile → UNUSED
+│  function   formatTaskFile → UNUSED
+│  function   addTask → kanban-cli, kanban
+│  function   getTask → dispatch, kanban-cli, kanban
+│  function   checkTransitionGates → dispatch, kanban-cli, kanban
+│  function   moveTask → kanban-cli, kanban
+│  function   editTask → kanban-cli, kanban
+│  function   appendNote → kanban-cli, kanban
+│  function   listTasks → dispatch, kanban-cli, kanban, handler
+│  function   taskHistory → kanban-cli
+│  function   getChildren → kanban-cli, kanban
+│  function   boardSummary → kanban-cli, handler
+│  function   boardSummaryText → system-prompt
+│  function   archiveShipped → kanban-cli
+│  function   searchTasks → kanban-cli, kanban
+│  const      STATES → kanban-cli
+│  const      TYPES → kanban-cli
+│  const      SIZES → kanban-cli
+│  const      STATUSES → UNUSED
+│  const      VALID_TRANSITIONS → dispatch
+│  const      REQUIRED_SECTIONS → UNUSED
+│  type       KanbanState → UNUSED
+│  type       Priority → UNUSED
+│  type       TaskType → UNUSED
+│  type       TaskStatus → UNUSED
+│  type       TaskSize → UNUSED
+│  type       TransitionEntry → UNUSED
+│  type       KanbanTask → UNUSED
+│  type       BoardMeta → UNUSED
+│  type       BoardSummaryResult → UNUSED
+│  type       GateViolation → UNUSED
+│  type       GateResult → UNUSED
+│  type       AddTaskOpts → UNUSED
+│  type       EditTaskUpdates → UNUSED
+└
+
+┌─── tools/util.ts (3 exports, 6 consumers) ⚠ STABLE (many dependents)
 │  function   formatToolError → edit, files, glob, grep, web
 │  function   resolveJailed → edit, files, glob, grep, shell
+│  function   isProtectedPath → edit, files, shell
+└
+
+┌─── agent.ts (2 exports, 4 consumers) ⚠ STABLE (many dependents)
+│  function   createTools → UNUSED
+│  function   runAgent → dispatch, index, handlers, handler
 └
 
 ┌─── memory/search.ts (6 exports, 4 consumers) ⚠ STABLE (many dependents)
@@ -1073,11 +1380,6 @@ Total: 44 state machines, 170 states, 152 transitions
 │  function   vectorSearchMemory → context, memory
 │  function   deepSearchMemory → memory
 │  type       SearchResult → UNUSED
-└
-
-┌─── agent.ts (2 exports, 3 consumers)
-│  function   createTools → UNUSED
-│  function   runAgent → index, handlers, handler
 └
 
 ┌─── memory/store.ts (3 exports, 3 consumers)
@@ -1119,6 +1421,27 @@ Total: 44 state machines, 170 states, 152 transitions
 │  function   loadActivePersona → agent
 └
 
+┌─── service.ts (18 exports, 2 consumers)
+│  function   detectPlatform → dispatch-cli, service-cli
+│  function   getServicePaths → service-cli
+│  function   generatePlist → UNUSED
+│  function   generateUnit → UNUSED
+│  function   installService → service-cli
+│  function   uninstallService → service-cli
+│  function   serviceStatus → service-cli
+│  function   getDispatchPaths → dispatch-cli
+│  function   generateDispatchPlist → UNUSED
+│  function   generateDispatchUnit → UNUSED
+│  function   generateDispatchTimer → UNUSED
+│  function   installDispatch → dispatch-cli
+│  function   uninstallDispatch → dispatch-cli
+│  function   dispatchStatus → dispatch-cli
+│  type       Platform → UNUSED
+│  interface  ServicePaths → UNUSED
+│  interface  ServiceStatus → UNUSED
+│  interface  DispatchPaths → UNUSED
+└
+
 ┌─── tools/run-process.ts (2 exports, 2 consumers)
 │  function   runProcess → claude-code, shell
 │  type       RunProcessOptions → UNUSED
@@ -1133,6 +1456,25 @@ Total: 44 state machines, 170 states, 152 transitions
 │  function   loadHistory → agent
 │  function   appendToHistory → agent
 │  function   archiveRotatedMessages → agent
+└
+
+┌─── dispatch.ts (16 exports, 1 consumers)
+│  function   acquireLock → UNUSED
+│  function   releaseLock → UNUSED
+│  function   cleanStaleLocks → UNUSED
+│  function   countActiveLocks → UNUSED
+│  function   getActiveLocks → dispatch-cli
+│  function   selectNextTask → UNUSED
+│  function   ensureKanbanCollection → UNUSED
+│  function   indexKanban → UNUSED
+│  function   searchRelatedTickets → UNUSED
+│  function   buildDispatchContext → UNUSED
+│  function   createAuditWriter → UNUSED
+│  function   getAuditLogs → dispatch-cli
+│  function   runDispatchLoop → UNUSED
+│  function   runDispatchCycle → dispatch-cli
+│  type       LockInfo → UNUSED
+│  type       QmdSearchResult → UNUSED
 └
 
 ┌─── kb/embeddings.ts (4 exports, 1 consumers)
@@ -1196,6 +1538,11 @@ Total: 44 state machines, 170 states, 152 transitions
 │  function   sendResponse → handlers
 └
 
+┌─── tools/audit.ts (2 exports, 1 consumers)
+│  function   createAuditLogTool → dispatch
+│  type       AuditWriter → UNUSED
+└
+
 ┌─── tools/claude-code.ts (1 exports, 1 consumers)
 │  const      claudeCodeTool → agent
 └
@@ -1222,6 +1569,15 @@ Total: 44 state machines, 170 states, 152 transitions
 ┌─── tools/grep.ts (2 exports, 1 consumers)
 │  function   createGrepTool → agent
 │  const      grepTool → UNUSED
+└
+
+┌─── tools/kanban.ts (6 exports, 1 consumers)
+│  const      kanbanAddTool → agent
+│  const      kanbanListTool → agent
+│  const      kanbanMoveTool → agent
+│  const      kanbanShowTool → agent
+│  const      kanbanSearchTool → agent
+│  const      kanbanCheckTool → agent
 └
 
 ┌─── tools/kb.ts (4 exports, 1 consumers)
@@ -1256,6 +1612,10 @@ Total: 44 state machines, 170 states, 152 transitions
 │  function   createRequestHandler → server
 └
 
+┌─── web/kanban-ui.ts (1 exports, 1 consumers)
+│  const      KANBAN_HTML → handler
+└
+
 ┌─── web/ui.ts (1 exports, 1 consumers)
 │  const      HTML → handler
 └
@@ -1280,4 +1640,4 @@ Total: 44 state machines, 170 states, 152 transitions
 │  function   startWebServer → UNUSED
 └
 
-Total: 37 modules, 119 exports, 36 potentially unused
+Total: 43 modules, 210 exports, 82 potentially unused

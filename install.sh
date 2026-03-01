@@ -42,7 +42,7 @@ fi
 echo "Installing to $INSTALL_DIR"
 
 # System dirs (we own these — safe to overwrite on update)
-mkdir -p "$INSTALL_DIR"/system/{bin,lib,templates}
+mkdir -p "$INSTALL_DIR"/system/{bin,lib,templates,instructions}
 
 # User dirs (agent/user owns — never overwritten)
 mkdir -p "$INSTALL_DIR"/user/{personas,snapshots}
@@ -55,6 +55,10 @@ cp "$SCRIPT_DIR/dist/vault-cli.mjs"     "$INSTALL_DIR/system/lib/vault-cli.mjs"
 cp "$SCRIPT_DIR/dist/persona-cli.mjs"   "$INSTALL_DIR/system/lib/persona-cli.mjs"
 cp "$SCRIPT_DIR/dist/snapshot-cli.mjs"  "$INSTALL_DIR/system/lib/snapshot-cli.mjs"
 cp "$SCRIPT_DIR/dist/install-tui.mjs"  "$INSTALL_DIR/system/lib/install-tui.mjs"
+cp "$SCRIPT_DIR/dist/kanban-cli.mjs"   "$INSTALL_DIR/system/lib/kanban-cli.mjs"
+cp "$SCRIPT_DIR/dist/kb-cli.mjs"      "$INSTALL_DIR/system/lib/kb-cli.mjs"
+cp "$SCRIPT_DIR/dist/service-cli.mjs" "$INSTALL_DIR/system/lib/service-cli.mjs"
+cp "$SCRIPT_DIR/dist/dispatch-cli.mjs" "$INSTALL_DIR/system/lib/dispatch-cli.mjs"
 
 # Copy sourcemaps if they exist
 cp "$SCRIPT_DIR/dist/miniclaw.mjs.map"      "$INSTALL_DIR/system/lib/miniclaw.mjs.map"      2>/dev/null || true
@@ -62,6 +66,14 @@ cp "$SCRIPT_DIR/dist/vault-cli.mjs.map"     "$INSTALL_DIR/system/lib/vault-cli.m
 cp "$SCRIPT_DIR/dist/persona-cli.mjs.map"   "$INSTALL_DIR/system/lib/persona-cli.mjs.map"   2>/dev/null || true
 cp "$SCRIPT_DIR/dist/snapshot-cli.mjs.map"  "$INSTALL_DIR/system/lib/snapshot-cli.mjs.map"  2>/dev/null || true
 cp "$SCRIPT_DIR/dist/install-tui.mjs.map"  "$INSTALL_DIR/system/lib/install-tui.mjs.map"  2>/dev/null || true
+cp "$SCRIPT_DIR/dist/kanban-cli.mjs.map"   "$INSTALL_DIR/system/lib/kanban-cli.mjs.map"   2>/dev/null || true
+cp "$SCRIPT_DIR/dist/kb-cli.mjs.map"      "$INSTALL_DIR/system/lib/kb-cli.mjs.map"      2>/dev/null || true
+cp "$SCRIPT_DIR/dist/service-cli.mjs.map" "$INSTALL_DIR/system/lib/service-cli.mjs.map" 2>/dev/null || true
+cp "$SCRIPT_DIR/dist/dispatch-cli.mjs.map" "$INSTALL_DIR/system/lib/dispatch-cli.mjs.map" 2>/dev/null || true
+
+# Symlink node_modules so native add-ons (better-sqlite3, sqlite-vec, etc.)
+# are resolvable from the installed bundles via createRequire(import.meta.url).
+ln -sfn "$SCRIPT_DIR/node_modules" "$INSTALL_DIR/system/lib/node_modules"
 
 echo "  system/lib/ updated"
 
@@ -77,6 +89,13 @@ if [[ -f "$SCRIPT_DIR/templates/ethics.md" ]]; then
 fi
 
 echo "  system/templates/ updated"
+
+# ── Copy CLI instructions to system/instructions (always overwritten) ─
+for f in "$SCRIPT_DIR"/instructions/*.md; do
+  [[ -f "$f" ]] && cp "$f" "$INSTALL_DIR/system/instructions/$(basename "$f")"
+done
+
+echo "  system/instructions/ updated"
 
 # ── Write bin wrappers to system/bin (always overwritten) ────────────
 write_wrapper() {
@@ -96,6 +115,10 @@ write_wrapper "miniclaw"          "miniclaw.mjs"
 write_wrapper "miniclaw-vault"    "vault-cli.mjs"
 write_wrapper "miniclaw-persona"  "persona-cli.mjs"
 write_wrapper "miniclaw-snapshot" "snapshot-cli.mjs"
+write_wrapper "miniclaw-kanban"   "kanban-cli.mjs"
+write_wrapper "miniclaw-kb"      "kb-cli.mjs"
+write_wrapper "miniclaw-service"  "service-cli.mjs"
+write_wrapper "miniclaw-dispatch" "dispatch-cli.mjs"
 
 echo "  system/bin/ updated"
 
@@ -105,6 +128,16 @@ echo "  system/bin/ updated"
 echo ""
 export MINICLAW_HOME="$INSTALL_DIR"
 node "$INSTALL_DIR/system/lib/install-tui.mjs" || true
+
+# ── Install service daemon ──────────────────────────────────────────
+echo ""
+echo "Installing service daemon..."
+node "$INSTALL_DIR/system/lib/service-cli.mjs" install || echo "  Service install skipped — run 'miniclaw-service install' manually"
+
+# ── Install dispatch cron ──────────────────────────────────────────
+echo ""
+echo "Installing dispatch timer..."
+node "$INSTALL_DIR/system/lib/dispatch-cli.mjs" install || echo "  Dispatch cron skipped — run 'miniclaw-dispatch install' manually"
 
 # ── PATH setup ───────────────────────────────────────────────────────
 BIN_DIR="$INSTALL_DIR/system/bin"

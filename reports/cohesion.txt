@@ -8,7 +8,7 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   △  50      2         0          0         2     tools/edit.ts
   △  50      2         0          0         2     tools/glob.ts
   △  50      2         0          0         2     tools/grep.ts
-  △  50      2         0          0         2     tools/util.ts
+  △  51      3         0          1         3     tools/util.ts
   △  52      4         0          1         4     kb/embeddings.ts
   △  53      2         0          2         2     kb/index.ts
   △  55      3         0          3         3     memory/store.ts
@@ -16,6 +16,7 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   △  55      2         0          0         1     tools/vault.ts
   △  55      2         0          0         1     tools/web.ts
   △  56      2         0          4         2     telegram/format.ts
+  △  58      6         0          0         1     tools/kanban.ts
   △  58      4         0          0         1     tools/kb.ts
   △  58      4         0          0         1     tools/memory.ts
   △  64      5         0         10         5     memory/search.ts
@@ -24,8 +25,11 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   ✓  69      4         2          1         4     auth.ts
   ✓  72      3         1          6         3     conversation.ts
   ✓  73      7         4          3         6     persona.ts
+  ✓  76     14        11          3        12     dispatch.ts
   ✓  76      6         3          4         3     vault.ts
   ✓  80      9         8          3         8     telegram/access.ts
-  ✓  85      8         7          3         4     config.ts
+  ✓  81     33        38          2        23     kanban.ts
+  ✓  86      9         8          3         4     config.ts
+  ✓  88     14        17          5         7     service.ts
 
-Average cohesion: 61/100
+Average cohesion: 63/100

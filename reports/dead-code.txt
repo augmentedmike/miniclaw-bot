@@ -2,21 +2,45 @@
 ║           DEAD CODE REPORT                      ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  POTENTIALLY UNUSED EXPORTS (17):
-   agent.ts:21  export createTools
+⚠  POTENTIALLY UNUSED EXPORTS (41):
+   agent.ts:22  export createTools
    auth.ts:110  export writeCredentials
+   config.ts:62  export getLogsDir
+   dispatch.ts:41  export acquireLock
+   dispatch.ts:56  export releaseLock
+   dispatch.ts:72  export cleanStaleLocks
+   dispatch.ts:95  export countActiveLocks
+   dispatch.ts:131  export selectNextTask
+   dispatch.ts:208  export ensureKanbanCollection
+   dispatch.ts:224  export indexKanban
+   dispatch.ts:240  export searchRelatedTickets
+   dispatch.ts:283  export buildDispatchContext
+   dispatch.ts:322  export createAuditWriter
+   dispatch.ts:426  export runDispatchLoop
+   kanban.ts:82  export validateTransition
+   kanban.ts:108  export extractSection
+   kanban.ts:126  export isSectionFilled
+   kanban.ts:131  export isForwardTransition
+   kanban.ts:151  export slugify
+   kanban.ts:192  export parseTaskFile
+   kanban.ts:284  export formatTaskFile
    kb/embeddings.ts:32  export isModelLoaded
    kb/embeddings.ts:37  export unloadModel
    kb/index.ts:26  export closeKB
    persona.ts:39  export formatPersona
+   service.ts:54  export generatePlist
+   service.ts:93  export generateUnit
+   service.ts:217  export generateDispatchPlist
+   service.ts:253  export generateDispatchUnit
+   service.ts:267  export generateDispatchTimer
    setup.ts:55  export runSetup
    telegram/access.ts:33  export saveAccess
    telegram/access.ts:108  export revokeUser
    telegram/bot.ts:7  export startBot
-   tools/edit.ts:50  export editFileTool
-   tools/files.ts:95  export readFileTool
-   tools/files.ts:96  export writeFileTool
-   tools/files.ts:97  export listDirectoryTool
+   tools/edit.ts:52  export editFileTool
+   tools/files.ts:97  export readFileTool
+   tools/files.ts:98  export writeFileTool
+   tools/files.ts:99  export listDirectoryTool
    tools/glob.ts:59  export globTool
    tools/grep.ts:75  export grepTool
    web/server.ts:5  export startWebServer

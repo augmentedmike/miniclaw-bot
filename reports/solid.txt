@@ -3,25 +3,42 @@
 ╚══════════════════════════════════════════════════╝
 
 SRP (Single Responsibility):
-  ✗ kb/engine.ts: 505 lines — file is very long, consider extracting
-  △ config.ts: 8 exports — approaching too many responsibilities
+  ✗ dispatch.ts: 16 exports — consider splitting into focused modules
+  ✗ dispatch.ts: 522 lines — file is very long, consider extracting
+  ✗ kanban-cli.ts: 501 lines — file is very long, consider extracting
+  ✗ kanban.ts: 46 exports — consider splitting into focused modules
+  ✗ kanban.ts: 824 lines — file is very long, consider extracting
+  ✗ kb/engine.ts: 504 lines — file is very long, consider extracting
+  ✗ service.ts: 18 exports — consider splitting into focused modules
+  ✗ web/kanban-ui.ts: 542 lines — file is very long, consider extracting
+  △ config.ts: 9 exports — approaching too many responsibilities
   △ kb/types.ts: 8 exports — approaching too many responsibilities
   △ kb-cli.ts: 404 lines — file is very long, consider extracting
   △ persona.ts: 7 exports — approaching too many responsibilities
+  △ service.ts: 338 lines — file is very long, consider extracting
   △ telegram/access.ts: 10 exports — approaching too many responsibilities
   △ vault.ts: 8 exports — approaching too many responsibilities
 
 DIP (Dependency Inversion):
   △ conversation.ts: Direct fs import — consider injecting via dependency
+  △ dispatch-cli.ts: Direct fs import — consider injecting via dependency
+  △ dispatch.ts: Direct fs import — consider injecting via dependency
   △ install-tui.ts: Direct fs import — consider injecting via dependency
+  △ kanban.ts: Direct fs import — consider injecting via dependency
   △ kb/engine.ts: Direct fs import — consider injecting via dependency
   △ kb-cli.ts: Direct fs import — consider injecting via dependency
   △ persona-cli.ts: Direct fs import — consider injecting via dependency
   △ persona.ts: Direct fs import — consider injecting via dependency
+  △ service-cli.ts: Direct child_process import — consider injecting via dependency
+  △ service.ts: Direct fs import — consider injecting via dependency
   △ setup.ts: Direct child_process import — consider injecting via dependency
   △ snapshot-cli.ts: Direct fs import — consider injecting via dependency
   △ snapshot.ts: Direct fs import — consider injecting via dependency
   △ telegram/access.ts: Direct fs import — consider injecting via dependency
   △ vault.ts: Direct fs import — consider injecting via dependency
 
-Total: 1 errors, 17 warnings
+ISP (Interface Segregation):
+  △ kanban-cli.ts: Importing 28 names from one module — interface may be too broad
+  △ tools/kanban.ts: Importing 17 names from one module — interface may be too broad
+
+Total: 8 errors, 25 warnings

@@ -1,6 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { runAgent } from "../agent.js";
 import { HTML } from "./ui.js";
+import { KANBAN_HTML } from "./kanban-ui.js";
+import { listTasks, boardSummary } from "../kanban.js";
 import type { MinicawConfig } from "../types.js";
 
 function readBody(req: IncomingMessage): Promise<string> {
@@ -52,6 +54,29 @@ export function createRequestHandler(
         "Content-Length": Buffer.byteLength(HTML),
       });
       res.end(HTML);
+      return;
+    }
+
+    // Kanban board UI
+    if (url === "/kanban" && method === "GET") {
+      res.writeHead(200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": Buffer.byteLength(KANBAN_HTML),
+      });
+      res.end(KANBAN_HTML);
+      return;
+    }
+
+    // Kanban API — JSON board data
+    if (url === "/api/kanban" && method === "GET") {
+      try {
+        const tasks = listTasks();
+        const summary = boardSummary();
+        sendJson(res, 200, { tasks, summary });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        sendJson(res, 500, { error: msg });
+      }
       return;
     }
 

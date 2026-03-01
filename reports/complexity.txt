@@ -6,39 +6,57 @@
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Cmplx  LOC  Nest  Params  Function
 ────────────────────────────────────────────────────────────────────────────────
-  F      44   136    8      2     checkCommandJail (tools/shell.ts:12)
-  C      39    35    2      3     add (kb/engine.ts:149)
-  C      28    46    3      2     search (kb/engine.ts:239)
-  C      26    44    3      0     loadConfig (config.ts:99)
+  F      63   255    6      1     parseQmdJson (dispatch.ts:268)
+  F      45   143    8      2     checkCommandJail (tools/shell.ts:12)
+  C      40    48    3      0     loadConfig (config.ts:110)
+  C      39    35    2      3     add (kb/engine.ts:148)
+  C      28    46    3      2     search (kb/engine.ts:238)
   D      26    61    3      1     handleAdd (kb-cli.ts:74)
+  C      25    33    2      2     addTask (kanban.ts:425)
   C      24    19    4      1     parseQmdJson (memory/search.ts:99)
   F      23   153    4      0     main (install-tui.ts:34)
+  F      23   115    6      1     createRequestHandler (web/handler.ts:26)
   D      22    44    5      1     wrapFileReferences (telegram/format.ts:103)
-  C      21    21    2      3     update (kb/engine.ts:185)
+  C      21    21    2      3     update (kb/engine.ts:184)
+  C      20    35    2      2     editTask (kanban.ts:597)
   F      20   116    9      2     registerHandlers (telegram/handlers.ts:15)
+  D      19    73    4      0     main (index.ts:5)
+  C      19    42    2      1     parseTaskFile (kanban.ts:192)
   F      19    66    6      1     createGrepTool (tools/grep.ts:7)
+  F      18    67    8      2     checkTransitionGates (kanban.ts:468)
+  C      17    71    3      1     handleEdit (kanban-cli.ts:291)
   D      17    55    5      0     handleImportMemory (kb-cli.ts:249)
   B      17     8    2      1     for (memory/search.ts:106)
-  F      17    54    7      2     createShellTool (tools/shell.ts:93)
-  F      17    92    6      1     createRequestHandler (web/handler.ts:24)
+  F      17    54    7      2     createShellTool (tools/shell.ts:100)
   F      17    64    6      0     send (web/ui.ts:162)
   C      16    65    3      1     markdownToTelegramHtml (telegram/format.ts:32)
-  C      14    63    3      0     main (index.ts:5)
   C      14    32    4      1     for (kb-cli.ts:268)
+  D      14    54    4      1     showDetail (web/kanban-ui.ts:462)
+  D      13    34    6      1     handleLogs (dispatch-cli.ts:71)
+  C      13    45    4      1     handleShow (kanban-cli.ts:221)
+  B      13    21    2      0     main (kanban-cli.ts:478)
   B      13    24    3      1     for (kb-cli.ts:275)
-  B      12    14    3      1     await (agent.ts:114)
+  B      13    23    3      1     handleSet (vault-cli.ts:79)
+  B      12    14    3      1     await (agent.ts:122)
   C      12    24    4      1     extractTextTurns (conversation.ts:23)
+  C      12    43    3      1     runDispatchCycle (dispatch.ts:479)
+  B      12    14    1      1     switch (kanban-cli.ts:484)
   B      12    19    2      0     main (kb-cli.ts:380)
-  D      12    50    3      6     buildSystemPrompt (system-prompt.ts:4)
+  D      12    53    3      6     buildSystemPrompt (system-prompt.ts:5)
   B      11    16    2      1     parseClaudeOauth (auth.ts:20)
   B      11    20    3      1     for (conversation.ts:25)
-  C      11    32    3      4     keywordSearch (kb/engine.ts:312)
+  C      11    44    4      0     selectNextTask (dispatch.ts:131)
+  C      11    32    3      4     keywordSearch (kb/engine.ts:311)
   B      11    13    1      1     switch (kb-cli.ts:385)
   D      11    52    4      1     handleCreate (persona-cli.ts:50)
   D      11    25    6      4     sendResponse (telegram/send.ts:11)
   F      11    52    6      1     createGlobTool (tools/glob.ts:5)
-  A      10    12    1      1     switch (kb/engine.ts:247)
-  B      10    25    3      4     vectorSearch (kb/engine.ts:286)
+  C      11    53    2      1     renderCard (web/kanban-ui.ts:408)
+  B      10    47    5      2     runDispatchLoop (dispatch.ts:426)
+  B      10    50    3      1     handleAdd (kanban-cli.ts:106)
+  B      10    29    5      1     handleList (kanban-cli.ts:157)
+  A      10    12    1      1     switch (kb/engine.ts:246)
+  B      10    25    3      4     vectorSearch (kb/engine.ts:285)
   A      10    18    2      0     main (persona-cli.ts:207)
   C      10    80    4      1     exportSnapshot (snapshot.ts:36)
   B      10    39    5      2     restoreSnapshot (snapshot.ts:121)
@@ -46,10 +64,10 @@ Grade  Cmplx  LOC  Nest  Params  Function
   B      10    24    4      1     while (web/ui.ts:190)
 
 SUMMARY:
-  Total functions: 393
-  A (simple):     342
-  B (moderate):   22
-  C (complex):    15
-  D (very complex): 6
-  F (needs refactor): 8
-  Avg complexity: 3.6
+  Total functions: 677
+  A (simple):     590
+  B (moderate):   46
+  C (complex):    22
+  D (very complex): 9
+  F (needs refactor): 10
+  Avg complexity: 3.5

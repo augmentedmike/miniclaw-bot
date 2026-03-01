@@ -14,6 +14,7 @@ import { memorySaveTool, memorySearchTool, memoryVectorSearchTool, memoryDeepSea
 import { claudeCodeTool } from "./tools/claude-code.js";
 import { vaultGetTool, vaultListTool } from "./tools/vault.js";
 import { kbAddTool, kbSearchTool, kbListTool, kbRemoveTool } from "./tools/kb.js";
+import { kanbanAddTool, kanbanListTool, kanbanMoveTool, kanbanShowTool, kanbanSearchTool, kanbanCheckTool } from "./tools/kanban.js";
 import { retrieveContext, saveContext } from "./context.js";
 import { loadHistory, appendToHistory, archiveRotatedMessages } from "./conversation.js";
 import type { MinicawConfig, Channel } from "./types.js";
@@ -41,6 +42,12 @@ export function createTools(config: MinicawConfig) {
     kb_search: kbSearchTool,
     kb_list: kbListTool,
     kb_remove: kbRemoveTool,
+    kanban_add: kanbanAddTool,
+    kanban_list: kanbanListTool,
+    kanban_move: kanbanMoveTool,
+    kanban_show: kanbanShowTool,
+    kanban_search: kanbanSearchTool,
+    kanban_check: kanbanCheckTool,
   };
 }
 
@@ -52,6 +59,7 @@ export async function runAgent(
     userId?: string;
     onText?: (text: string) => void;
     onToolCall?: (toolName: string, args: unknown) => void;
+    extraTools?: Record<string, ReturnType<typeof import("ai").tool>>;
   },
 ): Promise<{ text: string; messages: CoreMessage[] }> {
   const channel = options?.channel ?? "cli";
@@ -94,7 +102,7 @@ export async function runAgent(
     fetch: oauthFetch,
   });
 
-  const tools = createTools(config);
+  const tools = { ...createTools(config), ...options?.extraTools };
   const toolNames = Object.keys(tools);
 
   const persona = loadActivePersona(config);

@@ -52,6 +52,26 @@ stateDiagram-v2
   attempt --> caught : catch
   success --> [*]
 
+%% dispatch-cli.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% dispatch.ts :: state_machine
+stateDiagram-v2
+  blocked --> backlog : transition
+
+%% dispatch.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
 %% index.ts :: process_events
 stateDiagram-v2
   [*] --> idle
@@ -78,6 +98,28 @@ stateDiagram-v2
   attempt --> caught : catch
   caught --> fallback : fallback
   fallback --> success : complete
+  success --> [*]
+
+%% kanban-cli.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% kanban.ts :: state_machine
+stateDiagram-v2
+  shipped --> backlog : transition
+  backlog --> blocked : transition
+  blocked --> active : transition
+
+%% kanban.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
   success --> [*]
 
 %% kb/embeddings.ts :: embed_flow
@@ -123,6 +165,23 @@ stateDiagram-v2
   success --> [*]
 
 %% persona.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  caught --> fallback : fallback
+  fallback --> success : complete
+  success --> [*]
+
+%% service-cli.ts :: process_lifecycle
+stateDiagram-v2
+  [*] --> spawning
+  state error <<error>>
+  spawning --> running : spawn()
+  running --> error : error
+
+%% service.ts :: error_recovery
 stateDiagram-v2
   [*] --> attempt
   state caught <<error>>
@@ -276,6 +335,14 @@ stateDiagram-v2
   attempt --> caught : catch
   success --> [*]
 
+%% tools/kanban.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
 %% tools/kb.ts :: error_recovery
 stateDiagram-v2
   [*] --> attempt
@@ -376,6 +443,14 @@ stateDiagram-v2
   attempt --> caught : catch
   caught --> fallback : fallback
   fallback --> success : complete
+  success --> [*]
+
+%% web/kanban-ui.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
   success --> [*]
 
 %% web/server.ts :: process_events

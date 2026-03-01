@@ -94,7 +94,7 @@ describe("agent", () => {
         conversationLimit: 50,
       };
       const tools = createTools(config);
-      expect(Object.keys(tools)).toHaveLength(20);
+      expect(Object.keys(tools)).toHaveLength(26);
     });
 
     it("passes shell timeout to shell_exec", () => {

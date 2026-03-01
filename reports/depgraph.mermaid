@@ -8,12 +8,18 @@ graph TD
     conversation_ts["conversation.ts"]
     types_ts["types.ts"]
     config_ts["config.ts"]
+    dispatch-cli_ts["dispatch-cli.ts"]
+    dispatch_ts["dispatch.ts"]
+    service_ts["service.ts"]
+    kanban_ts["kanban.ts"]
     index_ts["index.ts"]
     setup_ts["setup.ts"]
     install-tui_ts["install-tui.ts"]
     vault_ts["vault.ts"]
+    kanban-cli_ts["kanban-cli.ts"]
     kb-cli_ts["kb-cli.ts"]
     persona-cli_ts["persona-cli.ts"]
+    service-cli_ts["service-cli.ts"]
     snapshot-cli_ts["snapshot-cli.ts"]
     snapshot_ts["snapshot.ts"]
     vault-cli_ts["vault-cli.ts"]
@@ -29,6 +35,8 @@ graph TD
     tools_claude-code_ts["claude-code.ts"]
     tools_vault_ts["vault.ts"]
     tools_kb_ts["kb.ts"]
+    tools_kanban_ts["kanban.ts"]
+    tools_audit_ts["audit.ts"]
     tools_run-process_ts["run-process.ts"]
     tools_util_ts["util.ts"]
   end
@@ -46,6 +54,7 @@ graph TD
     web_server_ts["server.ts"]
     web_handler_ts["handler.ts"]
     web_ui_ts["ui.ts"]
+    web_kanban-ui_ts["kanban-ui.ts"]
   end
   subgraph telegram
     telegram_bot_ts["bot.ts"]
@@ -67,6 +76,7 @@ graph TD
   agent_ts --> tools_claude-code_ts
   agent_ts --> tools_vault_ts
   agent_ts --> tools_kb_ts
+  agent_ts --> tools_kanban_ts
   agent_ts --> context_ts
   agent_ts --> conversation_ts
   agent_ts --> types_ts
@@ -80,6 +90,14 @@ graph TD
   context_ts --> kb_index_ts
   conversation_ts --> config_ts
   conversation_ts --> memory_store_ts
+  dispatch-cli_ts --> config_ts
+  dispatch-cli_ts --> dispatch_ts
+  dispatch-cli_ts --> service_ts
+  dispatch_ts --> config_ts
+  dispatch_ts --> kanban_ts
+  dispatch_ts --> agent_ts
+  dispatch_ts --> tools_audit_ts
+  dispatch_ts --> types_ts
   index_ts --> config_ts
   index_ts --> agent_ts
   index_ts --> setup_ts
@@ -87,6 +105,8 @@ graph TD
   index_ts --> telegram_bot_ts
   install-tui_ts --> config_ts
   install-tui_ts --> vault_ts
+  kanban-cli_ts --> kanban_ts
+  kanban_ts --> config_ts
   kb_engine_ts --> kb_embeddings_ts
   kb_engine_ts --> kb_types_ts
   kb_engine_ts --> kb_types_ts
@@ -102,6 +122,9 @@ graph TD
   persona-cli_ts --> persona_ts
   persona_ts --> config_ts
   persona_ts --> types_ts
+  service-cli_ts --> service_ts
+  service-cli_ts --> config_ts
+  service_ts --> config_ts
   setup_ts --> auth_ts
   setup_ts --> config_ts
   setup_ts --> memory_search_ts
@@ -109,6 +132,7 @@ graph TD
   snapshot-cli_ts --> snapshot_ts
   snapshot_ts --> config_ts
   system-prompt_ts --> types_ts
+  system-prompt_ts --> kanban_ts
   telegram_access_ts --> config_ts
   telegram_bot_ts --> telegram_handlers_ts
   telegram_bot_ts --> types_ts
@@ -122,12 +146,14 @@ graph TD
   tools_files_ts --> tools_util_ts
   tools_glob_ts --> tools_util_ts
   tools_grep_ts --> tools_util_ts
+  tools_kanban_ts --> kanban_ts
   tools_kb_ts --> kb_index_ts
   tools_kb_ts --> kb_types_ts
   tools_memory_ts --> memory_store_ts
   tools_memory_ts --> memory_search_ts
   tools_shell_ts --> tools_run-process_ts
   tools_shell_ts --> tools_util_ts
+  tools_util_ts --> kanban_ts
   tools_vault_ts --> vault_ts
   tools_vault_ts --> vault_ts
   tools_web_ts --> tools_util_ts
@@ -137,6 +163,8 @@ graph TD
   vault_ts --> config_ts
   web_handler_ts --> agent_ts
   web_handler_ts --> web_ui_ts
+  web_handler_ts --> web_kanban-ui_ts
+  web_handler_ts --> kanban_ts
   web_handler_ts --> types_ts
   web_server_ts --> web_handler_ts
   web_server_ts --> types_ts
