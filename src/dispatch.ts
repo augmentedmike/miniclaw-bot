@@ -241,12 +241,16 @@ export function searchRelatedTickets(
   query: string,
   maxResults: number = 5,
 ): QmdSearchResult[] {
-  const result = execFileSync(
-    "qmd",
-    ["vsearch", query, "-n", String(maxResults), "-c", KANBAN_COLLECTION, "--json"],
-    { encoding: "utf8", stdio: "pipe", timeout: 30_000 },
-  );
-  return parseQmdJson(result);
+  try {
+    const result = execFileSync(
+      "qmd",
+      ["vsearch", query, "-n", String(maxResults), "-c", KANBAN_COLLECTION, "--json"],
+      { encoding: "utf8", stdio: "pipe", timeout: 5_000 },
+    );
+    return parseQmdJson(result);
+  } catch {
+    return [];
+  }
 }
 
 function searchMemoryCollection(
@@ -257,7 +261,7 @@ function searchMemoryCollection(
     const result = execFileSync(
       "qmd",
       ["vsearch", query, "-n", String(maxResults), "-c", "miniclaw-memory", "--json"],
-      { encoding: "utf8", stdio: "pipe", timeout: 30_000 },
+      { encoding: "utf8", stdio: "pipe", timeout: 5000 },
     );
     return parseQmdJson(result);
   } catch {

@@ -66,6 +66,15 @@
 │  attempt ──[catch]──▶ caught
 └───
 
+┌─── cron-cli.ts :: process_lifecycle ───
+│  ● spawning
+│  ○ running
+│  ✗ error
+│
+│  spawning ──[spawn()]──▶ running
+│  running ──[error]──▶ error
+└───
+
 ┌─── dispatch-cli.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
@@ -91,15 +100,17 @@
 │  attempt ──[catch]──▶ caught
 └───
 
-┌─── index.ts :: process_events ───
+┌─── index.ts :: child_events ───
 │  ● idle
-│  ○ SIGINT
-│  ○ SIGTERM
+│  ◉ exit
+│  ◉ exit
+│  ◉ exit
+│  ◉ exit
 │
-│  idle ──[SIGINT]──▶ SIGINT
-│  SIGINT ──[done]──▶ idle
-│  idle ──[SIGTERM]──▶ SIGTERM
-│  SIGTERM ──[done]──▶ idle
+│  idle ──[exit]──▶ exit
+│  idle ──[exit]──▶ exit
+│  idle ──[exit]──▶ exit
+│  idle ──[exit]──▶ exit
 └───
 
 ┌─── index.ts :: error_recovery ───
@@ -138,11 +149,13 @@
 ┌─── kanban.ts :: state_machine ───
 │  ○ shipped
 │  ○ backlog
+│  ○ queued
 │  ○ blocked
 │  ○ active
 │
 │  shipped ──[transition]──▶ backlog
-│  backlog ──[transition]──▶ blocked
+│  backlog ──[transition]──▶ queued
+│  queued ──[transition]──▶ blocked
 │  blocked ──[transition]──▶ active
 └───
 
@@ -167,6 +180,48 @@
 └───
 
 ┌─── kb/engine.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── kb-video-ingest.ts :: extractFactSegments_flow ───
+│  ● start
+│  ○ getAccessToken
+│  ○ generateText
+│  ○ extractFactSegments
+│  ○ engine_add
+│  ✗ error
+│  ◉ complete
+│
+│  start ──[await getAccessToken()]──▶ getAccessToken
+│  getAccessToken ──[await generateText()]──▶ generateText
+│  generateText ──[await extractFactSegments()]──▶ extractFactSegments
+│  extractFactSegments ──[await engine.add()]──▶ engine_add
+│  engine_add ──[catch]──▶ error
+│  engine_add ──[return]──▶ complete
+└───
+
+┌─── kb-video-ingest.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+┌─── loop-manager.ts :: state_machine ───
+│  ◉ done
+│  ✗ failed
+│
+│  done ──[transition]──▶ failed
+└───
+
+┌─── loop-manager.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
 │  ✗ caught
@@ -553,6 +608,15 @@
 │  fallback ──[complete]──▶ success
 └───
 
+┌─── web/kanban-ui.ts :: state_machine ───
+│  ○ blocked
+│  ◉ done
+│  ✗ failed
+│
+│  blocked ──[transition]──▶ done
+│  done ──[transition]──▶ failed
+└───
+
 ┌─── web/kanban-ui.ts :: error_recovery ───
 │  ● attempt
 │  ◉ success
@@ -593,4 +657,22 @@
 │  attempt ──[catch]──▶ caught
 └───
 
-Total: 54 state machines, 201 states, 174 transitions
+┌─── webdebug-cli.ts :: process_lifecycle ───
+│  ● spawning
+│  ○ running
+│  ✗ error
+│
+│  spawning ──[spawn()]──▶ running
+│  running ──[error]──▶ error
+└───
+
+┌─── webdebug-cli.ts :: error_recovery ───
+│  ● attempt
+│  ◉ success
+│  ✗ caught
+│
+│  attempt ──[no error]──▶ success
+│  attempt ──[catch]──▶ caught
+└───
+
+Total: 62 state machines, 231 states, 194 transitions

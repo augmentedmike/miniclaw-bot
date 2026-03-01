@@ -23,13 +23,15 @@ Cohesion  Exports  IntCalls  SharedIDs  Prefixes  File
   ✓  65      2         0         10         2     context.ts
   ✓  68      6         0         20         4     tools/files.ts
   ✓  69      4         2          1         4     auth.ts
+  ✓  70      9         5          2         8     loop-manager.ts
   ✓  72      3         1          6         3     conversation.ts
   ✓  73      7         4          3         6     persona.ts
   ✓  76     14        11          3        12     dispatch.ts
   ✓  76      6         3          4         3     vault.ts
   ✓  80      9         8          3         8     telegram/access.ts
-  ✓  81     33        38          2        23     kanban.ts
+  ✓  83     36        44          3        26     kanban.ts
+  ✓  83      3         2          5         3     kb-video-ingest.ts
   ✓  86      9         8          3         4     config.ts
   ✓  88     14        17          5         7     service.ts
 
-Average cohesion: 63/100
+Average cohesion: 64/100

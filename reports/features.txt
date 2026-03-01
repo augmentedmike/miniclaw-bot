@@ -34,9 +34,10 @@
     · Structured tool parameter validation
     · Dispatch System — autonomous cron-driven agent loop
     · Local embedding via @huggingface/transformers
-    · Service Manager — register miniclaw serve as a system daemon
+    · loop-manager.ts — Active agent loop tracking
+    · ... and 1 more
 
-    Files: agent.ts, dispatch.ts, index.ts, kanban.ts, kb/embeddings.ts, service.ts, system-prompt.ts
+    Files: agent.ts, dispatch.ts, index.ts, kanban.ts, kb/embeddings.ts, loop-manager.ts, service.ts, system-prompt.ts
     Deps:  @ai-sdk/anthropic, ai, zod
 
 ▸ Authentication
@@ -113,13 +114,13 @@
 
     · Pre-turn: search KB for context relevant to the current message
     · Knowledge Base engine — SQLite + sqlite-vec + FTS5
+    · kb-video-ingest.ts — Transcribe a YouTube/local video, extract learnable fact segments using LLM, screenshot at those exact timestamps, and store each fact as its own KB entry with its screenshot
     · Knowledge Base tools for the agent
     · Add an entry to the knowledge base
     · Search the knowledge base using hybrid semantic + keyword search
-    · List entries in the knowledge base, optionally filtered by category or origin
-    · ... and 1 more
+    · ... and 2 more
 
-    Files: context.ts, kb/engine.ts, tools/kb.ts
+    Files: context.ts, kb-video-ingest.ts, kb/engine.ts, tools/kb.ts
 
 ▸ Persistent Memory
   Remembers facts, preferences, and notes across conversations and
@@ -200,4 +201,4 @@
     Files: web/handler.ts, web/kanban-ui.ts, web/server.ts, web/ui.ts
 
 ──────────────────────────────────────────────────────────
-18 features | 52 source files | 69 capabilities
+18 features | 56 source files | 71 capabilities

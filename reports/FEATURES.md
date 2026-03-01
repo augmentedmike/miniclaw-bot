@@ -1,6 +1,6 @@
 # Feature Map — miniclaw v0.1.0
 
-> 18 features | 52 source files | 69 capabilities
+> 18 features | 56 source files | 71 capabilities
 
 ## Agent Personas
 
@@ -37,9 +37,10 @@ Conversational AI agent that reasons through problems step-by-step, uses tools t
 - Structured tool parameter validation
 - Dispatch System — autonomous cron-driven agent loop
 - Local embedding via @huggingface/transformers
+- loop-manager.ts — Active agent loop tracking
 - Service Manager — register miniclaw serve as a system daemon
 
-**Files:** `agent.ts`, `dispatch.ts`, `index.ts`, `kanban.ts`, `kb/embeddings.ts`, `service.ts`, `system-prompt.ts`
+**Files:** `agent.ts`, `dispatch.ts`, `index.ts`, `kanban.ts`, `kb/embeddings.ts`, `loop-manager.ts`, `service.ts`, `system-prompt.ts`
 
 **Dependencies:** @ai-sdk/anthropic, ai, zod
 
@@ -124,13 +125,14 @@ Automatic context retrieval before each response. Searches stored knowledge usin
 **Capabilities:**
 - Pre-turn: search KB for context relevant to the current message
 - Knowledge Base engine — SQLite + sqlite-vec + FTS5
+- kb-video-ingest.ts — Transcribe a YouTube/local video, extract learnable fact segments using LLM, screenshot at those exact timestamps, and store each fact as its own KB entry with its screenshot
 - Knowledge Base tools for the agent
 - Add an entry to the knowledge base
 - Search the knowledge base using hybrid semantic + keyword search
 - List entries in the knowledge base, optionally filtered by category or origin
 - Remove an entry from the knowledge base by ID
 
-**Files:** `context.ts`, `kb/engine.ts`, `tools/kb.ts`
+**Files:** `context.ts`, `kb-video-ingest.ts`, `kb/engine.ts`, `tools/kb.ts`
 
 ## Persistent Memory
 

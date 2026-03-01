@@ -8,9 +8,10 @@ graph TD
     conversation_ts["conversation.ts"]
     types_ts["types.ts"]
     config_ts["config.ts"]
-    dispatch-cli_ts["dispatch-cli.ts"]
+    cron-cli_ts["cron-cli.ts"]
     dispatch_ts["dispatch.ts"]
     service_ts["service.ts"]
+    dispatch-cli_ts["dispatch-cli.ts"]
     kanban_ts["kanban.ts"]
     index_ts["index.ts"]
     setup_ts["setup.ts"]
@@ -18,11 +19,14 @@ graph TD
     vault_ts["vault.ts"]
     kanban-cli_ts["kanban-cli.ts"]
     kb-cli_ts["kb-cli.ts"]
+    kb-video-ingest_ts["kb-video-ingest.ts"]
+    loop-manager_ts["loop-manager.ts"]
     persona-cli_ts["persona-cli.ts"]
     service-cli_ts["service-cli.ts"]
     snapshot-cli_ts["snapshot-cli.ts"]
     snapshot_ts["snapshot.ts"]
     vault-cli_ts["vault-cli.ts"]
+    webdebug-cli_ts["webdebug-cli.ts"]
   end
   subgraph tools
     tools_shell_ts["shell.ts"]
@@ -90,6 +94,9 @@ graph TD
   context_ts --> kb_index_ts
   conversation_ts --> config_ts
   conversation_ts --> memory_store_ts
+  cron-cli_ts --> config_ts
+  cron-cli_ts --> dispatch_ts
+  cron-cli_ts --> service_ts
   dispatch-cli_ts --> config_ts
   dispatch-cli_ts --> dispatch_ts
   dispatch-cli_ts --> service_ts
@@ -115,6 +122,10 @@ graph TD
   kb-cli_ts --> config_ts
   kb-cli_ts --> kb_engine_ts
   kb-cli_ts --> kb_types_ts
+  kb-cli_ts --> kb-video-ingest_ts
+  kb-video-ingest_ts --> auth_ts
+  kb-video-ingest_ts --> kb_engine_ts
+  kb-video-ingest_ts --> config_ts
   memory_search_ts --> config_ts
   memory_store_ts --> config_ts
   memory_store_ts --> memory_search_ts
@@ -165,6 +176,8 @@ graph TD
   web_handler_ts --> web_ui_ts
   web_handler_ts --> web_kanban-ui_ts
   web_handler_ts --> kanban_ts
+  web_handler_ts --> loop-manager_ts
   web_handler_ts --> types_ts
   web_server_ts --> web_handler_ts
   web_server_ts --> types_ts
+  webdebug-cli_ts --> config_ts

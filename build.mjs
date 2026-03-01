@@ -73,4 +73,16 @@ await build({
   outfile: "dist/dispatch-cli.mjs",
 });
 
-console.log("Build complete → dist/miniclaw.mjs, dist/vault-cli.mjs, dist/persona-cli.mjs, dist/snapshot-cli.mjs, dist/install-tui.mjs, dist/kb-cli.mjs, dist/kanban-cli.mjs, dist/service-cli.mjs, dist/dispatch-cli.mjs");
+await build({
+  ...shared,
+  entryPoints: ["src/cron-cli.ts"],
+  outfile: "dist/cron-cli.mjs",
+});
+
+await build({
+  ...shared,
+  entryPoints: ["src/webdebug-cli.ts"],
+  outfile: "dist/webdebug-cli.mjs",
+});
+
+console.log("Build complete → dist/miniclaw.mjs, dist/vault-cli.mjs, dist/persona-cli.mjs, dist/snapshot-cli.mjs, dist/install-tui.mjs, dist/kb-cli.mjs, dist/kanban-cli.mjs, dist/service-cli.mjs, dist/dispatch-cli.mjs, dist/cron-cli.mjs, dist/webdebug-cli.mjs");

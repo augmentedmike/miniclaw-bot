@@ -21,6 +21,7 @@ import path from "node:path";
 import { getActivePersonaHome, ensurePersonaDirs, loadConfig } from "./config.js";
 import { KBEngine } from "./kb/engine.js";
 import type { KBCategory, KBOrigin, KBVolatility, KBEntry } from "./kb/types.js";
+import { videoIngest } from "./kb-video-ingest.js";
 
 const CATEGORIES = ["personality", "fact", "procedure", "general"] as const;
 const ORIGINS = ["scholastic", "human", "observed", "read", "inferred", "imported"] as const;
@@ -48,6 +49,12 @@ Commands:
   import <file>                Import KB from JSON file
   stats                        Show statistics
   rebuild-embeddings           Regenerate all vector embeddings
+  video-ingest <url> [flags]   Transcribe video + capture screenshots into KB
+    --interval <secs>          Screenshot every N seconds (default: 60)
+    --lang <code>              Subtitle language (default: en)
+    --max-frames <n>           Max screenshots to capture (default: 30)
+    --tags <t,t,...>           Extra tags
+    --dry-run                  Parse and plan without writing to KB
 
 Categories: ${CATEGORIES.join(", ")}
 `.trim());
@@ -377,6 +384,39 @@ async function handleRebuildEmbeddings(): Promise<void> {
   engine.close();
 }
 
+async function handleVideoIngest(args: string[]): Promise<void> {
+  let remaining = args;
+  const { value: intervalStr, rest: r1 } = extractFlag(remaining, "--interval");
+  remaining = r1;
+  const { value: lang, rest: r2 } = extractFlag(remaining, "--lang");
+  remaining = r2;
+  const { value: maxFramesStr, rest: r3 } = extractFlag(remaining, "--max-frames");
+  remaining = r3;
+  const { value: tagsRaw, rest: r4 } = extractFlag(remaining, "--tags");
+  remaining = r4;
+  const dryRun = remaining.includes("--dry-run");
+  remaining = remaining.filter(a => a !== "--dry-run");
+
+  const urlOrPath = remaining[0];
+  if (!urlOrPath) {
+    console.error("Usage: video-ingest <url-or-path> [--interval 60] [--lang en] [--max-frames 30] [--tags t,t] [--dry-run]");
+    process.exit(1);
+  }
+
+  const result = await videoIngest(urlOrPath, {
+    intervalSec: intervalStr ? Number(intervalStr) : undefined,
+    lang: lang ?? "en",
+    maxFrames: maxFramesStr ? Number(maxFramesStr) : undefined,
+    tags: tagsRaw ? tagsRaw.split(",").map(t => t.trim()) : undefined,
+    dryRun,
+  });
+
+  console.log("\n✓ Video ingest complete");
+  console.log(`  KB entry: ${result.entryId}`);
+  console.log(`  Title:    ${result.title}`);
+  console.log(`  Frames:   ${result.frameCount} screenshots in ${result.mediaDir}`);
+}
+
 async function main() {
   const [command, ...args] = process.argv.slice(2);
 
@@ -393,6 +433,7 @@ async function main() {
     case "import":             await handleImport(args); break;
     case "stats":              handleStats(); break;
     case "rebuild-embeddings": await handleRebuildEmbeddings(); break;
+    case "video-ingest":       await handleVideoIngest(args); break;
     default:                   usage();
   }
 }

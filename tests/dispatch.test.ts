@@ -271,6 +271,8 @@ describe("dispatch", () => {
       try {
         const { execSync } = require("node:child_process");
         execSync("which qmd", { stdio: "pipe" });
+        // Also verify qmd is responsive (not just installed)
+        execSync("qmd --version", { stdio: "pipe", timeout: 3000 });
         qmdInstalled = true;
       } catch {
         qmdInstalled = false;

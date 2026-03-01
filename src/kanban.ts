@@ -4,7 +4,7 @@ import { getActivePersonaHome } from "./config.js";
 
 // ── Types ──────────────────────────────────────────────────────────
 
-export type KanbanState = "backlog" | "in-progress" | "in-review" | "shipped";
+export type KanbanState = "backlog" | "queued" | "in-progress" | "in-review" | "shipped";
 export type Priority = "low" | "medium" | "high" | "critical";
 export type TaskType = "chore" | "bugfix" | "feature" | "epic" | "research";
 export type TaskStatus = "active" | "on-hold" | "blocked";
@@ -13,6 +13,12 @@ export type TaskSize = "small" | "medium" | "large" | "xl";
 export type TransitionEntry = {
   from: KanbanState;
   to: KanbanState;
+  at: string;
+};
+
+export type CommitEntry = {
+  hash: string;
+  message: string;
   at: string;
 };
 
@@ -31,6 +37,7 @@ export type KanbanTask = {
   created: string;
   updated: string;
   history: TransitionEntry[];
+  commits: CommitEntry[];
   body: string;
 };
 
@@ -51,13 +58,14 @@ export type GateResult = { ok: boolean; violations: GateViolation[] };
 
 // ── Constants ──────────────────────────────────────────────────────
 
-export const STATES: KanbanState[] = ["backlog", "in-progress", "in-review", "shipped"];
+export const STATES: KanbanState[] = ["backlog", "queued", "in-progress", "in-review", "shipped"];
 export const TYPES: TaskType[] = ["chore", "bugfix", "feature", "epic", "research"];
 export const SIZES: TaskSize[] = ["small", "medium", "large", "xl"];
 export const STATUSES: TaskStatus[] = ["active", "on-hold", "blocked"];
 
 export const VALID_TRANSITIONS: Record<KanbanState, KanbanState[]> = {
-  "backlog": ["in-progress"],
+  "backlog": ["queued", "in-progress"],
+  "queued": ["in-progress", "backlog"],
   "in-progress": ["in-review", "backlog"],
   "in-review": ["shipped", "in-progress"],
   "shipped": [],
@@ -72,9 +80,10 @@ export const REQUIRED_SECTIONS = [
 
 const STATE_ORDER: Record<KanbanState, number> = {
   backlog: 0,
-  "in-progress": 1,
-  "in-review": 2,
-  shipped: 3,
+  queued: 1,
+  "in-progress": 2,
+  "in-review": 3,
+  shipped: 4,
 };
 
 // ── Validators ─────────────────────────────────────────────────────
@@ -210,6 +219,7 @@ export function parseTaskFile(content: string): Omit<KanbanTask, "state"> {
   const created = extractYamlString(yaml, "created");
   const updated = extractYamlString(yaml, "updated");
   const history = extractYamlHistory(yaml);
+  const commits = extractYamlCommits(yaml);
 
   if (id === undefined) throw new Error("Task file missing 'id' field");
   if (!title) throw new Error("Task file missing 'title' field");
@@ -228,6 +238,7 @@ export function parseTaskFile(content: string): Omit<KanbanTask, "state"> {
     created: created || new Date().toISOString(),
     updated: updated || new Date().toISOString(),
     history,
+    commits,
     body,
   };
 }
@@ -264,7 +275,12 @@ function extractYamlHistory(yaml: string): TransitionEntry[] {
   const historyStart = yaml.indexOf("history:");
   if (historyStart === -1) return [];
 
-  const historyBlock = yaml.slice(historyStart);
+  // Slice only up to "commits:" if it exists, so we don't accidentally parse commits entries
+  const commitsStart = yaml.indexOf("commits:");
+  const historyBlock = commitsStart > historyStart
+    ? yaml.slice(historyStart, commitsStart)
+    : yaml.slice(historyStart);
+
   const entries: TransitionEntry[] = [];
   const entryRegex = /-\s*\{\s*from:\s*(\S+),\s*to:\s*(\S+),\s*at:\s*"?([^"}\s]+)"?\s*\}/g;
 
@@ -279,6 +295,26 @@ function extractYamlHistory(yaml: string): TransitionEntry[] {
   return entries;
 }
 
+function extractYamlCommits(yaml: string): CommitEntry[] {
+  const commitsStart = yaml.indexOf("commits:");
+  if (commitsStart === -1) return [];
+
+  const commitsBlock = yaml.slice(commitsStart);
+  const entries: CommitEntry[] = [];
+  // Format: - { hash: abc1234, message: "...", at: "..." }
+  const entryRegex = /-\s*\{\s*hash:\s*([a-f0-9A-F]+),\s*message:\s*"([^"]*)",\s*at:\s*"?([^"}\s]+)"?\s*\}/g;
+
+  let match: RegExpExecArray | null;
+  while ((match = entryRegex.exec(commitsBlock)) !== null) {
+    entries.push({
+      hash: match[1]!,
+      message: match[2]!,
+      at: match[3]!,
+    });
+  }
+  return entries;
+}
+
 // ── Frontmatter serializer ─────────────────────────────────────────
 
 export function formatTaskFile(task: KanbanTask): string {
@@ -287,6 +323,12 @@ export function formatTaskFile(task: KanbanTask): string {
       `  - { from: ${h.from}, to: ${h.to}, at: "${h.at}" }`,
     ).join("\n")
     : "history: []";
+
+  const commitsYaml = (task.commits ?? []).length > 0
+    ? "commits:\n" + task.commits.map((c) =>
+      `  - { hash: ${c.hash}, message: "${c.message.replace(/"/g, '\\"')}", at: "${c.at}" }`,
+    ).join("\n")
+    : "commits: []";
 
   const blockedByYaml = task.blocked_by.length > 0
     ? `[${task.blocked_by.join(", ")}]`
@@ -307,6 +349,7 @@ export function formatTaskFile(task: KanbanTask): string {
     `created: ${task.created}`,
     `updated: ${task.updated}`,
     historyYaml,
+    commitsYaml,
     "---",
   ].join("\n");
 
@@ -488,8 +531,11 @@ export function checkTransitionGates(id: number, toState: KanbanState): GateResu
     }
   }
 
-  // backlog → in-progress gates
-  if (fromState === "backlog" && toState === "in-progress") {
+  // backlog → queued gates (light — only dep check already done above)
+  // No section requirements yet; agent loop fills them before moving to in-progress
+
+  // queued → in-progress gates (full section + project check)
+  if ((fromState === "backlog" || fromState === "queued") && toState === "in-progress") {
     if (!task.title.trim()) {
       violations.push({ code: "empty_title", message: "Title is empty" });
     }
@@ -645,6 +691,80 @@ export function appendNote(id: number, note: string): KanbanTask {
     body: parsed.body
       ? `${parsed.body}\n\n${note}`
       : note,
+  };
+
+  fs.writeFileSync(found.filePath, formatTaskFile(task), "utf8");
+  return task;
+}
+
+/**
+ * Fill (replace) the content of a specific section heading in the task body.
+ * If the section doesn't exist, it is appended.
+ *
+ * @param id       Task ID
+ * @param heading  Section heading text (e.g. "Problem / Work Summary")
+ * @param content  New content to place under the heading
+ */
+export function fillSection(id: number, heading: string, content: string): KanbanTask {
+  const found = findTaskFile(id);
+  if (!found) throw new Error(`Task #${id} not found`);
+
+  const fileContent = fs.readFileSync(found.filePath, "utf8");
+  const parsed = parseTaskFile(fileContent);
+  const now = new Date().toISOString();
+
+  const marker = `## ${heading}`;
+  const body = parsed.body ?? "";
+  const idx = body.indexOf(marker);
+
+  let newBody: string;
+  if (idx === -1) {
+    // Section not found — append it
+    newBody = body ? `${body}\n\n${marker}\n\n${content}` : `${marker}\n\n${content}`;
+  } else {
+    const contentStart = idx + marker.length;
+    const nextSection = body.indexOf("\n## ", contentStart);
+
+    if (nextSection === -1) {
+      // Last section in body — replace to end
+      newBody = `${body.slice(0, contentStart)}\n\n${content}`;
+    } else {
+      // Mid-body section — replace up to the next heading
+      newBody = `${body.slice(0, contentStart)}\n\n${content}\n${body.slice(nextSection)}`;
+    }
+  }
+
+  const task: KanbanTask = {
+    ...parsed,
+    state: found.state,
+    updated: now,
+    body: newBody,
+  };
+
+  fs.writeFileSync(found.filePath, formatTaskFile(task), "utf8");
+  return task;
+}
+
+/**
+ * Log a git commit or PR reference against a task.
+ *
+ * @param id       Task ID
+ * @param hash     Short or full commit SHA (or PR number prefixed with "pr:")
+ * @param message  Commit message / PR title
+ */
+export function logCommit(id: number, hash: string, message: string): KanbanTask {
+  const found = findTaskFile(id);
+  if (!found) throw new Error(`Task #${id} not found`);
+
+  const content = fs.readFileSync(found.filePath, "utf8");
+  const parsed = parseTaskFile(content);
+  const now = new Date().toISOString();
+
+  const task: KanbanTask = {
+    ...parsed,
+    state: found.state,
+    updated: now,
+    commits: [...(parsed.commits ?? []), { hash, message, at: now }],
   };
 
   fs.writeFileSync(found.filePath, formatTaskFile(task), "utf8");
@@ -807,6 +927,47 @@ export function archiveShipped(days: number = ARCHIVE_AFTER_DAYS): KanbanTask[] 
   }
 
   return archived;
+}
+
+/**
+ * Move an archived task back to backlog.
+ * Updates the task state to "backlog" and clears history forward from archive.
+ */
+export function unarchiveTask(id: number): KanbanTask {
+  const aDir = archiveDir();
+  if (!fs.existsSync(aDir)) throw new Error("Archive directory not found");
+
+  const files = fs.readdirSync(aDir).filter((f) => f.endsWith(".md"));
+  for (const file of files) {
+    const filePath = path.join(aDir, file);
+    try {
+      const content = fs.readFileSync(filePath, "utf8");
+      const parsed = parseTaskFile(content);
+      if (parsed.id !== id) continue;
+
+      const now = new Date().toISOString();
+      const task: KanbanTask = {
+        ...parsed,
+        state: "backlog",
+        updated: now,
+        // Append an unarchive entry to history so the trail is visible
+        history: [
+          ...parsed.history,
+          { from: "shipped" as KanbanState, to: "backlog" as KanbanState, at: now },
+        ],
+      };
+
+      const dest = path.join(stateDir("backlog"), taskFilename(task.id, task.title));
+      fs.mkdirSync(stateDir("backlog"), { recursive: true });
+      fs.writeFileSync(dest, formatTaskFile(task), "utf8");
+      fs.unlinkSync(filePath);
+      return task;
+    } catch {
+      // Skip malformed files
+    }
+  }
+
+  throw new Error(`Archived task #${id} not found`);
 }
 
 // ── Search ─────────────────────────────────────────────────────────

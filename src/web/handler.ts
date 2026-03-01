@@ -3,6 +3,7 @@ import { runAgent } from "../agent.js";
 import { HTML } from "./ui.js";
 import { KANBAN_HTML } from "./kanban-ui.js";
 import { listTasks, boardSummary } from "../kanban.js";
+import { readLoops, purgeStaleLoops, readDispatchLog } from "../loop-manager.js";
 import type { MinicawConfig } from "../types.js";
 
 function readBody(req: IncomingMessage): Promise<string> {
@@ -27,7 +28,7 @@ export function createRequestHandler(
   config: MinicawConfig,
 ): (req: IncomingMessage, res: ServerResponse) => void {
   return async (req, res) => {
-    const url = req.url ?? "/";
+    const url = (req.url ?? "/").split("?")[0];
     const method = req.method ?? "GET";
 
     // CORS preflight
@@ -47,8 +48,8 @@ export function createRequestHandler(
       return;
     }
 
-    // Serve chat UI
-    if (url === "/" && method === "GET") {
+    // Serve chat UI (root and /chat)
+    if ((url === "/" || url === "/chat") && method === "GET") {
       res.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8",
         "Content-Length": Buffer.byteLength(HTML),
@@ -57,10 +58,14 @@ export function createRequestHandler(
       return;
     }
 
-    // Kanban board UI
-    if (url === "/kanban" && method === "GET") {
+    // Kanban board UI — path-based routing:
+    //   /kanban                      → all projects
+    //   /kanban/[project-slug]       → project filtered
+    //   /kanban/[project-slug]/[id]  → project + ticket open
+    if ((url === "/kanban" || /^\/kanban\/[^/]+(\/\d+)?$/.test(url)) && method === "GET") {
       res.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
         "Content-Length": Buffer.byteLength(KANBAN_HTML),
       });
       res.end(KANBAN_HTML);
@@ -70,9 +75,30 @@ export function createRequestHandler(
     // Kanban API — JSON board data
     if (url === "/api/kanban" && method === "GET") {
       try {
+        res.setHeader("Cache-Control", "no-store");
         const tasks = listTasks();
         const summary = boardSummary();
         sendJson(res, 200, { tasks, summary });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        sendJson(res, 500, { error: msg });
+      }
+      return;
+    }
+
+    // Activity API — running agent loops
+    if ((url === "/api/activity" || url === "/activity") && method === "GET") {
+      try {
+        res.setHeader("Cache-Control", "no-store");
+        purgeStaleLoops();
+        const store = readLoops();
+        if (url === "/activity") {
+          res.writeHead(302, { Location: "/kanban" });
+          res.end();
+        } else {
+          const dispatchLog = readDispatchLog(100);
+          sendJson(res, 200, { ...store, dispatch: dispatchLog.entries });
+        }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         sendJson(res, 500, { error: msg });

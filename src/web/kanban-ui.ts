@@ -64,12 +64,15 @@ export const KANBAN_HTML = `<!DOCTYPE html>
   /* ── Board ────────────────────────────────────────── */
   .board {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0;
     padding: 0;
     min-height: calc(100vh - 49px);
   }
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
+    .board { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 700px) {
     .board { grid-template-columns: repeat(2, 1fr); }
   }
 
@@ -94,9 +97,46 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     flex-shrink: 0;
   }
   .col-backlog .column-dot { background: #8b949e; }
+  .col-queued .column-dot { background: #6e40c9; }
   .col-in-progress .column-dot { background: #d29922; }
   .col-in-review .column-dot { background: #d29922; }
   .col-shipped .column-dot { background: #3fb950; }
+  /* Active loop indicator on cards */
+  .loop-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: #6e40c9;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-top: 4px;
+  }
+  .loop-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #6e40c9;
+    animation: loopPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes loopPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  /* Activity bar in topbar */
+  .activity-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #8b949e;
+    padding: 4px 10px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    cursor: default;
+  }
+  .activity-bar.active { color: #6e40c9; border-color: #6e40c9; }
+  .activity-bar .loop-pulse { width: 6px; height: 6px; }
   .column-name {
     font-size: 14px;
     font-weight: 600;
@@ -298,6 +338,28 @@ export const KANBAN_HTML = `<!DOCTYPE html>
   }
   .loading { color: #484f58; text-align: center; padding: 48px; }
   .error { color: #f85149; text-align: center; padding: 48px; }
+
+  /* Markdown body rendering */
+  .detail-body h1 { font-size: 1.15em; font-weight: 700; margin: 1em 0 0.4em; color: #e6edf3; }
+  .detail-body h2 { font-size: 1.05em; font-weight: 600; margin: 0.9em 0 0.35em; color: #e6edf3; border-bottom: 1px solid #21262d; padding-bottom: 0.2em; }
+  .detail-body h3 { font-size: 0.95em; font-weight: 600; margin: 0.75em 0 0.3em; color: #8b949e; }
+  .detail-body p { margin: 0.5em 0; line-height: 1.65; }
+  .detail-body ul, .detail-body ol { padding-left: 1.4em; margin: 0.4em 0; }
+  .detail-body li { margin: 0.2em 0; line-height: 1.6; }
+  .detail-body ul li { list-style-type: disc; }
+  .detail-body ol li { list-style-type: decimal; }
+  .detail-body ul.checklist { list-style: none; padding-left: 0.2em; }
+  .detail-body ul.checklist li.cb-item { display: flex; align-items: flex-start; gap: 6px; list-style: none; }
+  .detail-body ul.checklist input[type="checkbox"] { margin-top: 3px; accent-color: #3fb950; cursor: default; flex-shrink: 0; }
+  .detail-body code { font-family: monospace; font-size: 0.85em; background: rgba(255,255,255,0.07); padding: 0.1em 0.35em; border-radius: 3px; color: #79c0ff; }
+  .detail-body pre { background: rgba(0,0,0,0.35); border: 1px solid #30363d; border-radius: 6px; padding: 0.85em; overflow-x: auto; margin: 0.6em 0; }
+  .detail-body pre code { background: none; padding: 0; color: #e6edf3; }
+  .detail-body blockquote { border-left: 3px solid #388bfd; padding-left: 0.7em; margin: 0.5em 0; color: #8b949e; font-style: italic; }
+  .detail-body strong { font-weight: 600; color: #e6edf3; }
+  .detail-body em { font-style: italic; color: #8b949e; }
+  .detail-body a { color: #58a6ff; text-decoration: underline; }
+  .detail-body hr { border: none; border-top: 1px solid #21262d; margin: 0.8em 0; }
+  .detail-body > *:first-child { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -310,6 +372,7 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     <span class="topbar-stats" id="stats"></span>
   </div>
   <div class="topbar-right">
+    <div class="activity-bar" id="activity-bar">&#9675; no active loops</div>
   </div>
 </div>
 <div class="board" id="board">
@@ -319,15 +382,101 @@ export const KANBAN_HTML = `<!DOCTYPE html>
   <div class="detail-panel" id="detail"></div>
 </div>
 <script>
-const STATES = ["backlog", "in-progress", "in-review", "shipped"];
-const STATE_LABELS = { "backlog": "Backlog", "in-progress": "In Progress", "in-review": "In Review", "shipped": "Shipped" };
+const STATES = ["backlog", "queued", "in-progress", "in-review", "shipped"];
+const STATE_LABELS = { "backlog": "Backlog", "queued": "Queued", "in-progress": "In Progress", "in-review": "In Review", "shipped": "Shipped" };
 let allTasks = [];
 let currentProject = "";
+let activeLoops = []; // from /api/activity
+let dispatchLog = []; // from /api/activity
 
 function escapeHtml(s) {
   const d = document.createElement("div");
   d.textContent = s;
   return d.innerHTML;
+}
+
+function renderMarkdown(md) {
+  if (!md) return "";
+
+  // ── Pre-processing: normalize inline list items onto their own lines ──
+  md = md.split("\\n").map(function(line) {
+    // "1. item 2. item" → split on newlines
+    if (/^\\d+\\.\\s/.test(line) && / \\d+\\.\\s/.test(line)) {
+      return line.replace(/ (\\d+)\\.\\s+/g, "\\n$1. ");
+    }
+    // "(1) item (2) item" anywhere in line → convert to numbered list items
+    if (/\\(\\d+\\)/.test(line) && /\\(\\d+\\).+\\(\\d+\\)/.test(line)) {
+      // Extract prefix before first (1)
+      const firstIdx = line.search(/\\(\\d+\\)/);
+      const prefix = firstIdx > 0 ? line.slice(0, firstIdx).trim() : "";
+      const listPart = line.slice(firstIdx);
+      // Split on (N) boundaries, convert to "N. text"
+      const converted = listPart
+        .replace(/\\((\\d+)\\)\\s*/g, "\\n$1. ")
+        .trim();
+      return (prefix ? prefix + "\\n" : "") + converted;
+    }
+    // Unordered: line starts with "- " or "* " AND has " - " or " * " inline
+    if (/^[-*]\\s/.test(line) && / [-*]\\s/.test(line)) {
+      return line.replace(/ ([-*])\\s+(?=\\S)/g, "\\n$1 ");
+    }
+    // Checkbox lists: "- [ ] item - [ ] item"
+    if (/^-\\s\\[[ x]\\]/.test(line) && / -\\s\\[[ x]\\]/.test(line)) {
+      return line.replace(/ (-\\s\\[[ x]\\])/g, "\\n$1");
+    }
+    return line;
+  }).join("\\n");
+
+  const BT = "\\x60";
+  const fence = new RegExp(BT + BT + BT + "[\\\\w]*\\\\n?([\\\\s\\\\S]*?)" + BT + BT + BT, "g");
+  const inlineCode = new RegExp(BT + "(.+?)" + BT, "g");
+  let html = escapeHtml(md);
+  // Code blocks first (before inline code)
+  html = html.replace(fence, (_, c) => "<pre><code>" + c.trim() + "</code></pre>");
+  // Headings
+  html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+  html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
+  html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
+  // Bold / italic
+  html = html.replace(/\\*\\*(.+?)\\*\\*/g, "<strong>$1</strong>");
+  html = html.replace(/\\*(.+?)\\*/g, "<em>$1</em>");
+  // Inline code
+  html = html.replace(inlineCode, "<code>$1</code>");
+  // Checkbox lists (before unordered so we can style them)
+  html = html.replace(/((?:^- \\[[ x]\\] .+\\n?)+)/gm, function(block) {
+    const items = block.trim().split("\\n").map(function(l) {
+      const checked = /^- \\[x\\]/i.test(l);
+      const text = l.replace(/^- \\[[ x]\\]\\s*/i, "");
+      return "<li class=\\"cb-item\\">" +
+        "<input type=\\"checkbox\\" disabled" + (checked ? " checked" : "") + "> " +
+        text + "</li>";
+    }).join("");
+    return "<ul class=\\"checklist\\">" + items + "</ul>";
+  });
+  // Unordered lists
+  html = html.replace(/((?:^[-*] .+\\n?)+)/gm, function(block) {
+    const items = block.trim().split("\\n").map(function(l) {
+      return "<li>" + l.replace(/^[-*]\\s+/, "") + "</li>";
+    }).join("");
+    return "<ul>" + items + "</ul>";
+  });
+  // Ordered lists
+  html = html.replace(/((?:^\\d+\\. .+\\n?)+)/gm, function(block) {
+    const items = block.trim().split("\\n").map(function(l) {
+      return "<li>" + l.replace(/^\\d+\\.\\s+/, "") + "</li>";
+    }).join("");
+    return "<ol>" + items + "</ol>";
+  });
+  // Horizontal rule
+  html = html.replace(/^---$/gm, "<hr>");
+  // Paragraphs
+  html = html.split(/\\n\\n+/).map(function(block) {
+    block = block.trim();
+    if (!block) return "";
+    if (/^<(h[1-6]|ul|ol|pre|hr)/.test(block)) return block;
+    return "<p>" + block.replace(/\\n/g, " ") + "</p>";
+  }).join("\\n");
+  return html;
 }
 
 function shortDate(iso) {
@@ -359,8 +508,20 @@ function updateProjectDropdown(tasks) {
   }
 }
 
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function kanbanPath(project, ticketId) {
+  const base = "/kanban";
+  if (!project) return ticketId ? base + "/" + ticketId : base;
+  const slug = slugify(project);
+  return ticketId ? base + "/" + slug + "/" + ticketId : base + "/" + slug;
+}
+
 function filterProject() {
   currentProject = document.getElementById("project-filter").value;
+  history.replaceState({}, "", kanbanPath(currentProject, null));
   renderBoard(allTasks);
 }
 
@@ -450,10 +611,19 @@ function renderCard(task) {
     bottomHtml = '<div class="card-bottom">' + pills.join("") + '</div>';
   }
 
+  // Active loop indicator
+  let loopHtml = "";
+  const loop = activeLoops.find(l => l.ticketId === task.id);
+  if (loop) {
+    const phaseLabel = loop.phase || "working";
+    loopHtml = '<div class="loop-indicator"><span class="loop-pulse"></span> agent: ' + escapeHtml(phaseLabel) + '</div>';
+  }
+
   card.innerHTML =
     '<div class="card-top">' + topHtml + '</div>' +
     titleHtml +
     epicHtml +
+    loopHtml +
     bottomHtml;
 
   return card;
@@ -484,7 +654,7 @@ function showDetail(id) {
   html += '<div class="detail-meta">' + escapeHtml(meta) + '</div>';
 
   if (task.body) {
-    html += '<div class="detail-body">' + escapeHtml(task.body) + '</div>';
+    html += '<div class="detail-body">' + renderMarkdown(task.body) + '</div>';
   }
 
   if (task.history && task.history.length > 0) {
@@ -512,10 +682,12 @@ function showDetail(id) {
 
   panel.innerHTML = html;
   document.getElementById("overlay").classList.add("open");
+  history.pushState({ ticketId: id, project: currentProject }, "", kanbanPath(currentProject, id));
 }
 
 function closeDetail() {
   document.getElementById("overlay").classList.remove("open");
+  history.pushState({}, "", kanbanPath(currentProject, null));
 }
 
 document.addEventListener("keydown", (e) => {
@@ -525,17 +697,101 @@ document.addEventListener("keydown", (e) => {
 async function load() {
   const board = document.getElementById("board");
   try {
-    const res = await fetch("/api/kanban");
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
+    const ts = Date.now();
+    const [kanbanRes, activityRes] = await Promise.all([
+      fetch("/api/kanban?_=" + ts),
+      fetch("/api/activity?_=" + ts).catch(() => null),
+    ]);
+    if (!kanbanRes.ok) throw new Error("HTTP " + kanbanRes.status);
+    const data = await kanbanRes.json();
+    if (activityRes && activityRes.ok) {
+      const actData = await activityRes.json();
+      activeLoops = actData.loops || [];
+      dispatchLog = actData.dispatch || [];
+    }
     renderBoard(data.tasks || []);
+    renderActivityBar();
   } catch (err) {
     board.innerHTML = '<div class="error">Failed to load board: ' + err.message + '</div>';
   }
 }
 
-load();
+function renderActivityBar() {
+  const bar = document.getElementById("activity-bar");
+  if (!bar) return;
+  const running = activeLoops.filter(l => l.phase !== "done" && l.phase !== "failed");
+
+  // Build tooltip: running loops + last 5 dispatch entries
+  const loopLines = running.map(l => "● #" + l.ticketId + " " + l.ticketTitle + " [" + l.phase + "]");
+  const recentDispatch = dispatchLog.slice(-8).reverse().map(d => {
+    const t = new Date(d.at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+    const icon = d.action === "queued" ? "→" : d.action === "loop-started" ? "▶" : d.action === "loop-done" ? "✓" : d.action === "loop-failed" ? "✗" : "·";
+    return t + " " + icon + " #" + d.ticketId + " " + (d.ticketTitle || "").slice(0, 40) + " [" + d.action + "]";
+  });
+
+  const tooltipLines = [];
+  if (loopLines.length) tooltipLines.push("RUNNING:", ...loopLines, "");
+  if (recentDispatch.length) tooltipLines.push("DISPATCH LOG:", ...recentDispatch);
+  bar.title = tooltipLines.join("\\n") || "No activity";
+
+  if (running.length === 0) {
+    const lastAction = dispatchLog.length > 0 ? dispatchLog[dispatchLog.length - 1] : null;
+    bar.className = "activity-bar";
+    if (lastAction) {
+      const t = new Date(lastAction.at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+      bar.innerHTML = "\\u25CB last: #" + lastAction.ticketId + " " + lastAction.action + " " + t;
+    } else {
+      bar.innerHTML = "\\u25CB no active loops";
+    }
+  } else {
+    bar.className = "activity-bar active";
+    bar.innerHTML = '<span class="loop-pulse"></span> ' + running.length + ' loop' + (running.length > 1 ? "s" : "") + " running";
+  }
+}
+
+// Surface any uncaught JS errors on the page
+window.onerror = function(msg, src, line, col, err) {
+  const board = document.getElementById("board");
+  if (board) {
+    board.innerHTML = '<div class="error" style="white-space:pre-wrap">JS Error: ' + msg + '\\n' + (src || '') + ':' + line + ':' + col + '</div>';
+  }
+  return false;
+};
+window.onunhandledrejection = function(e) {
+  const board = document.getElementById("board");
+  if (board && board.innerHTML.includes('Loading board')) {
+    board.innerHTML = '<div class="error">Unhandled error: ' + String(e.reason) + '</div>';
+  }
+};
+
+load().then(() => {
+  // Deep-link: parse path — /kanban/[project-slug] or /kanban/[project-slug]/[id] or /kanban/[id]
+  const pathParts = location.pathname.replace(/^\\/kanban\\/?/, "").split("/").filter(Boolean);
+  const firstIsId = pathParts.length === 1 && /^\\d+$/.test(pathParts[0]);
+  const projSlug = (!firstIsId && pathParts.length >= 1) ? pathParts[0] : null;
+  const ticketFromPath = pathParts.length === 2 ? pathParts[1] : (firstIsId ? pathParts[0] : null);
+
+  if (projSlug) {
+    // Match slug back to a real project name (case-insensitive slug compare)
+    const match = allTasks.map(t => t.project).find(p => p && slugify(p) === projSlug);
+    if (match) {
+      const select = document.getElementById("project-filter");
+      if (select) { select.value = match; currentProject = match; renderBoard(allTasks); }
+    }
+  }
+
+  // Deep-link: open ticket if path ends with a ticket id
+  if (ticketFromPath) showDetail(parseInt(ticketFromPath, 10));
+});
 setInterval(load, 30000);
+
+window.addEventListener("popstate", (e) => {
+  if (e.state && e.state.ticketId) {
+    showDetail(e.state.ticketId);
+  } else {
+    closeDetail();
+  }
+});
 </script>
 </body>
 </html>`;

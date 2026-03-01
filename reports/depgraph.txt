@@ -4,21 +4,24 @@
 
 ┌─── root/ ────────────────────────────────────┐
 │  agent.ts                       in:4 out:17 ★ hub
-│  auth.ts                        in:2 out:1
-│  config.ts                      in:20 out:1 ★ hub
+│  auth.ts                        in:3 out:1
+│  config.ts                      in:23 out:1 ★ hub
 │  context.ts                     in:1 out:6
 │  conversation.ts                in:1 out:2
+│  cron-cli.ts                    in:0 out:3 ← entry
 │  dispatch-cli.ts                in:0 out:3 ← entry
-│  dispatch.ts                    in:1 out:5
+│  dispatch.ts                    in:2 out:5
 │  index.ts                       in:0 out:5 ← entry
 │  install-tui.ts                 in:0 out:2 ← entry
 │  kanban-cli.ts                  in:0 out:1 ← entry
 │  kanban.ts                      in:6 out:1 ★ hub
-│  kb-cli.ts                      in:0 out:3 ← entry
+│  kb-cli.ts                      in:0 out:4 ← entry
+│  kb-video-ingest.ts             in:1 out:3
+│  loop-manager.ts                in:1 out:0
 │  persona-cli.ts                 in:0 out:2 ← entry
 │  persona.ts                     in:2 out:2
 │  service-cli.ts                 in:0 out:2 ← entry
-│  service.ts                     in:2 out:1
+│  service.ts                     in:3 out:1
 │  setup.ts                       in:1 out:3
 │  snapshot-cli.ts                in:0 out:2 ← entry
 │  snapshot.ts                    in:1 out:1
@@ -26,13 +29,14 @@
 │  types.ts                       in:11 out:0 ★ hub
 │  vault-cli.ts                   in:0 out:3 ← entry
 │  vault.ts                       in:5 out:1 ★ hub
+│  webdebug-cli.ts                in:0 out:1 ← entry
 │
 │  → depends on: tools, memory, kb, web, telegram
 └──────────────────────────────────────────────┘
 
 ┌─── kb/ ──────────────────────────────────────┐
 │  embeddings.ts                  in:1 out:0
-│  engine.ts                      in:2 out:3
+│  engine.ts                      in:3 out:3
 │  index.ts                       in:3 out:2
 │  types.ts                       in:4 out:0 ★ hub
 │
@@ -76,7 +80,7 @@
 └──────────────────────────────────────────────┘
 
 ┌─── web/ ─────────────────────────────────────┐
-│  handler.ts                     in:1 out:5
+│  handler.ts                     in:1 out:6
 │  kanban-ui.ts                   in:1 out:0
 │  server.ts                      in:1 out:2
 │  ui.ts                          in:1 out:0
@@ -84,4 +88,4 @@
 │  → depends on: .
 └──────────────────────────────────────────────┘
 
-Modules: 6  Files: 52  Dependencies: 105  Cycles: 0
+Modules: 6  Files: 56  Dependencies: 114  Cycles: 0

@@ -30,16 +30,27 @@ IMPURE FUNCTIONS (have side effects):
     getAuditLogs:333  [fs]
     runDispatchCycle:479  [console]
   kanban.ts:
-    initBoard:165  [fs] [date]
-    parseTaskFile:192  [date]
-    addTask:425  [fs] [date]
-    getTask:459  [fs]
-    moveTask:536  [fs] [date]
-    editTask:597  [fs] [date]
-    appendNote:633  [fs] [date]
-    listTasks:654  [fs]
-    boardSummary:696  [date]
-    archiveShipped:785  [fs] [date]
+    initBoard:174  [fs] [date]
+    parseTaskFile:201  [date]
+    addTask:468  [fs] [date]
+    getTask:502  [fs]
+    moveTask:582  [fs] [date]
+    editTask:643  [fs] [date]
+    appendNote:679  [fs] [date]
+    fillSection:708  [fs] [date]
+    logCommit:755  [fs] [date]
+    listTasks:774  [fs]
+    boardSummary:816  [date]
+    archiveShipped:905  [fs] [date]
+    unarchiveTask:936  [fs] [date]
+  kb-video-ingest.ts:
+    extractFactSegments:177  [fs] [network] [console] [date]
+  loop-manager.ts:
+    readLoops:45  [fs] [date]
+    updateLoop:75  [date]
+    readDispatchLog:117  [fs] [date]
+    logDispatch:129  [fs] [date]
+    purgeStaleLoops:143  [date]
   memory/search.ts:
     ensureQmdCollection:31  [fs]
     indexMemory:46  [child_process]
@@ -114,28 +125,34 @@ PURE FUNCTIONS (no side effects):
   ✓ dispatch.ts:240  searchRelatedTickets
   ✓ dispatch.ts:283  buildDispatchContext
   ✓ dispatch.ts:426  runDispatchLoop
-  ✓ kanban.ts:82  validateTransition
-  ✓ kanban.ts:86  isValidState
-  ✓ kanban.ts:90  isValidPriority
-  ✓ kanban.ts:94  isValidType
-  ✓ kanban.ts:98  isValidSize
-  ✓ kanban.ts:102  isValidStatus
-  ✓ kanban.ts:108  extractSection
-  ✓ kanban.ts:126  isSectionFilled
-  ✓ kanban.ts:131  isForwardTransition
-  ✓ kanban.ts:137  getKanbanDir
-  ✓ kanban.ts:151  slugify
-  ✓ kanban.ts:284  formatTaskFile
-  ✓ kanban.ts:468  checkTransitionGates
-  ✓ kanban.ts:683  taskHistory
-  ✓ kanban.ts:692  getChildren
-  ✓ kanban.ts:740  boardSummaryText
-  ✓ kanban.ts:814  searchTasks
+  ✓ kanban.ts:91  validateTransition
+  ✓ kanban.ts:95  isValidState
+  ✓ kanban.ts:99  isValidPriority
+  ✓ kanban.ts:103  isValidType
+  ✓ kanban.ts:107  isValidSize
+  ✓ kanban.ts:111  isValidStatus
+  ✓ kanban.ts:117  extractSection
+  ✓ kanban.ts:135  isSectionFilled
+  ✓ kanban.ts:140  isForwardTransition
+  ✓ kanban.ts:146  getKanbanDir
+  ✓ kanban.ts:160  slugify
+  ✓ kanban.ts:320  formatTaskFile
+  ✓ kanban.ts:511  checkTransitionGates
+  ✓ kanban.ts:803  taskHistory
+  ✓ kanban.ts:812  getChildren
+  ✓ kanban.ts:860  boardSummaryText
+  ✓ kanban.ts:975  searchTasks
   ✓ kb/embeddings.ts:23  embed
   ✓ kb/embeddings.ts:32  isModelLoaded
   ✓ kb/embeddings.ts:37  unloadModel
   ✓ kb/index.ts:13  getKB
   ✓ kb/index.ts:26  closeKB
+  ✓ kb-video-ingest.ts:105  parseVTT
+  ✓ kb-video-ingest.ts:261  videoIngest
+  ✓ loop-manager.ts:61  upsertLoop
+  ✓ loop-manager.ts:84  removeLoop
+  ✓ loop-manager.ts:91  isLoopActive
+  ✓ loop-manager.ts:153  activeLoopCount
   ✓ memory/search.ts:61  searchMemory
   ✓ memory/search.ts:74  vectorSearchMemory
   ✓ memory/search.ts:87  deepSearchMemory
@@ -166,7 +183,7 @@ PURE FUNCTIONS (no side effects):
   ✓ vault.ts:217  vaultGet
   ✓ vault.ts:236  vaultDelete
   ✓ vault.ts:256  vaultList
-  ✓ web/handler.ts:26  createRequestHandler
+  ✓ web/handler.ts:27  createRequestHandler
 
-Total: 135 functions, 67 pure (50%), 68 impure
-Effect frequency: fs(48), date(18), env(7), console(6), process(6), child_process(4), network(1)
+Total: 150 functions, 73 pure (49%), 77 impure
+Effect frequency: fs(55), date(27), env(7), console(7), process(6), child_process(4), network(2)

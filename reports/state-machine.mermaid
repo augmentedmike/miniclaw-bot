@@ -52,6 +52,13 @@ stateDiagram-v2
   attempt --> caught : catch
   success --> [*]
 
+%% cron-cli.ts :: process_lifecycle
+stateDiagram-v2
+  [*] --> spawning
+  state error <<error>>
+  spawning --> running : spawn()
+  running --> error : error
+
 %% dispatch-cli.ts :: error_recovery
 stateDiagram-v2
   [*] --> attempt
@@ -72,13 +79,17 @@ stateDiagram-v2
   attempt --> caught : catch
   success --> [*]
 
-%% index.ts :: process_events
+%% index.ts :: child_events
 stateDiagram-v2
   [*] --> idle
-  idle --> SIGINT : SIGINT
-  SIGINT --> idle : done
-  idle --> SIGTERM : SIGTERM
-  SIGTERM --> idle : done
+  idle --> exit : exit
+  idle --> exit : exit
+  idle --> exit : exit
+  idle --> exit : exit
+  exit --> [*]
+  exit --> [*]
+  exit --> [*]
+  exit --> [*]
 
 %% index.ts :: error_recovery
 stateDiagram-v2
@@ -111,7 +122,8 @@ stateDiagram-v2
 %% kanban.ts :: state_machine
 stateDiagram-v2
   shipped --> backlog : transition
-  backlog --> blocked : transition
+  backlog --> queued : transition
+  queued --> blocked : transition
   blocked --> active : transition
 
 %% kanban.ts :: error_recovery
@@ -131,6 +143,40 @@ stateDiagram-v2
   complete --> [*]
 
 %% kb/engine.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% kb-video-ingest.ts :: extractFactSegments_flow
+stateDiagram-v2
+  [*] --> start
+  state error <<error>>
+  start --> getAccessToken : await getAccessToken()
+  getAccessToken --> generateText : await generateText()
+  generateText --> extractFactSegments : await extractFactSegments()
+  extractFactSegments --> engine_add : await engine.add()
+  engine_add --> error : catch
+  engine_add --> complete : return
+  complete --> [*]
+
+%% kb-video-ingest.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% loop-manager.ts :: state_machine
+stateDiagram-v2
+  state failed <<error>>
+  done --> failed : transition
+  done --> [*]
+
+%% loop-manager.ts :: error_recovery
 stateDiagram-v2
   [*] --> attempt
   state caught <<error>>
@@ -445,6 +491,13 @@ stateDiagram-v2
   fallback --> success : complete
   success --> [*]
 
+%% web/kanban-ui.ts :: state_machine
+stateDiagram-v2
+  state failed <<error>>
+  blocked --> done : transition
+  done --> failed : transition
+  done --> [*]
+
 %% web/kanban-ui.ts :: error_recovery
 stateDiagram-v2
   [*] --> attempt
@@ -470,6 +523,21 @@ stateDiagram-v2
   keydown --> idle : done
 
 %% web/ui.ts :: error_recovery
+stateDiagram-v2
+  [*] --> attempt
+  state caught <<error>>
+  attempt --> success : no error
+  attempt --> caught : catch
+  success --> [*]
+
+%% webdebug-cli.ts :: process_lifecycle
+stateDiagram-v2
+  [*] --> spawning
+  state error <<error>>
+  spawning --> running : spawn()
+  running --> error : error
+
+%% webdebug-cli.ts :: error_recovery
 stateDiagram-v2
   [*] --> attempt
   state caught <<error>>

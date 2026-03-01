@@ -2,19 +2,19 @@
 ║           API SURFACE MAP                       ║
 ╚══════════════════════════════════════════════════╝
 
-┌─── config.ts (9 exports, 20 consumers) ⚠ STABLE (many dependents)
-│  function   getMinicawHome → dispatch-cli, dispatch, persona, service-cli, service
+┌─── config.ts (9 exports, 23 consumers) ⚠ STABLE (many dependents)
+│  function   getMinicawHome → cron-cli, dispatch-cli, dispatch, persona, service-cli, service, webdebug-cli
 │  function   getSystemDir → install-tui, persona-cli, snapshot
 │  function   getUserDir → install-tui, persona-cli, persona, snapshot-cli, snapshot
-│  function   getActivePersonaHome → conversation, dispatch, kanban, index, kb-cli, search, store, access, vault-cli, vault
+│  function   getActivePersonaHome → conversation, dispatch, kanban, index, kb-cli, kb-video-ingest, search, store, access, vault-cli, vault
 │  function   writeActivePersona → install-tui, persona-cli
 │  function   getLogsDir → UNUSED
-│  function   ensureMinicawDirs → dispatch-cli, index, persona-cli, service-cli, setup, snapshot-cli, vault-cli
-│  function   ensurePersonaDirs → install-tui, kb-cli, persona-cli
-│  function   loadConfig → dispatch-cli, dispatch, index, kb-cli, persona-cli
+│  function   ensureMinicawDirs → cron-cli, dispatch-cli, index, persona-cli, service-cli, setup, snapshot-cli, vault-cli, webdebug-cli
+│  function   ensurePersonaDirs → install-tui, kb-cli, kb-video-ingest, persona-cli
+│  function   loadConfig → cron-cli, dispatch-cli, dispatch, index, kb-cli, kb-video-ingest, persona-cli
 └
 
-┌─── kanban.ts (46 exports, 6 consumers) ⚠ STABLE (many dependents)
+┌─── kanban.ts (50 exports, 6 consumers) ⚠ STABLE (many dependents)
 │  function   validateTransition → UNUSED
 │  function   isValidState → kanban-cli, kanban
 │  function   isValidPriority → kanban-cli, kanban
@@ -35,25 +35,29 @@
 │  function   moveTask → kanban-cli, kanban
 │  function   editTask → kanban-cli, kanban
 │  function   appendNote → kanban-cli, kanban
+│  function   fillSection → kanban-cli
+│  function   logCommit → kanban-cli
 │  function   listTasks → dispatch, kanban-cli, kanban, handler
 │  function   taskHistory → kanban-cli
 │  function   getChildren → kanban-cli, kanban
 │  function   boardSummary → kanban-cli, handler
 │  function   boardSummaryText → system-prompt
 │  function   archiveShipped → kanban-cli
+│  function   unarchiveTask → kanban-cli
 │  function   searchTasks → kanban-cli, kanban
 │  const      STATES → kanban-cli
 │  const      TYPES → kanban-cli
 │  const      SIZES → kanban-cli
 │  const      STATUSES → UNUSED
 │  const      VALID_TRANSITIONS → dispatch
-│  const      REQUIRED_SECTIONS → UNUSED
+│  const      REQUIRED_SECTIONS → kanban-cli
 │  type       KanbanState → UNUSED
 │  type       Priority → UNUSED
 │  type       TaskType → UNUSED
 │  type       TaskStatus → UNUSED
 │  type       TaskSize → UNUSED
 │  type       TransitionEntry → UNUSED
+│  type       CommitEntry → UNUSED
 │  type       KanbanTask → UNUSED
 │  type       BoardMeta → UNUSED
 │  type       BoardSummaryResult → UNUSED
@@ -83,10 +87,43 @@
 │  type       SearchResult → UNUSED
 └
 
+┌─── auth.ts (4 exports, 3 consumers)
+│  function   writeCredentials → UNUSED
+│  function   readCredentials → setup
+│  function   isExpired → setup
+│  function   getAccessToken → agent, kb-video-ingest
+└
+
+┌─── kb/engine.ts (2 exports, 3 consumers)
+│  class      KBEngine → index, kb-cli, kb-video-ingest
+│  type       AddOptions → UNUSED
+└
+
 ┌─── memory/store.ts (3 exports, 3 consumers)
 │  function   saveMemory → context, conversation, memory
 │  function   readMemory → context
 │  function   listMemories → memory
+└
+
+┌─── service.ts (18 exports, 3 consumers)
+│  function   detectPlatform → cron-cli, dispatch-cli, service-cli
+│  function   getServicePaths → service-cli
+│  function   generatePlist → UNUSED
+│  function   generateUnit → UNUSED
+│  function   installService → service-cli
+│  function   uninstallService → service-cli
+│  function   serviceStatus → service-cli
+│  function   getDispatchPaths → cron-cli, dispatch-cli
+│  function   generateDispatchPlist → UNUSED
+│  function   generateDispatchUnit → UNUSED
+│  function   generateDispatchTimer → UNUSED
+│  function   installDispatch → cron-cli, dispatch-cli
+│  function   uninstallDispatch → cron-cli, dispatch-cli
+│  function   dispatchStatus → cron-cli, dispatch-cli
+│  type       Platform → UNUSED
+│  interface  ServicePaths → UNUSED
+│  interface  ServiceStatus → UNUSED
+│  interface  DispatchPaths → UNUSED
 └
 
 ┌─── vault.ts (8 exports, 3 consumers)
@@ -100,16 +137,23 @@
 │  type       VaultEntry → UNUSED
 └
 
-┌─── auth.ts (4 exports, 2 consumers)
-│  function   writeCredentials → UNUSED
-│  function   readCredentials → setup
-│  function   isExpired → setup
-│  function   getAccessToken → agent
-└
-
-┌─── kb/engine.ts (2 exports, 2 consumers)
-│  class      KBEngine → index, kb-cli
-│  type       AddOptions → UNUSED
+┌─── dispatch.ts (16 exports, 2 consumers)
+│  function   acquireLock → UNUSED
+│  function   releaseLock → UNUSED
+│  function   cleanStaleLocks → UNUSED
+│  function   countActiveLocks → UNUSED
+│  function   getActiveLocks → dispatch-cli
+│  function   selectNextTask → UNUSED
+│  function   ensureKanbanCollection → UNUSED
+│  function   indexKanban → UNUSED
+│  function   searchRelatedTickets → UNUSED
+│  function   buildDispatchContext → UNUSED
+│  function   createAuditWriter → UNUSED
+│  function   getAuditLogs → dispatch-cli
+│  function   runDispatchLoop → UNUSED
+│  function   runDispatchCycle → cron-cli, dispatch-cli
+│  type       LockInfo → UNUSED
+│  type       QmdSearchResult → UNUSED
 └
 
 ┌─── persona.ts (7 exports, 2 consumers)
@@ -120,27 +164,6 @@
 │  function   savePersona → persona-cli
 │  function   listPersonas → persona-cli
 │  function   loadActivePersona → agent
-└
-
-┌─── service.ts (18 exports, 2 consumers)
-│  function   detectPlatform → dispatch-cli, service-cli
-│  function   getServicePaths → service-cli
-│  function   generatePlist → UNUSED
-│  function   generateUnit → UNUSED
-│  function   installService → service-cli
-│  function   uninstallService → service-cli
-│  function   serviceStatus → service-cli
-│  function   getDispatchPaths → dispatch-cli
-│  function   generateDispatchPlist → UNUSED
-│  function   generateDispatchUnit → UNUSED
-│  function   generateDispatchTimer → UNUSED
-│  function   installDispatch → dispatch-cli
-│  function   uninstallDispatch → dispatch-cli
-│  function   dispatchStatus → dispatch-cli
-│  type       Platform → UNUSED
-│  interface  ServicePaths → UNUSED
-│  interface  ServiceStatus → UNUSED
-│  interface  DispatchPaths → UNUSED
 └
 
 ┌─── tools/run-process.ts (2 exports, 2 consumers)
@@ -157,25 +180,6 @@
 │  function   loadHistory → agent
 │  function   appendToHistory → agent
 │  function   archiveRotatedMessages → agent
-└
-
-┌─── dispatch.ts (16 exports, 1 consumers)
-│  function   acquireLock → UNUSED
-│  function   releaseLock → UNUSED
-│  function   cleanStaleLocks → UNUSED
-│  function   countActiveLocks → UNUSED
-│  function   getActiveLocks → dispatch-cli
-│  function   selectNextTask → UNUSED
-│  function   ensureKanbanCollection → UNUSED
-│  function   indexKanban → UNUSED
-│  function   searchRelatedTickets → UNUSED
-│  function   buildDispatchContext → UNUSED
-│  function   createAuditWriter → UNUSED
-│  function   getAuditLogs → dispatch-cli
-│  function   runDispatchLoop → UNUSED
-│  function   runDispatchCycle → dispatch-cli
-│  type       LockInfo → UNUSED
-│  type       QmdSearchResult → UNUSED
 └
 
 ┌─── kb/embeddings.ts (4 exports, 1 consumers)
@@ -199,6 +203,33 @@
 │  type       KBSearchResult → UNUSED
 │  type       KBSearchOptions → UNUSED
 │  type       KBStats → UNUSED
+└
+
+┌─── kb-video-ingest.ts (7 exports, 1 consumers)
+│  function   parseVTT → UNUSED
+│  function   extractFactSegments → UNUSED
+│  function   videoIngest → kb-cli
+│  type       TranscriptSegment → UNUSED
+│  type       FactSegment → UNUSED
+│  type       VideoIngestResult → UNUSED
+│  type       VideoIngestOptions → UNUSED
+└
+
+┌─── loop-manager.ts (14 exports, 1 consumers)
+│  function   readLoops → handler
+│  function   upsertLoop → UNUSED
+│  function   updateLoop → UNUSED
+│  function   removeLoop → UNUSED
+│  function   isLoopActive → UNUSED
+│  function   readDispatchLog → handler
+│  function   logDispatch → UNUSED
+│  function   purgeStaleLoops → handler
+│  function   activeLoopCount → UNUSED
+│  type       LoopPhase → UNUSED
+│  type       ActiveLoop → UNUSED
+│  type       LoopStore → UNUSED
+│  type       DispatchEntry → UNUSED
+│  type       DispatchLog → UNUSED
 └
 
 ┌─── snapshot.ts (5 exports, 1 consumers)
@@ -341,4 +372,4 @@
 │  function   startWebServer → UNUSED
 └
 
-Total: 43 modules, 210 exports, 82 potentially unused
+Total: 45 modules, 235 exports, 99 potentially unused

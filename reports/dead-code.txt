@@ -2,7 +2,7 @@
 ║           DEAD CODE REPORT                      ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  POTENTIALLY UNUSED EXPORTS (41):
+⚠  POTENTIALLY UNUSED EXPORTS (49):
    agent.ts:22  export createTools
    auth.ts:110  export writeCredentials
    config.ts:62  export getLogsDir
@@ -17,16 +17,24 @@
    dispatch.ts:283  export buildDispatchContext
    dispatch.ts:322  export createAuditWriter
    dispatch.ts:426  export runDispatchLoop
-   kanban.ts:82  export validateTransition
-   kanban.ts:108  export extractSection
-   kanban.ts:126  export isSectionFilled
-   kanban.ts:131  export isForwardTransition
-   kanban.ts:151  export slugify
-   kanban.ts:192  export parseTaskFile
-   kanban.ts:284  export formatTaskFile
+   kanban.ts:91  export validateTransition
+   kanban.ts:117  export extractSection
+   kanban.ts:135  export isSectionFilled
+   kanban.ts:140  export isForwardTransition
+   kanban.ts:160  export slugify
+   kanban.ts:201  export parseTaskFile
+   kanban.ts:320  export formatTaskFile
    kb/embeddings.ts:32  export isModelLoaded
    kb/embeddings.ts:37  export unloadModel
    kb/index.ts:26  export closeKB
+   kb-video-ingest.ts:105  export parseVTT
+   kb-video-ingest.ts:177  export extractFactSegments
+   loop-manager.ts:61  export upsertLoop
+   loop-manager.ts:75  export updateLoop
+   loop-manager.ts:84  export removeLoop
+   loop-manager.ts:91  export isLoopActive
+   loop-manager.ts:129  export logDispatch
+   loop-manager.ts:153  export activeLoopCount
    persona.ts:39  export formatPersona
    service.ts:54  export generatePlist
    service.ts:93  export generateUnit

@@ -24,6 +24,9 @@ import {
   getTask,
   editTask,
   appendNote,
+  fillSection,
+  logCommit,
+  unarchiveTask,
   taskHistory,
   searchTasks,
   boardSummary,
@@ -39,6 +42,7 @@ import {
   STATES,
   TYPES,
   SIZES,
+  REQUIRED_SECTIONS,
   type KanbanState,
   type Priority,
   type TaskType,
@@ -76,9 +80,16 @@ Commands:
     --parent <id>            New parent (use "null" to clear)
     --blocked-by <ids>       New blocked-by list (replaces existing)
   note <id> <text>           Append a note to task body
+  fill <id> <section> <text> Fill a structured section (replaces existing content)
+    section: problem | research | implementation | acceptance
+             (or the full heading text, e.g. "Problem / Work Summary")
+  commit <id> <hash> <msg>   Log a git commit or PR against the task
+    hash: short/full commit SHA or "pr:123" for PRs
+    msg:  commit message / PR title
   history <id>               Show transition log
   search <query>             Search tasks by title/body/project/type
   archive [days]             Archive shipped tasks older than N days (default: 7)
+  unarchive <id>             Move an archived task back to backlog
 
 States: ${STATES.join(", ")}
 Types: ${TYPES.join(", ")}
@@ -244,6 +255,13 @@ function handleShow(args: string[]): void {
   console.log(`Created: ${task.created}`);
   console.log(`Updated: ${task.updated}`);
 
+  if (task.commits && task.commits.length > 0) {
+    console.log("\nCommits:");
+    for (const c of task.commits) {
+      console.log(`  ${c.hash}  ${c.message}  (${c.at.slice(0, 10)})`);
+    }
+  }
+
   if (task.history.length > 0) {
     console.log("\nHistory:");
     for (const h of task.history) {
@@ -261,6 +279,26 @@ function handleShow(args: string[]): void {
       console.log("\nChild tasks:");
       for (const c of children) console.log(formatTask(c));
     }
+  }
+}
+
+function handleQueue(args: string[]): void {
+  const [idStr] = args;
+  if (!idStr) {
+    console.error("Usage: queue <id>");
+    process.exit(1);
+  }
+  const id = Number(idStr);
+  if (Number.isNaN(id)) {
+    console.error(`Invalid ID: ${idStr}`);
+    process.exit(1);
+  }
+  try {
+    const task = moveTask(id, "queued");
+    console.log(`Queued #${task.id}: ${task.title} → queued`);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    process.exit(1);
   }
 }
 
@@ -380,6 +418,66 @@ function handleNote(args: string[]): void {
   }
 }
 
+// Short aliases → full heading text
+const SECTION_ALIASES: Record<string, string> = {
+  problem:        "Problem / Work Summary",
+  research:       "Research Planning",
+  implementation: "Implementation Plan",
+  acceptance:     "Acceptance Criteria",
+};
+
+function handleFill(args: string[]): void {
+  const [idStr, sectionKey, ...contentParts] = args;
+  if (!idStr || !sectionKey || contentParts.length === 0) {
+    console.error("Usage: fill <id> <section> <text>");
+    console.error(`  section: ${Object.keys(SECTION_ALIASES).join(" | ")}`);
+    console.error(`  (or the full heading, e.g. "Problem / Work Summary")`);
+    process.exit(1);
+  }
+
+  const id = Number(idStr);
+  if (Number.isNaN(id)) {
+    console.error(`Invalid ID: ${idStr}`);
+    process.exit(1);
+  }
+
+  const heading = SECTION_ALIASES[sectionKey.toLowerCase()] ?? sectionKey;
+  const content = contentParts.join(" ");
+
+  try {
+    const task = fillSection(id, heading, content);
+    console.log(`Section "${heading}" filled in #${task.id}: ${task.title}`);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    process.exit(1);
+  }
+}
+
+function handleCommit(args: string[]): void {
+  const [idStr, hash, ...msgParts] = args;
+  if (!idStr || !hash || msgParts.length === 0) {
+    console.error("Usage: commit <id> <hash> <message>");
+    console.error("  hash: short SHA (abc1234) or pr:123 for pull requests");
+    process.exit(1);
+  }
+
+  const id = Number(idStr);
+  if (Number.isNaN(id)) {
+    console.error(`Invalid ID: ${idStr}`);
+    process.exit(1);
+  }
+
+  const message = msgParts.join(" ");
+  try {
+    const task = logCommit(id, hash, message);
+    console.log(`Commit ${hash} logged on #${task.id}: ${task.title}`);
+    console.log(`  "${message}"`);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    process.exit(1);
+  }
+}
+
 function handleHistory(args: string[]): void {
   const [idStr] = args;
   if (!idStr) usage();
@@ -421,6 +519,28 @@ function handleSearch(args: string[]): void {
     if (t.due) flags.push(`due:${t.due}`);
     const flagStr = flags.length > 0 ? ` [${flags.join(", ")}]` : "";
     console.log(`#${String(t.id).padStart(3, "0")} ${t.title} (${t.state}, ${t.type}, ${t.priority})${flagStr}`);
+  }
+}
+
+function handleUnarchive(args: string[]): void {
+  const [idStr] = args;
+  if (!idStr) {
+    console.error("Usage: unarchive <id>");
+    process.exit(1);
+  }
+
+  const id = Number(idStr);
+  if (Number.isNaN(id)) {
+    console.error(`Invalid ID: ${idStr}`);
+    process.exit(1);
+  }
+
+  try {
+    const task = unarchiveTask(id);
+    console.log(`Unarchived #${task.id}: ${task.title} → backlog`);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    process.exit(1);
   }
 }
 
@@ -486,13 +606,17 @@ function main(): void {
     case "list":    handleList(args); break;
     case "board":   handleBoard(); break;
     case "show":    handleShow(args); break;
+    case "queue":   handleQueue(args); break;
     case "move":    handleMove(args); break;
     case "check":   handleCheck(args); break;
     case "edit":    handleEdit(args); break;
     case "note":    handleNote(args); break;
+    case "fill":    handleFill(args); break;
+    case "commit":  handleCommit(args); break;
     case "history": handleHistory(args); break;
     case "search":  handleSearch(args); break;
-    case "archive": handleArchive(args); break;
+    case "archive":   handleArchive(args); break;
+    case "unarchive": handleUnarchive(args); break;
     default:        usage();
   }
 }

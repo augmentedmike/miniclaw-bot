@@ -2,13 +2,13 @@
 ║           DUPLICATION REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  DUPLICATED BLOCKS (68):
+⚠  DUPLICATED BLOCKS (113):
 
   Block (5 lines) found in 4 files:
     agent.ts:143
     config.ts:125
     dispatch.ts:164
-    kanban.ts:804
+    kanban.ts:924
     Preview:     } catch {
 
   Block (5 lines) found in 2 files:
@@ -19,7 +19,7 @@
   Block (5 lines) found in 3 files:
     agent.ts:162
     dispatch.ts:163
-    kanban.ts:803
+    kanban.ts:923
     Preview:       }
 
   Block (5 lines) found in 2 files:
@@ -46,10 +46,11 @@
     dispatch.ts:66
     Preview:     return true;
 
-  Block (5 lines) found in 3 files:
+  Block (5 lines) found in 4 files:
     auth.ts:87
     dispatch.ts:67
     install-tui.ts:22
+    kb-video-ingest.ts:254
     Preview:   } catch {
 
   Block (5 lines) found in 2 files:
@@ -59,7 +60,7 @@
 
   Block (5 lines) found in 2 files:
     context.ts:38
-    kanban.ts:768
+    kanban.ts:888
     Preview:     } catch {
 
   Block (5 lines) found in 2 files:
@@ -84,59 +85,39 @@
     Preview:     return [];
 
   Block (5 lines) found in 2 files:
+    cron-cli.ts:16
+    dispatch-cli.ts:15
+    Preview: import {
+
+  Block (5 lines) found in 2 files:
+    cron-cli.ts:17
+    dispatch-cli.ts:16
+    Preview:   detectPlatform,
+
+  Block (5 lines) found in 2 files:
+    cron-cli.ts:18
+    dispatch-cli.ts:17
+    Preview:   getDispatchPaths,
+
+  Block (5 lines) found in 2 files:
+    cron-cli.ts:19
+    dispatch-cli.ts:18
+    Preview:   installDispatch,
+
+  Block (5 lines) found in 2 files:
+    cron-cli.ts:20
+    dispatch-cli.ts:19
+    Preview:   uninstallDispatch,
+
+  Block (5 lines) found in 2 files:
+    cron-cli.ts:21
+    dispatch-cli.ts:20
+    Preview:   dispatchStatus,
+
+  Block (5 lines) found in 3 files:
+    cron-cli.ts:34
     dispatch-cli.ts:33
     service-cli.ts:32
     Preview: 
 
-  Block (5 lines) found in 5 files:
-    dispatch-cli.ts:125
-    persona-cli.ts:205
-    service-cli.ts:116
-    snapshot-cli.ts:111
-    vault-cli.ts:140
-    Preview: }
-
-  Block (5 lines) found in 5 files:
-    dispatch-cli.ts:126
-    persona-cli.ts:206
-    service-cli.ts:117
-    snapshot-cli.ts:112
-    vault-cli.ts:141
-    Preview: 
-
-  Block (5 lines) found in 5 files:
-    dispatch-cli.ts:128
-    persona-cli.ts:208
-    service-cli.ts:119
-    snapshot-cli.ts:114
-    vault-cli.ts:143
-    Preview:   ensureMinicawDirs();
-
-  Block (5 lines) found in 6 files:
-    dispatch-cli.ts:130
-    kb-cli.ts:381
-    persona-cli.ts:209
-    service-cli.ts:121
-    snapshot-cli.ts:115
-    vault-cli.ts:145
-    Preview:   const [command, ...args] = process.argv.slice(2);
-
-  Block (5 lines) found in 6 files:
-    dispatch-cli.ts:140
-    kb-cli.ts:396
-    persona-cli.ts:222
-    service-cli.ts:131
-    snapshot-cli.ts:126
-    vault-cli.ts:155
-    Preview:     default:          usage();
-
-  Block (5 lines) found in 6 files:
-    dispatch-cli.ts:141
-    kb-cli.ts:397
-    persona-cli.ts:223
-    service-cli.ts:132
-    snapshot-cli.ts:127
-    vault-cli.ts:156
-    Preview:   }
-
-  ... and 48 more
+  ... and 93 more

@@ -41,6 +41,30 @@ async function main() {
     return;
   }
 
+  if (args[0] === "dispatch") {
+    const { spawn } = await import("node:child_process");
+    const dispatchCli = new URL("./dispatch-cli.mjs", import.meta.url).pathname;
+    const child = spawn(process.execPath, [dispatchCli, ...args.slice(1)], { stdio: "inherit" });
+    child.on("exit", (code) => process.exit(code ?? 0));
+    return;
+  }
+
+  if (args[0] === "cron") {
+    const { spawn } = await import("node:child_process");
+    const cronCli = new URL("./cron-cli.mjs", import.meta.url).pathname;
+    const child = spawn(process.execPath, [cronCli, ...args.slice(1)], { stdio: "inherit" });
+    child.on("exit", (code) => process.exit(code ?? 0));
+    return;
+  }
+
+  if (args[0] === "webdebug") {
+    const { spawn } = await import("node:child_process");
+    const webdebugCli = new URL("./webdebug-cli.mjs", import.meta.url).pathname;
+    const child = spawn(process.execPath, [webdebugCli, ...args.slice(1)], { stdio: "inherit" });
+    child.on("exit", (code) => process.exit(code ?? 0));
+    return;
+  }
+
   if (args[0] === "serve") {
     const { startWebServer } = await import("./web/server.js");
     await startWebServer(config);
@@ -69,7 +93,11 @@ async function main() {
       "Usage:\n" +
       "  miniclaw --message 'your message'         One-shot (jailed to cwd)\n" +
       "  miniclaw /path --message 'your message'    One-shot (jailed to /path)\n" +
-      "  miniclaw serve                             Web chat UI on :3000\n" +
+      "  miniclaw serve                             Web chat UI\n" +
+      "  miniclaw service <cmd>                     Manage web server daemon\n" +
+      "  miniclaw dispatch <cmd>                    Manage autonomous dispatch\n" +
+      "  miniclaw cron <cmd>                        Manage dispatch cron timer\n" +
+      "  miniclaw webdebug <cmd>                    Manage debug web server\n" +
       "  Set TELEGRAM_BOT_TOKEN in .env              Telegram bot mode",
     );
     process.exit(1);

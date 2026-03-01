@@ -9,11 +9,12 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INSTALL_DIR=""
+DEV_MODE=0
 
 # ── Parse args ───────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --dev)    INSTALL_DIR="$HOME/.miniclaw-dev"; shift ;;
+    --dev)    INSTALL_DIR="$HOME/.miniclaw-dev"; DEV_MODE=1; shift ;;
     --dir)    INSTALL_DIR="$2"; shift 2 ;;
     *)        echo "Unknown option: $1"; exit 1 ;;
   esac
@@ -59,6 +60,8 @@ cp "$SCRIPT_DIR/dist/kanban-cli.mjs"   "$INSTALL_DIR/system/lib/kanban-cli.mjs"
 cp "$SCRIPT_DIR/dist/kb-cli.mjs"      "$INSTALL_DIR/system/lib/kb-cli.mjs"
 cp "$SCRIPT_DIR/dist/service-cli.mjs" "$INSTALL_DIR/system/lib/service-cli.mjs"
 cp "$SCRIPT_DIR/dist/dispatch-cli.mjs" "$INSTALL_DIR/system/lib/dispatch-cli.mjs"
+cp "$SCRIPT_DIR/dist/cron-cli.mjs"     "$INSTALL_DIR/system/lib/cron-cli.mjs"
+cp "$SCRIPT_DIR/dist/webdebug-cli.mjs" "$INSTALL_DIR/system/lib/webdebug-cli.mjs"
 
 # Copy sourcemaps if they exist
 cp "$SCRIPT_DIR/dist/miniclaw.mjs.map"      "$INSTALL_DIR/system/lib/miniclaw.mjs.map"      2>/dev/null || true
@@ -70,6 +73,8 @@ cp "$SCRIPT_DIR/dist/kanban-cli.mjs.map"   "$INSTALL_DIR/system/lib/kanban-cli.m
 cp "$SCRIPT_DIR/dist/kb-cli.mjs.map"      "$INSTALL_DIR/system/lib/kb-cli.mjs.map"      2>/dev/null || true
 cp "$SCRIPT_DIR/dist/service-cli.mjs.map" "$INSTALL_DIR/system/lib/service-cli.mjs.map" 2>/dev/null || true
 cp "$SCRIPT_DIR/dist/dispatch-cli.mjs.map" "$INSTALL_DIR/system/lib/dispatch-cli.mjs.map" 2>/dev/null || true
+cp "$SCRIPT_DIR/dist/cron-cli.mjs.map"     "$INSTALL_DIR/system/lib/cron-cli.mjs.map"     2>/dev/null || true
+cp "$SCRIPT_DIR/dist/webdebug-cli.mjs.map" "$INSTALL_DIR/system/lib/webdebug-cli.mjs.map" 2>/dev/null || true
 
 # Symlink node_modules so native add-ons (better-sqlite3, sqlite-vec, etc.)
 # are resolvable from the installed bundles via createRequire(import.meta.url).
@@ -119,25 +124,33 @@ write_wrapper "miniclaw-kanban"   "kanban-cli.mjs"
 write_wrapper "miniclaw-kb"      "kb-cli.mjs"
 write_wrapper "miniclaw-service"  "service-cli.mjs"
 write_wrapper "miniclaw-dispatch" "dispatch-cli.mjs"
+write_wrapper "miniclaw-cron"     "cron-cli.mjs"
+write_wrapper "miniclaw-webdebug" "webdebug-cli.mjs"
 
 echo "  system/bin/ updated"
 
-# ── Interactive persona setup ─────────────────────────────────────────
-# The TUI handles: persona creation, legacy file import, vault init.
-# Skips automatically on re-install (personas already exist) or non-TTY.
-echo ""
-export MINICLAW_HOME="$INSTALL_DIR"
-node "$INSTALL_DIR/system/lib/install-tui.mjs" || true
+if [[ $DEV_MODE -eq 0 ]]; then
+  # ── Interactive persona setup ──────────────────────────────────────
+  # The TUI handles: persona creation, legacy file import, vault init.
+  # Skips automatically on re-install (personas already exist) or non-TTY.
+  echo ""
+  export MINICLAW_HOME="$INSTALL_DIR"
+  node "$INSTALL_DIR/system/lib/install-tui.mjs" || true
 
-# ── Install service daemon ──────────────────────────────────────────
-echo ""
-echo "Installing service daemon..."
-node "$INSTALL_DIR/system/lib/service-cli.mjs" install || echo "  Service install skipped — run 'miniclaw-service install' manually"
+  # ── Install service daemon ────────────────────────────────────────
+  echo ""
+  echo "Installing service daemon..."
+  node "$INSTALL_DIR/system/lib/service-cli.mjs" install || echo "  Service install skipped — run 'miniclaw-service install' manually"
 
-# ── Install dispatch cron ──────────────────────────────────────────
-echo ""
-echo "Installing dispatch timer..."
-node "$INSTALL_DIR/system/lib/dispatch-cli.mjs" install || echo "  Dispatch cron skipped — run 'miniclaw-dispatch install' manually"
+  # ── Install dispatch cron ─────────────────────────────────────────
+  echo ""
+  echo "Installing dispatch timer..."
+  node "$INSTALL_DIR/system/lib/dispatch-cli.mjs" install || echo "  Dispatch cron skipped — run 'miniclaw-dispatch install' manually"
+else
+  echo ""
+  echo "  Dev mode: skipping persona TUI, service daemon, and dispatch cron install."
+  echo "  Binary copied to $INSTALL_DIR — plist unchanged (MINICLAW_HOME stays as prod)."
+fi
 
 # ── PATH setup ───────────────────────────────────────────────────────
 BIN_DIR="$INSTALL_DIR/system/bin"
@@ -181,6 +194,30 @@ else
       echo "Added to $RC_FILE — restart your shell or run: source $RC_FILE"
     fi
   fi
+fi
+
+echo ""
+
+# ── OpenClaw browser extension (optional but recommended) ─────────────────
+if command -v openclaw &>/dev/null; then
+  echo "Installing OpenClaw browser extension..."
+  EXT_PATH=$(openclaw browser extension install 2>/dev/null | grep "^~\|^/" | head -1)
+  if [[ -n "$EXT_PATH" ]]; then
+    echo "  Extension installed → $EXT_PATH"
+    echo ""
+    echo "  To enable browser control:"
+    echo "  1. Open Chrome → chrome://extensions → enable 'Developer mode'"
+    echo "  2. Click 'Load unpacked' → select: $EXT_PATH"
+    echo "  3. Pin 'OpenClaw Browser Relay' and click it on any tab (badge: ON)"
+    # Open Chrome to the extensions page automatically
+    if [[ "$(uname)" == "Darwin" ]]; then
+      open -a "Google Chrome" "chrome://extensions" 2>/dev/null || true
+    fi
+  else
+    echo "  (run 'openclaw browser extension install' manually to set up browser control)"
+  fi
+else
+  echo "  Tip: install OpenClaw (npm i -g openclaw) for browser control support"
 fi
 
 echo ""

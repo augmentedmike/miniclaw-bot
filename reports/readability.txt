@@ -6,35 +6,39 @@ FILE SCORES (worst first):
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
 ────────────────────────────────────────────────────────────────────────────────
-  D      53     35    146     5%    15    8    kanban.ts
+  D      54     35    146     7%    15    8    kanban.ts
+  C      55     41    126     4%    10    5    kb-cli.ts
   C      57     40    176     8%    12    5    kb/engine.ts
-  C      57     40    117     5%     6    5    kb-cli.ts
   C      58     38    116     1%     6    8    tools/files.ts
-  C      61     29    171     2%    18    4    web/kanban-ui.ts
+  C      61     41    246     9%    22    6    kb-video-ingest.ts
+  C      61     34    171     4%    32    4    web/kanban-ui.ts
   C      62     32    120     7%     4    6    dispatch.ts
-  C      62     30     80     5%    11    6    web/handler.ts
+  C      62     33     91     7%    15    6    web/handler.ts
   C      63     41    116     7%     5    6    tools/grep.ts
   C      64     39    133     7%     8    5    agent.ts
   C      64     36    114    10%     3    9    telegram/handlers.ts
+  C      65     33    155     3%     3    5    kanban-cli.ts
   C      66     46    123     0%     7    3    tools/memory.ts
   C      68     45    175     5%     4    5    tools/kb.ts
   C      69     34    102     4%     6    4    service.ts
   B      70     38     94     7%     6    6    tools/glob.ts
   B      72     35    100     7%     8    6    dispatch-cli.ts
   B      72     26     83     1%     4    6    web/ui.ts
-  B      74     34    155     4%     0    5    kanban-cli.ts
   B      75     47    149     2%     0    7    tools/edit.ts
   B      76     36    110    10%     3    5    tools/web.ts
   B      78     30     93     0%     3    4    setup.ts
   B      78     34     92    15%     3    6    telegram/send.ts
+  B      79     33     96     7%     6    4    cron-cli.ts
   B      79     30     87     8%     6    4    service-cli.ts
   B      79     30    103    23%    12    4    vault.ts
   B      80     38    131     0%     0    5    tools/kanban.ts
   B      82     35     84     8%     3    3    auth.ts
   B      82     46    120    16%     0    8    tools/shell.ts
+  B      82     33     96     6%     4    4    webdebug-cli.ts
   B      83     35    121    20%     8    4    context.ts
-  B      83     34    124     7%     1    5    index.ts
+  A      85     38    124     5%     0    5    index.ts
   A      86     40    133    11%     1    6    tools/vault.ts
+  A      87     35    122    10%     7    3    loop-manager.ts
   A      89     34    101    24%     3    4    memory/search.ts
   A      89     39    112     8%     0    6    tools/claude-code.ts
   A      90     32     97    19%     1    5    snapshot.ts
@@ -59,5 +63,5 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   A     100     33     85    28%     0    4    tools/util.ts
   A     100     23     72     0%     0    1    types.ts
 
-Average readability score: 82/100
-Grades: A:24 B:15 C:12 D:1 F:0
+Average readability score: 81/100
+Grades: A:26 B:15 C:14 D:1 F:0
