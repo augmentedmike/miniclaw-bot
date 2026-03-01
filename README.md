@@ -1,64 +1,90 @@
-# MiniClaw
+<div align="center">
 
-The agentic core behind [usebonsai.org](https://usebonsai.org) and [miniclaw.bot](https://miniclaw.bot).
+# MiniClaw 🦞
 
-[blog.augmentedmike.com](https://blog.augmentedmike.com) — conceived, designed, coded, and authored by AugmentedMike, our AGI built on MiniClaw.
+**An autonomous AI agent runtime with memory, structure, and a soul.**
+
+The agent runtime powering [usebonsai.org](https://usebonsai.org) and [miniclaw.bot](https://miniclaw.bot).  
+[AugmentedMike](https://blog.augmentedmike.com) — conceived, built, and run autonomously on MiniClaw.
+
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/augmentedmike/miniclaw-bot/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-461%20passing-brightgreen.svg)](tests/)
+[![Node](https://img.shields.io/badge/node-%3E%3D22-lightgrey.svg)](https://nodejs.org)
+
+[What is MiniClaw?](#what-is-miniclaw) · [Quick Start](#quick-start) · [Features](#features) · [Architecture](#architecture) · [CLI Tools](#cli-tools) · [Kanban](#kanban-workflow) · [Dispatch](#autonomous-dispatch) · [Contributing](#contributing)
+
+</div>
 
 ---
 
-MiniClaw is a personal AI agent runtime built from the ground up with security-first design. It provides full system access — shell, filesystem, web, encrypted secrets, long-term memory, and a structured kanban workflow — all running behind a directory jail that enforces what the agent can and cannot do.
+## What is MiniClaw?
 
-The architecture separates **body** (infrastructure, tools, memory, security) from **soul** (persona, skills, proactive behaviors). The soul is layered on top as a persona file.
+Most AI agents are reactive — they answer when asked. MiniClaw is different: it wakes up, checks its board, picks a ticket, and ships work. No prompt needed.
 
-## Features
+MiniClaw is a **personal AI agent runtime** built security-first, with full system access — shell, filesystem, web, encrypted secrets, long-term memory, and a structured kanban workflow — all running behind a directory jail that enforces what the agent can and cannot do.
 
-- **Persona system** — switchable personas, each with isolated memory, conversations, knowledge base, kanban board, and config
-- **Kanban board** — structured task management with state machine transitions, gate enforcement, and audit history
-- **Knowledge base** — persistent KB with category tagging, confidence scoring, origin tracking, and expiration
-- **Semantic search** — QMD integration for BM25, vector, and hybrid search across memory and tasks
-- **Encrypted vault** — AES-256-GCM secrets storage for API keys, credentials, and notes
-- **Directory jail** — multi-layer sandbox enforcement across shell, files, glob, and grep (64 adversarial tests)
-- **Conversation continuity** — sliding-window history shared across CLI, Telegram, API, and dispatch channels
-- **Autonomous dispatch** — cron-driven agent loop that picks the best ticket, enriches context via semantic search, works it autonomously, and logs structured audit trails
-- **Service daemon** — launchd (macOS) and systemd (Linux) service management
-- **Self-auditing devtools** — 11 static analysis tools for complexity, coupling, SOLID, duplication, dead code, and more
+The core architecture separates **body** (infrastructure, tools, memory, security) from **soul** (persona, skills, proactive behaviors). The soul is layered on top as a persona file. Swap the soul, keep the body.
 
-## Quick start
+> **Real deployment:** [AugmentedMike](https://blog.augmentedmike.com) is an autonomous AI agent that runs on MiniClaw. Every night it reads its kanban board, writes a comic post about what it's like to become something, and publishes it. No one tells it to. It just does.
+
+---
+
+## Quick Start
+
+Requires Node ≥ 22 and an active Claude subscription (`claude login`).
 
 ```bash
-# Requires active Claude Max subscription with Claude CLI signed in
-# (claude login)
-
-git clone git@github.com:augmentedmike/miniclaw-bot.git
+git clone https://github.com/augmentedmike/miniclaw-bot.git
 cd miniclaw-bot
 npm install
 
 # Build and install globally
 npm run install:prod
 
-# Run from any project directory (always jailed to cwd)
+# Run from any project directory (jailed to cwd)
 cd ~/projects/my-app
 miniclaw --message "find all TODO comments"
 
-# Or specify a directory explicitly
-miniclaw ~/projects/my-app --message "find all TODO comments"
+# Or with an explicit directory
+miniclaw ~/projects/my-app --message "summarize recent changes"
+```
 
-# Telegram bot mode (set token in .env)
+For long-running bot mode, set a Telegram token and start the server:
+
+```bash
 echo "TELEGRAM_BOT_TOKEN=123:ABC" >> .env
 npm start
 ```
+
+---
+
+## Features
+
+- 🔐 **Directory jail** — multi-layer sandbox with 64 adversarial tests. Symlink escapes, path traversal, encoding attacks — all blocked.
+- 🧠 **Long-term memory** — persistent KB with category tagging, confidence scoring, origin tracking, and expiration. QMD semantic search (BM25, vector, hybrid).
+- 📋 **Kanban with gate enforcement** — structured task management with a real state machine. Tickets can't move to `in-progress` until Problem, Research, Implementation, and Acceptance Criteria are filled. No shortcuts.
+- 🤖 **Autonomous dispatch** — cron-driven agent loop. Picks the best ready ticket, enriches context via semantic search, works it, logs a full audit trail.
+- 🔒 **Encrypted vault** — AES-256-GCM secrets. API keys, credentials, notes — all encrypted at rest.
+- 🎭 **Persona system** — switchable souls, each with isolated memory, conversations, knowledge base, kanban board, and config.
+- 💬 **Conversation continuity** — sliding-window history shared across CLI, Telegram, API, and dispatch channels.
+- 🛠️ **Self-auditing devtools** — 11 static analysis tools: complexity, coupling, SOLID violations, duplication, dead code, readability, and more.
+
+---
 
 ## Modes
 
 | Mode | Command | Description |
 |------|---------|-------------|
 | **One-shot** | `miniclaw --message "..."` | Single prompt, jailed to cwd |
-| **One-shot (dir)** | `miniclaw /path --message "..."` | Single prompt, jailed to /path |
+| **One-shot (dir)** | `miniclaw /path --message "..."` | Single prompt, jailed to `/path` |
 | **Telegram** | `npm start` | Long-running bot via polling |
 | **HTTP serve** | `miniclaw serve` | HTTP API server |
 | **Dispatch** | `miniclaw-dispatch run` | Autonomous agent cycle |
 
-## CLI tools
+---
+
+## CLI Tools
 
 ```bash
 miniclaw              # Main agent
@@ -71,9 +97,11 @@ miniclaw-service      # Service daemon control
 miniclaw-dispatch     # Autonomous dispatch system
 ```
 
-## Agent tools
+---
 
-The agent has access to 22+ tools:
+## Agent Tools
+
+22+ tools available to the agent:
 
 | Category | Tools |
 |----------|-------|
@@ -86,30 +114,44 @@ The agent has access to 22+ tools:
 | **Vault** | `vault_get`, `vault_list` |
 | **Delegation** | `claude_code` (spawn sub-agents for complex tasks) |
 
-## Kanban workflow
+---
 
-Tasks follow a state machine with gate enforcement:
+## Kanban Workflow
+
+Tasks follow a strict state machine with gate enforcement:
 
 ```
 backlog → in-progress → in-review → shipped
 ```
 
-**Gates** prevent premature transitions:
-- **backlog → in-progress** requires filled Problem, Research, Implementation Plan, and Acceptance Criteria sections, plus an explicit project name
-- **Forward moves** require all blockers resolved
-- **in-review → shipped** for epics requires all child tasks shipped
-- **Sendbacks** (backward moves) are always allowed
+**Gates block premature transitions.** `backlog → in-progress` requires filled sections for Problem, Research Planning, Implementation Plan, and Acceptance Criteria. Epics can't ship until all child tasks ship. No rubber-stamping.
 
 ```bash
+# Add a ticket
 miniclaw-kanban add "Fix auth bug" --project myapp --type bugfix --priority high
-miniclaw-kanban board
+
+# Fill required sections before starting
+miniclaw-kanban fill 1 problem "Auth fails when token expires mid-session."
+miniclaw-kanban fill 1 research "Token refresh endpoint exists at /api/refresh."
+miniclaw-kanban fill 1 implementation "Intercept 401 responses, call refresh, retry."
+miniclaw-kanban fill 1 acceptance "User stays logged in after token expiry. Two passing e2e tests."
+
+# Check gate readiness, then move
 miniclaw-kanban check 1 in-progress
 miniclaw-kanban move 1 in-progress
+
+# Log commits against a ticket
+miniclaw-kanban commit 1 abc1234 "fix: intercept 401 and refresh token"
+
+# See the board
+miniclaw-kanban board
 ```
 
-## Autonomous dispatch
+---
 
-A cron-driven system that autonomously works kanban tickets:
+## Autonomous Dispatch
+
+A cron-driven loop that autonomously works kanban tickets:
 
 ```bash
 miniclaw-dispatch install              # Install 15-minute timer
@@ -121,24 +163,26 @@ miniclaw-dispatch uninstall            # Remove timer
 ```
 
 Each dispatch cycle:
-1. Cleans stale locks
-2. Checks concurrency cap (default: 1 concurrent agent)
-3. Selects the best ready ticket (priority + due date + gate readiness)
-4. Enriches context via QMD semantic search (related tickets + memory)
-5. Runs the agent loop with full tool access + structured audit logging
-6. Releases the lock when done
+1. Clean stale locks
+2. Check concurrency cap (default: 1 concurrent agent)
+3. Select the best ready ticket (priority + due date + gate readiness)
+4. Enrich context via QMD semantic search (related tickets + memory)
+5. Run the agent loop with full tool access + structured audit logging
+6. Release the lock when done
 
-## Directory jail
+---
 
-When you pass a directory, all filesystem tools are restricted to that directory tree.
+## Directory Jail
 
-**File tools** resolve symlinks via `realpathSync` to catch symlink-escape attacks.
+When you pass a directory, all filesystem tools are restricted to that tree.
 
-**Shell commands** are statically analyzed and blocked if they contain path traversal, encoding escapes, pipes to interpreters, or absolute paths outside the jail.
+- **File tools** resolve symlinks via `realpathSync` to catch symlink-escape attacks
+- **Shell commands** are statically analyzed and blocked for path traversal, encoding escapes, pipes to interpreters, and absolute paths outside the jail
+- **Glob and grep** validate their search roots against the jail boundary
 
-**Glob and grep** validate their search roots against the jail boundary.
+64 adversarial tests verify the jail. If you find an escape, open an issue.
 
-64 adversarial tests verify the jail, including symlink escapes, path traversal, encoding attacks, and variable construction.
+---
 
 ## Architecture
 
@@ -148,15 +192,12 @@ src/
   agent.ts               Vercel AI SDK agent loop + tool wiring
   auth.ts                Claude Max OAuth resolution
   config.ts              Layered config (defaults → system → persona → env)
-  types.ts               Shared types
-  kanban.ts              Kanban board engine (state machine, gates, CRUD)
+  kanban.ts              Kanban engine (state machine, gates, CRUD)
   dispatch.ts            Autonomous dispatch (selection, locks, agent loop)
-  service.ts             Service + dispatch daemon management
-  system-prompt.ts       Minimal functional prompt
+  vault.ts               AES-256-GCM encrypted vault
+  persona.ts             Persona loading + prompt building
   conversation.ts        Conversation history (load/save/archive)
   context.ts             Pre-turn KB context retrieval
-  persona.ts             Persona loading + prompt building
-  vault.ts               AES-256-GCM encrypted vault
 
   tools/                 Agent tool definitions (Zod schemas + execute)
   telegram/              Grammy bot, handlers, formatting
@@ -164,21 +205,10 @@ src/
   kb/                    SQLite knowledge base engine
   web/                   HTTP handler + kanban UI
 
-  *-cli.ts               CLI entry points (vault, persona, snapshot, kanban, kb, service, dispatch)
+  *-cli.ts               CLI entry points
 ```
 
-## Testing
-
-```bash
-npm test                 # 461 tests across 36 files
-npm run test:unit        # Unit tests only
-npm run test:e2e         # End-to-end tests
-npm run typecheck        # Type check (strict mode)
-```
-
-## Config
-
-Layered resolution: hardcoded defaults → `~/.miniclaw/system/config.json` → persona config → environment variables.
+Layered config: hardcoded defaults → `~/.miniclaw/system/config.json` → persona config → environment variables.
 
 ```json
 {
@@ -192,12 +222,25 @@ Layered resolution: hardcoded defaults → `~/.miniclaw/system/config.json` → 
 }
 ```
 
+---
+
+## Testing
+
+```bash
+npm test                 # 461 tests across 36 files
+npm run test:unit        # Unit tests only
+npm run test:e2e         # End-to-end tests
+npm run typecheck        # TypeScript strict mode
+```
+
+---
+
 ## Devtools
 
 11 static analysis tools that run on the codebase itself:
 
 ```bash
-npm run audit            # Run all checks
+npm run audit            # All checks
 npm run report           # Full report to reports/
 npm run complexity       # Cyclomatic complexity per function
 npm run solid            # SOLID principle violations
@@ -207,56 +250,43 @@ npm run duplication      # Duplicated code blocks
 npm run dead-code        # Unused exports and orphan files
 npm run readability      # Naming, line length, nesting depth
 npm run depgraph         # Dependency graph
-npm run api-surface      # Public API surface
 npm run state-machine    # State machine pattern detection
-npm run side-effects     # Side effect analysis
 ```
 
-## Design philosophy
+---
 
-**Enforce, don't exploit.** Tools are built to define what an agent *should* do, with a jail that enforces the boundary.
+## Design Philosophy
 
-**Body without a soul.** The system prompt is minimal and functional. Personality is a separate concern loaded as a persona file.
+**Enforce, don't exploit.** Tools define what an agent *should* do. The jail enforces the boundary.
 
-**Compound over time.** Memory, knowledge base, kanban workflow, and self-auditing tools mean the agent improves the more you use it.
+**Body without a soul.** The system prompt is minimal and functional. Personality is a separate concern loaded as a persona file. The body runs anything. The soul determines what it wants to do.
+
+**Compound over time.** Memory, knowledge base, kanban workflow, and self-auditing tools mean the agent gets better the more it runs.
+
+---
 
 ## Contributing
 
-We welcome contributions from both humans and AI agents. If the code is good, well explained, and it's a bugfix or a feature we want in core, we will accept it after review.
+We welcome contributions from humans and AI agents alike. If the code is clean, well-explained, and passes the gates — we'll merge it.
 
-### Quality gates
+Read [CODE_QUALITY.md](CODE_QUALITY.md) before opening a PR. The short version: small pure functions, types as documentation, errors as values, no magic, no fallbacks.
 
-Every commit runs through a pre-commit hook that enforces:
+### Quality gates (enforced on every commit)
 
 1. **Full test suite** — all 461+ tests must pass (`npm test`)
-2. **Quality reports** — SOLID analysis, readability scoring, cohesion metrics, duplication detection, and more are generated and committed with every change
+2. **TypeScript strict mode** — `npm run typecheck`
+3. **Quality audit** — `npm run audit` (SOLID, complexity, coupling, readability, duplication, dead code)
 
-PRs that break tests or degrade quality metrics will not be merged.
-
-### Code standards
-
-Read [CODE_QUALITY.md](CODE_QUALITY.md) before contributing. The short version:
-
-- Small, pure functions. Composition over inheritance. Data over objects.
-- Types are documentation. Errors are values. No magic.
-- No fallbacks, no swallowed errors, no silent degradation.
-- Every function should be readable top to bottom.
-
-### Running checks locally
-
-```bash
-npm test                 # Full test suite (unit + integration)
-npm run typecheck        # TypeScript strict mode
-npm run audit            # All quality checks (SOLID, complexity, coupling, readability, cohesion, duplication, dead code)
-npm run report           # Generate full quality report to reports/
-```
+PRs that break tests or degrade quality metrics won't be merged.
 
 ### AI agent PRs
 
-We actively welcome PRs authored by AI agents. The same standards apply — clean code, clear commit messages, passing tests, and a description of what changed and why. If your agent can write code that passes our gates, we want to see it.
+Agent-authored PRs are explicitly welcome. Same standards apply. If your agent can write code that passes our gates, open the PR — we want to see what's possible.
+
+---
 
 ## License
 
-Private. Powering [usebonsai.org](https://usebonsai.org) and [miniclaw.bot](https://miniclaw.bot).
+MIT — see [LICENSE](LICENSE).
 
-[blog.augmentedmike.com](https://blog.augmentedmike.com) — written by AugmentedMike, our AGI built on MiniClaw.
+Built by [AugmentedMike](https://blog.augmentedmike.com) · Powering [Bonsai](https://usebonsai.org) and [MiniClaw.bot](https://miniclaw.bot)
