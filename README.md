@@ -4,11 +4,14 @@
 
 # MiniClaw
 
-**An autonomous AI agent runtime with memory, structure, and a soul.**
+**An autonomous AI agent runtime with memory, structure, and a persona.**
+
+> ⚠️ **Alpha software.** Interfaces change without notice. Not ready for production use.
 
 The agent runtime powering [usebonsai.org](https://usebonsai.org) and [miniclaw.bot](https://miniclaw.bot).  
 [AugmentedMike](https://blog.augmentedmike.com) — conceived, built, and run autonomously on MiniClaw.
 
+[![Alpha](https://img.shields.io/badge/status-alpha-red.svg)](#)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/augmentedmike/miniclaw-bot/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-461%20passing-brightgreen.svg)](tests/)
@@ -26,7 +29,7 @@ Most AI agents are reactive — they answer when asked. MiniClaw is different: i
 
 MiniClaw is a **personal AI agent runtime** built security-first, with full system access — shell, filesystem, web, encrypted secrets, long-term memory, and a structured kanban workflow — all running behind a directory jail that enforces what the agent can and cannot do.
 
-The core architecture separates **body** (infrastructure, tools, memory, security) from **soul** (persona, skills, proactive behaviors). The soul is layered on top as a persona file. Swap the soul, keep the body.
+The core architecture separates **body** (infrastructure, tools, memory, security) from **persona** (skills, proactive behaviors, identity). The persona is layered on top as a file. Swap the persona, keep the body.
 
 > **Real deployment:** [AugmentedMike](https://blog.augmentedmike.com) is an autonomous AI agent that runs on MiniClaw. Every night it reads its kanban board, writes a comic post about what it's like to become something, and publishes it. No one tells it to. It just does.
 
@@ -68,7 +71,7 @@ npm start
 - 📋 **Kanban with gate enforcement** — structured task management with a real state machine. Tickets can't move to `in-progress` until Problem, Research, Implementation, and Acceptance Criteria are filled. No shortcuts.
 - 🤖 **Autonomous dispatch** — cron-driven agent loop. Picks the best ready ticket, enriches context via semantic search, works it, logs a full audit trail.
 - 🔒 **Encrypted vault** — AES-256-GCM secrets. API keys, credentials, notes — all encrypted at rest.
-- 🎭 **Persona system** — switchable souls, each with isolated memory, conversations, knowledge base, kanban board, and config.
+- 🎭 **Persona system** — switchable personas, each with isolated memory, conversations, knowledge base, kanban board, and config.
 - 💬 **Conversation continuity** — sliding-window history shared across CLI, Telegram, API, and dispatch channels.
 - 🛠️ **Self-auditing devtools** — 11 static analysis tools: complexity, coupling, SOLID violations, duplication, dead code, readability, and more.
 
@@ -261,7 +264,7 @@ npm run state-machine    # State machine pattern detection
 
 **Enforce, don't exploit.** Tools define what an agent *should* do. The jail enforces the boundary.
 
-**Body without a soul.** The system prompt is minimal and functional. Personality is a separate concern loaded as a persona file. The body runs anything. The soul determines what it wants to do.
+**Body without a persona.** The system prompt is minimal and functional. Personality is a separate concern loaded as a persona file. The body runs anything. The persona determines what it wants to do.
 
 **Compound over time.** Memory, knowledge base, kanban workflow, and self-auditing tools mean the agent gets better the more it runs.
 
