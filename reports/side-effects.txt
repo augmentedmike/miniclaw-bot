@@ -26,9 +26,9 @@ IMPURE FUNCTIONS (have side effects):
     getActiveLocks:101  [fs]
     ensureKanbanCollection:208  [fs]
     indexKanban:224  [child_process]
-    createAuditWriter:322  [fs] [date]
-    getAuditLogs:333  [fs]
-    runDispatchCycle:479  [console]
+    createAuditWriter:326  [fs] [date]
+    getAuditLogs:337  [fs]
+    runDispatchCycle:483  [console]
   kanban.ts:
     initBoard:174  [fs] [date]
     parseTaskFile:201  [date]
@@ -123,8 +123,8 @@ PURE FUNCTIONS (no side effects):
   ✓ context.ts:12  retrieveContext
   ✓ dispatch.ts:131  selectNextTask
   ✓ dispatch.ts:240  searchRelatedTickets
-  ✓ dispatch.ts:283  buildDispatchContext
-  ✓ dispatch.ts:426  runDispatchLoop
+  ✓ dispatch.ts:287  buildDispatchContext
+  ✓ dispatch.ts:430  runDispatchLoop
   ✓ kanban.ts:91  validateTransition
   ✓ kanban.ts:95  isValidState
   ✓ kanban.ts:99  isValidPriority

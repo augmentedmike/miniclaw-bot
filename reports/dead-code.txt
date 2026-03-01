@@ -14,9 +14,9 @@
    dispatch.ts:208  export ensureKanbanCollection
    dispatch.ts:224  export indexKanban
    dispatch.ts:240  export searchRelatedTickets
-   dispatch.ts:283  export buildDispatchContext
-   dispatch.ts:322  export createAuditWriter
-   dispatch.ts:426  export runDispatchLoop
+   dispatch.ts:287  export buildDispatchContext
+   dispatch.ts:326  export createAuditWriter
+   dispatch.ts:430  export runDispatchLoop
    kanban.ts:91  export validateTransition
    kanban.ts:117  export extractSection
    kanban.ts:135  export isSectionFilled

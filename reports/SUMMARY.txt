@@ -1,4 +1,4 @@
-Quality Report — 2026-03-01T21:00:58.125Z
+Quality Report — 2026-03-01T21:13:17.284Z
 ==================================================
 
 ╔══════════════════════════════════════════════════╗
@@ -101,7 +101,7 @@ Modules: 6  Files: 56  Dependencies: 114  Cycles: 0
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Cmplx  LOC  Nest  Params  Function
 ────────────────────────────────────────────────────────────────────────────────
-  F      63   255    6      1     parseQmdJson (dispatch.ts:268)
+  F      63   255    6      1     parseQmdJson (dispatch.ts:272)
   F      45   143    8      2     checkCommandJail (tools/shell.ts:12)
   F      42   229    6      3     extractFactSegments (kb-video-ingest.ts:177)
   C      40    48    3      0     loadConfig (config.ts:110)
@@ -141,7 +141,7 @@ Grade  Cmplx  LOC  Nest  Params  Function
   C      13    62    2      1     renderCard (web/kanban-ui.ts:569)
   B      12    14    3      1     await (agent.ts:122)
   C      12    24    4      1     extractTextTurns (conversation.ts:23)
-  C      12    43    3      1     runDispatchCycle (dispatch.ts:479)
+  C      12    43    3      1     runDispatchCycle (dispatch.ts:483)
   B      12    14    1      1     switch (kb-cli.ts:425)
   D      12    53    3      6     buildSystemPrompt (system-prompt.ts:5)
   B      12    27    2      1     map (web/kanban-ui.ts:402)
@@ -154,7 +154,7 @@ Grade  Cmplx  LOC  Nest  Params  Function
   D      11    25    6      4     sendResponse (telegram/send.ts:11)
   F      11    52    6      1     createGlobTool (tools/glob.ts:5)
   B      11    21    3      0     load (web/kanban-ui.ts:697)
-  B      10    47    5      2     runDispatchLoop (dispatch.ts:426)
+  B      10    47    5      2     runDispatchLoop (dispatch.ts:430)
   B      10    50    3      1     handleAdd (kanban-cli.ts:117)
   B      10    29    5      1     handleList (kanban-cli.ts:168)
   A      10    12    1      1     switch (kb/engine.ts:246)
@@ -180,7 +180,7 @@ SUMMARY:
 
 SRP (Single Responsibility):
   ✗ dispatch.ts: 16 exports — consider splitting into focused modules
-  ✗ dispatch.ts: 522 lines — file is very long, consider extracting
+  ✗ dispatch.ts: 526 lines — file is very long, consider extracting
   ✗ kanban-cli.ts: 625 lines — file is very long, consider extracting
   ✗ kanban.ts: 50 exports — consider splitting into focused modules
   ✗ kanban.ts: 985 lines — file is very long, consider extracting
@@ -262,9 +262,9 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   C      55     41    126     4%    10    5    kb-cli.ts
   C      57     40    176     8%    12    5    kb/engine.ts
   C      58     38    116     1%     6    8    tools/files.ts
+  C      59     32    120     6%     5    6    dispatch.ts
   C      61     41    246     9%    22    6    kb-video-ingest.ts
   C      61     34    171     4%    32    4    web/kanban-ui.ts
-  C      62     32    120     7%     4    6    dispatch.ts
   C      62     33     91     7%    15    6    web/handler.ts
   C      63     41    116     7%     5    6    tools/grep.ts
   C      64     39    133     7%     8    5    agent.ts
@@ -384,9 +384,9 @@ IMPURE FUNCTIONS (have side effects):
     getActiveLocks:101  [fs]
     ensureKanbanCollection:208  [fs]
     indexKanban:224  [child_process]
-    createAuditWriter:322  [fs] [date]
-    getAuditLogs:333  [fs]
-    runDispatchCycle:479  [console]
+    createAuditWriter:326  [fs] [date]
+    getAuditLogs:337  [fs]
+    runDispatchCycle:483  [console]
   kanban.ts:
     initBoard:174  [fs] [date]
     parseTaskFile:201  [date]
@@ -481,8 +481,8 @@ PURE FUNCTIONS (no side effects):
   ✓ context.ts:12  retrieveContext
   ✓ dispatch.ts:131  selectNextTask
   ✓ dispatch.ts:240  searchRelatedTickets
-  ✓ dispatch.ts:283  buildDispatchContext
-  ✓ dispatch.ts:426  runDispatchLoop
+  ✓ dispatch.ts:287  buildDispatchContext
+  ✓ dispatch.ts:430  runDispatchLoop
   ✓ kanban.ts:91  validateTransition
   ✓ kanban.ts:95  isValidState
   ✓ kanban.ts:99  isValidPriority
@@ -1229,7 +1229,7 @@ Total: 62 state machines, 231 states, 194 transitions
 ║           DUPLICATION REPORT                    ║
 ╚══════════════════════════════════════════════════╝
 
-⚠  DUPLICATED BLOCKS (113):
+⚠  DUPLICATED BLOCKS (112):
 
   Block (5 lines) found in 4 files:
     agent.ts:143
@@ -1240,7 +1240,7 @@ Total: 62 state machines, 231 states, 194 transitions
 
   Block (5 lines) found in 2 files:
     agent.ts:161
-    dispatch.ts:295
+    dispatch.ts:299
     Preview:         }
 
   Block (5 lines) found in 3 files:
@@ -1282,7 +1282,7 @@ Total: 62 state machines, 231 states, 194 transitions
 
   Block (5 lines) found in 2 files:
     context.ts:21
-    dispatch.ts:296
+    dispatch.ts:300
     Preview:     }
 
   Block (5 lines) found in 2 files:
@@ -1297,7 +1297,7 @@ Total: 62 state machines, 231 states, 194 transitions
 
   Block (5 lines) found in 6 files:
     conversation.ts:58
-    dispatch.ts:263
+    dispatch.ts:251
     memory/store.ts:59
     persona.ts:98
     snapshot.ts:173
@@ -1347,7 +1347,7 @@ Total: 62 state machines, 231 states, 194 transitions
     service-cli.ts:32
     Preview: 
 
-  ... and 93 more
+  ... and 92 more
 
 ╔══════════════════════════════════════════════════╗
 ║           DEAD CODE REPORT                      ║
@@ -1365,9 +1365,9 @@ Total: 62 state machines, 231 states, 194 transitions
    dispatch.ts:208  export ensureKanbanCollection
    dispatch.ts:224  export indexKanban
    dispatch.ts:240  export searchRelatedTickets
-   dispatch.ts:283  export buildDispatchContext
-   dispatch.ts:322  export createAuditWriter
-   dispatch.ts:426  export runDispatchLoop
+   dispatch.ts:287  export buildDispatchContext
+   dispatch.ts:326  export createAuditWriter
+   dispatch.ts:430  export runDispatchLoop
    kanban.ts:91  export validateTransition
    kanban.ts:117  export extractSection
    kanban.ts:135  export isSectionFilled

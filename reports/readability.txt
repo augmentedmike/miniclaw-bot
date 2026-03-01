@@ -10,9 +10,9 @@ Grade  Score  AvgLn  MaxLn  Cmts  Magic  Nest  File
   C      55     41    126     4%    10    5    kb-cli.ts
   C      57     40    176     8%    12    5    kb/engine.ts
   C      58     38    116     1%     6    8    tools/files.ts
+  C      59     32    120     6%     5    6    dispatch.ts
   C      61     41    246     9%    22    6    kb-video-ingest.ts
   C      61     34    171     4%    32    4    web/kanban-ui.ts
-  C      62     32    120     7%     4    6    dispatch.ts
   C      62     33     91     7%    15    6    web/handler.ts
   C      63     41    116     7%     5    6    tools/grep.ts
   C      64     39    133     7%     8    5    agent.ts

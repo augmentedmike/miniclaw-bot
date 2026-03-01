@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { runAgent } from "../agent.js";
 import { HTML } from "./ui.js";
 import { KANBAN_HTML } from "./kanban-ui.js";
+import { SUMMARY_HTML } from "./summary-ui.js";
 import { listTasks, boardSummary } from "../kanban.js";
 import { readLoops, purgeStaleLoops, readDispatchLog } from "../loop-manager.js";
 import type { MinicawConfig } from "../types.js";
@@ -55,6 +56,17 @@ export function createRequestHandler(
         "Content-Length": Buffer.byteLength(HTML),
       });
       res.end(HTML);
+      return;
+    }
+
+    // Kanban summary view — executive activity digest
+    if (url === "/kanban/summary" && method === "GET") {
+      res.writeHead(200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
+        "Content-Length": Buffer.byteLength(SUMMARY_HTML),
+      });
+      res.end(SUMMARY_HTML);
       return;
     }
 

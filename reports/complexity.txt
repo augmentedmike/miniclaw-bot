@@ -6,7 +6,7 @@
 ────────────────────────────────────────────────────────────────────────────────
 Grade  Cmplx  LOC  Nest  Params  Function
 ────────────────────────────────────────────────────────────────────────────────
-  F      63   255    6      1     parseQmdJson (dispatch.ts:268)
+  F      63   255    6      1     parseQmdJson (dispatch.ts:272)
   F      45   143    8      2     checkCommandJail (tools/shell.ts:12)
   F      42   229    6      3     extractFactSegments (kb-video-ingest.ts:177)
   C      40    48    3      0     loadConfig (config.ts:110)
@@ -46,7 +46,7 @@ Grade  Cmplx  LOC  Nest  Params  Function
   C      13    62    2      1     renderCard (web/kanban-ui.ts:569)
   B      12    14    3      1     await (agent.ts:122)
   C      12    24    4      1     extractTextTurns (conversation.ts:23)
-  C      12    43    3      1     runDispatchCycle (dispatch.ts:479)
+  C      12    43    3      1     runDispatchCycle (dispatch.ts:483)
   B      12    14    1      1     switch (kb-cli.ts:425)
   D      12    53    3      6     buildSystemPrompt (system-prompt.ts:5)
   B      12    27    2      1     map (web/kanban-ui.ts:402)
@@ -59,7 +59,7 @@ Grade  Cmplx  LOC  Nest  Params  Function
   D      11    25    6      4     sendResponse (telegram/send.ts:11)
   F      11    52    6      1     createGlobTool (tools/glob.ts:5)
   B      11    21    3      0     load (web/kanban-ui.ts:697)
-  B      10    47    5      2     runDispatchLoop (dispatch.ts:426)
+  B      10    47    5      2     runDispatchLoop (dispatch.ts:430)
   B      10    50    3      1     handleAdd (kanban-cli.ts:117)
   B      10    29    5      1     handleList (kanban-cli.ts:168)
   A      10    12    1      1     switch (kb/engine.ts:246)

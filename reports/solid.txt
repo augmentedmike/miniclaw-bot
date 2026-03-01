@@ -4,7 +4,7 @@
 
 SRP (Single Responsibility):
   ✗ dispatch.ts: 16 exports — consider splitting into focused modules
-  ✗ dispatch.ts: 522 lines — file is very long, consider extracting
+  ✗ dispatch.ts: 526 lines — file is very long, consider extracting
   ✗ kanban-cli.ts: 625 lines — file is very long, consider extracting
   ✗ kanban.ts: 50 exports — consider splitting into focused modules
   ✗ kanban.ts: 985 lines — file is very long, consider extracting
