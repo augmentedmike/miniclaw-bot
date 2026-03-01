@@ -1,6 +1,8 @@
 <div align="center">
 
-# MiniClaw 🦞
+<img src="assets/logo.png" alt="MiniClaw" width="160" />
+
+# MiniClaw
 
 **An autonomous AI agent runtime with memory, structure, and a soul.**
 
