@@ -291,8 +291,26 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     border: 1px solid #30363d;
     border-radius: 10px;
     padding: 24px;
-    max-width: 680px;
+    max-width: 1000px;
     width: 100%;
+  }
+  .detail-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin-top: 16px;
+    border-top: 1px solid #21262d;
+    padding-top: 16px;
+  }
+  .detail-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .detail-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    border-left: 1px solid #21262d;
+    padding-left: 20px;
   }
   .detail-close {
     float: right;
@@ -312,19 +330,25 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     margin-bottom: 4px;
   }
   .detail-meta {
-    font-size: 13px;
+    font-size: 12px;
     color: #8b949e;
-    margin-bottom: 16px;
-    line-height: 1.6;
+    line-height: 1.8;
+    margin-bottom: 12px;
   }
+  .detail-meta-label {
+    display: block;
+    color: #484f58;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    margin-top: 10px;
+  }
+  .detail-meta-label:first-child { margin-top: 0; }
   .detail-body {
     font-size: 14px;
     line-height: 1.7;
     color: #c9d1d9;
-    white-space: pre-wrap;
-    border-top: 1px solid #21262d;
-    padding-top: 16px;
-    margin-top: 16px;
   }
   .detail-history {
     font-size: 12px;
@@ -340,8 +364,10 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     padding-top: 12px;
   }
   .detail-children h3 {
-    font-size: 13px;
-    color: #8b949e;
+    font-size: 12px;
+    color: #484f58;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     font-weight: 600;
     margin-bottom: 8px;
   }
@@ -655,44 +681,58 @@ function showDetail(id) {
   html += '</div>';
   html += '<div class="detail-title">' + escapeHtml(task.title) + '</div>';
 
-  let meta = task.project + ' \\u00B7 ' + task.priority + ' \\u00B7 ' + task.size + ' \\u00B7 ' + task.status;
-  if (task.due) meta += ' \\u00B7 due ' + shortDate(task.due);
+  // ── Sidebar: metadata ──
+  let sidebar = '<div class="detail-meta">';
+  sidebar += '<span class="detail-meta-label">Project</span>' + escapeHtml(task.project);
+  sidebar += '<span class="detail-meta-label">Priority</span>' + escapeHtml(task.priority);
+  sidebar += '<span class="detail-meta-label">Size</span>' + escapeHtml(task.size);
+  sidebar += '<span class="detail-meta-label">Status</span>' + escapeHtml(task.status);
+  if (task.due) {
+    sidebar += '<span class="detail-meta-label">Due</span>' + escapeHtml(shortDate(task.due));
+  }
   if (task.parent) {
     const parent = allTasks.find(t => t.id === task.parent);
-    meta += ' \\u00B7 epic #' + task.parent + (parent ? ' ' + parent.title : '');
+    sidebar += '<span class="detail-meta-label">Epic</span>#' + task.parent + (parent ? ' ' + escapeHtml(parent.title) : '');
   }
   if (task.blocked_by && task.blocked_by.length > 0) {
-    meta += '\\nBlocked by: ' + task.blocked_by.map(b => '#' + b).join(', ');
+    sidebar += '<span class="detail-meta-label">Blocked by</span>' + task.blocked_by.map(b => '#' + b).join(', ');
   }
-  meta += '\\nCreated: ' + shortDate(task.created) + ' \\u00B7 Updated: ' + shortDate(task.updated);
-  html += '<div class="detail-meta">' + escapeHtml(meta) + '</div>';
-
-  if (task.body) {
-    html += '<div class="detail-body">' + renderMarkdown(task.body) + '</div>';
-  }
+  sidebar += '<span class="detail-meta-label">Created</span>' + escapeHtml(shortDate(task.created));
+  sidebar += '<span class="detail-meta-label">Updated</span>' + escapeHtml(shortDate(task.updated));
+  sidebar += '</div>';
 
   if (task.history && task.history.length > 0) {
-    html += '<div class="detail-history"><strong>History</strong>';
+    sidebar += '<div class="detail-history"><strong>History</strong>';
     for (const h of task.history) {
-      html += '<div>' + h.from + ' \\u2192 ' + h.to + '  ' + shortDate(h.at) + '</div>';
+      sidebar += '<div>' + h.from + ' \\u2192 ' + h.to + '  ' + shortDate(h.at) + '</div>';
     }
-    html += '</div>';
+    sidebar += '</div>';
   }
 
-  // Epic children
+  // Epic children go in sidebar too
   if (task.type === "epic") {
     const children = allTasks.filter(t => t.parent === task.id);
     if (children.length > 0) {
-      html += '<div class="detail-children"><h3>Child tasks</h3>';
+      sidebar += '<div class="detail-children"><h3>Child tasks</h3>';
       for (const c of children) {
-        html += '<div class="card" onclick="closeDetail();setTimeout(()=>showDetail(' + c.id + '),100)" style="margin-bottom:6px">';
-        html += '<div class="card-top"><span class="type-badge type-' + c.type + '">' + c.type + '</span>';
-        html += '<span class="card-number">#' + c.id + '</span></div>';
-        html += '<div class="card-title">' + escapeHtml(c.title) + '</div></div>';
+        sidebar += '<div class="card" onclick="closeDetail();setTimeout(()=>showDetail(' + c.id + '),100)" style="margin-bottom:6px">';
+        sidebar += '<div class="card-top"><span class="type-badge type-' + c.type + '">' + c.type + '</span>';
+        sidebar += '<span class="card-number">#' + c.id + '</span></div>';
+        sidebar += '<div class="card-title">' + escapeHtml(c.title) + '</div></div>';
       }
-      html += '</div>';
+      sidebar += '</div>';
     }
   }
+
+  // ── Two-column layout ──
+  html += '<div class="detail-layout">';
+  html += '<div class="detail-main">';
+  if (task.body) {
+    html += '<div class="detail-body">' + renderMarkdown(task.body) + '</div>';
+  }
+  html += '</div>';
+  html += '<div class="detail-sidebar">' + sidebar + '</div>';
+  html += '</div>';
 
   panel.innerHTML = html;
   document.getElementById("overlay").classList.add("open");
