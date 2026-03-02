@@ -32,6 +32,15 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     font-size: 14px;
     color: #8b949e;
   }
+  .topbar-brand { color: #e6edf3; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; margin-right: 4px; }
+  .topbar-nav { display: flex; gap: 2px; margin: 0 8px; }
+  .topbar-tab {
+    font-size: 12px; color: #484f58; text-decoration: none;
+    padding: 4px 12px; border-radius: 4px; border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .topbar-tab:hover { color: #c9d1d9; border-color: #30363d; }
+  .topbar-tab.active { color: #c9d1d9; border-color: #30363d; background: #0d1117; }
   .topbar-left strong { color: #e6edf3; font-weight: 600; }
   .topbar-left .sep { color: #30363d; }
   .topbar-right {
@@ -97,7 +106,7 @@ export const KANBAN_HTML = `<!DOCTYPE html>
     flex-shrink: 0;
   }
   .col-backlog .column-dot { background: #8b949e; }
-  .col-queued .column-dot { background: #6e40c9; }
+
   .col-in-progress .column-dot { background: #d29922; }
   .col-in-review .column-dot { background: #d29922; }
   .col-shipped .column-dot { background: #3fb950; }
@@ -365,7 +374,12 @@ export const KANBAN_HTML = `<!DOCTYPE html>
 <body>
 <div class="topbar">
   <div class="topbar-left">
-    <strong>miniclaw</strong>
+    <strong class="topbar-brand">AM</strong>
+    <nav class="topbar-nav">
+      <a href="/" class="topbar-tab">Chat</a>
+      <a href="/kanban" class="topbar-tab active">Board</a>
+      <a href="/kanban/activity" class="topbar-tab">Activity</a>
+    </nav>
     <select class="project-select" id="project-filter" onchange="filterProject()">
       <option value="">All projects</option>
     </select>
@@ -382,8 +396,8 @@ export const KANBAN_HTML = `<!DOCTYPE html>
   <div class="detail-panel" id="detail"></div>
 </div>
 <script>
-const STATES = ["backlog", "queued", "in-progress", "in-review", "shipped"];
-const STATE_LABELS = { "backlog": "Backlog", "queued": "Queued", "in-progress": "In Progress", "in-review": "In Review", "shipped": "Shipped" };
+const STATES = ["backlog", "in-progress", "in-review", "shipped"];
+const STATE_LABELS = { "backlog": "Backlog", "in-progress": "In Progress", "in-review": "In Review", "shipped": "Shipped" };
 let allTasks = [];
 let currentProject = "";
 let activeLoops = []; // from /api/activity
