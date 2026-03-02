@@ -4,7 +4,7 @@ import { getActivePersonaHome } from "./config.js";
 
 // ── Types ──────────────────────────────────────────────────────────
 
-export type KanbanState = "backlog" | "queued" | "in-progress" | "in-review" | "shipped";
+export type KanbanState = "backlog" | "in-progress" | "in-review" | "shipped";
 export type Priority = "low" | "medium" | "high" | "critical";
 export type TaskType = "chore" | "bugfix" | "feature" | "epic" | "research";
 export type TaskStatus = "active" | "on-hold" | "blocked";
@@ -58,14 +58,13 @@ export type GateResult = { ok: boolean; violations: GateViolation[] };
 
 // ── Constants ──────────────────────────────────────────────────────
 
-export const STATES: KanbanState[] = ["backlog", "queued", "in-progress", "in-review", "shipped"];
+export const STATES: KanbanState[] = ["backlog", "in-progress", "in-review", "shipped"];
 export const TYPES: TaskType[] = ["chore", "bugfix", "feature", "epic", "research"];
 export const SIZES: TaskSize[] = ["small", "medium", "large", "xl"];
 export const STATUSES: TaskStatus[] = ["active", "on-hold", "blocked"];
 
 export const VALID_TRANSITIONS: Record<KanbanState, KanbanState[]> = {
-  "backlog": ["queued", "in-progress"],
-  "queued": ["in-progress", "backlog"],
+  "backlog": ["in-progress"],
   "in-progress": ["in-review", "backlog"],
   "in-review": ["shipped", "in-progress"],
   "shipped": [],
@@ -80,10 +79,9 @@ export const REQUIRED_SECTIONS = [
 
 const STATE_ORDER: Record<KanbanState, number> = {
   backlog: 0,
-  queued: 1,
-  "in-progress": 2,
-  "in-review": 3,
-  shipped: 4,
+  "in-progress": 1,
+  "in-review": 2,
+  shipped: 3,
 };
 
 // ── Validators ─────────────────────────────────────────────────────
@@ -531,11 +529,8 @@ export function checkTransitionGates(id: number, toState: KanbanState): GateResu
     }
   }
 
-  // backlog → queued gates (light — only dep check already done above)
-  // No section requirements yet; agent loop fills them before moving to in-progress
-
-  // queued → in-progress gates (full section + project check)
-  if ((fromState === "backlog" || fromState === "queued") && toState === "in-progress") {
+  // backlog → in-progress gates (full section + project check)
+  if (fromState === "backlog" && toState === "in-progress") {
     if (!task.title.trim()) {
       violations.push({ code: "empty_title", message: "Title is empty" });
     }
