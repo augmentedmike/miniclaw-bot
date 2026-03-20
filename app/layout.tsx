@@ -301,46 +301,14 @@ export default function RootLayout({
         <link rel="modelcontext" href="/.well-known/modelcontext" />
         <link rel="webmcp" href="/.well-known/webmcp" />
         <link rel="webmcp-manifest" href="/.well-known/webmcp.json" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-// WebMCP Tool Contract Registration — navigator.modelContext API
-(function() {
-  if (typeof navigator !== 'undefined' && navigator.modelContext) {
-    navigator.modelContext.registerTool({
-      name: 'join-waitlist',
-      description: 'Join the MiniClaw waitlist to get notified when early access is available',
-      inputSchema: { type: 'object', properties: { email: { type: 'string', format: 'email' } }, required: ['email'] },
-      execute: function(params) {
-        var form = document.querySelector('form[data-tool-name="join-waitlist"]');
-        if (form) { var input = form.querySelector('input[name="email"]'); if (input) input.value = params.email; form.requestSubmit(); }
-        return { content: [{ type: 'text', text: 'Waitlist signup submitted for ' + params.email }] };
-      }
-    });
-    navigator.modelContext.registerTool({
-      name: 'download-miniclaw',
-      description: 'Download the MiniClaw bootstrap installer for macOS',
-      inputSchema: { type: 'object', properties: {} },
-      execute: function() { window.location.href = '/install/download'; return { content: [{ type: 'text', text: 'Download initiated' }] }; }
-    });
-    navigator.modelContext.registerTool({
-      name: 'check-plugin-list',
-      description: 'View the list of available MiniClaw plugins',
-      inputSchema: { type: 'object', properties: {} },
-      execute: function() { window.location.hash = '#plugins'; return { content: [{ type: 'text', text: 'Navigated to plugins' }] }; }
-    });
-  }
-})();
-`,
-          }}
-        />
+        {/* WebMCP tool registration handled by webmcp-tools.js + webmcp-init-miniclaw.js after polyfill loads */}
       </head>
       <body className="font-sans antialiased">
         <WebMCPPolyfill />
         <SmoothScroll />
         {children}
-        <Script src="/webmcp-tools.js" strategy="afterInteractive" />
-        <Script src="/webmcp-init-miniclaw.js" strategy="afterInteractive" />
+        <Script src="/webmcp-tools.js" strategy="beforeInteractive" />
+        <Script src="/webmcp-init-miniclaw.js" strategy="beforeInteractive" />
       </body>
     </html>
   )

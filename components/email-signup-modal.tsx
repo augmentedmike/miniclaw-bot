@@ -108,6 +108,9 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               required
+              pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+              title="Enter a valid email address"
+              autoComplete="email"
               disabled={status === "loading" || status === "success"}
               className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             />

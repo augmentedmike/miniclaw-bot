@@ -162,6 +162,8 @@ function HeroSignupForm() {
         onSubmit={handleSubmit}
         action="/api/subscribe"
         method="POST"
+        toolname="join-waitlist"
+        tooldescription="Join the MiniClaw waitlist to get notified when early access is available"
         data-tool-name="join-waitlist"
         data-tool-description="Join the MiniClaw waitlist to get notified when early access is available"
         role="form"
@@ -178,6 +180,9 @@ function HeroSignupForm() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           aria-label="Email address for waitlist signup"
+          pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+          title="Enter a valid email address"
+          autoComplete="email"
           disabled={status === "loading" || status === "success"}
           className="flex-1 rounded-lg border border-border bg-background/80 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
