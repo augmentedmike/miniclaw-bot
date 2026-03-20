@@ -1,10 +1,7 @@
 "use client"
 
-const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL
-const SESSION_PRICE = process.env.NEXT_PUBLIC_SESSION_PRICE
-
-if (!BOOKING_URL) throw new Error("NEXT_PUBLIC_BOOKING_URL is not set")
-if (!SESSION_PRICE) throw new Error("NEXT_PUBLIC_SESSION_PRICE is not set")
+const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL ?? ""
+const SESSION_PRICE = process.env.NEXT_PUBLIC_SESSION_PRICE ?? ""
 
 export function LiveSupport() {
   return (
