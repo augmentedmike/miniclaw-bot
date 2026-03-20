@@ -11,7 +11,7 @@ const manifest = {
   schema_version: "1.0",
   name: "MiniClaw",
   description:
-    "MiniClaw is an AI-native plugin ecosystem built on OpenClaw. Download the installer, browse documentation, join the waitlist, or explore available plugins.",
+    "MiniClaw is an AI-native plugin ecosystem built on OpenClaw. Download the installer, join the waitlist, or explore available plugins.",
   url: "https://miniclaw.bot",
   logo: "https://miniclaw.bot/og-image-square.png",
   contact_email: "michael@claimhawk.app",
@@ -19,7 +19,7 @@ const manifest = {
     {
       name: "download-miniclaw",
       description:
-        "Download and install MiniClaw on macOS. Returns a bootstrap installer zip or raw shell script.",
+        "Download the MiniClaw bootstrap installer for macOS.",
       uri: "https://miniclaw.bot/install/download",
       method: "GET",
       inputSchema: {
@@ -30,43 +30,6 @@ const manifest = {
         type: "object",
         properties: {
           message: { type: "string" },
-        },
-      },
-    },
-    {
-      name: "view-documentation",
-      description:
-        "Search MiniClaw documentation for setup guides, plugin APIs, architecture details, and troubleshooting.",
-      uri: "https://miniclaw.bot/api/docs/search",
-      method: "GET",
-      inputSchema: {
-        type: "object",
-        properties: {
-          q: {
-            type: "string",
-            description: "Search query — keywords or topic to find in documentation",
-          },
-          tag: {
-            type: "string",
-            description: "Optional tag filter (e.g. plugin, api, guide)",
-          },
-        },
-        required: ["q"],
-      },
-      returnSchema: {
-        type: "object",
-        properties: {
-          results: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                title: { type: "string" },
-                summary: { type: "string" },
-                url: { type: "string" },
-              },
-            },
-          },
         },
       },
     },
@@ -116,139 +79,6 @@ const manifest = {
         type: "object",
         properties: {
           message: { type: "string" },
-        },
-      },
-    },
-    {
-      name: "view-portfolio",
-      description:
-        "View the MiniClaw project portfolio — AI-native tools, plugins, and automations.",
-      uri: "https://miniclaw.bot/#portfolio",
-      method: "interactive",
-      inputSchema: {
-        type: "object",
-        properties: {
-          category: {
-            type: "string",
-            enum: ["plugins", "automations", "ai-tools", "all"],
-            description: "Filter by category",
-          },
-        },
-      },
-      returnSchema: {
-        type: "object",
-        properties: {
-          message: { type: "string" },
-        },
-      },
-    },
-    {
-      name: "send-message",
-      description:
-        "Send a message or inquiry to the MiniClaw team via the contact form.",
-      uri: "https://miniclaw.bot/#contact",
-      method: "interactive",
-      inputSchema: {
-        type: "object",
-        properties: {
-          name: { type: "string", description: "Your name" },
-          email: {
-            type: "string",
-            format: "email",
-            description: "Your email address",
-          },
-          message: {
-            type: "string",
-            description: "Your message or inquiry",
-          },
-        },
-        required: ["name", "email", "message"],
-      },
-      returnSchema: {
-        type: "object",
-        properties: {
-          message: { type: "string" },
-        },
-      },
-    },
-    {
-      name: "check_availability",
-      description:
-        "Check available consultation time slots for booking.",
-      uri: "https://miniclaw.bot/api/slots",
-      method: "GET",
-      inputSchema: {
-        type: "object",
-        properties: {
-          date: {
-            type: "string",
-            description: "Optional ISO date (YYYY-MM-DD) to filter slots",
-          },
-        },
-      },
-      returnSchema: {
-        type: "object",
-        properties: {
-          slots: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                time: { type: "string" },
-                available: { type: "boolean" },
-              },
-            },
-          },
-        },
-      },
-    },
-    {
-      name: "book-consultation",
-      description:
-        "Book a paid consultation with Mike O'Neal — the MiniClaw founder.",
-      uri: "https://miniclaw.bot/booking",
-      method: "interactive",
-      inputSchema: {
-        type: "object",
-        properties: {
-          name: {
-            type: "string",
-            description: "Full name of the person booking",
-          },
-          email: {
-            type: "string",
-            format: "email",
-            description: "Email for booking confirmation",
-          },
-        },
-        required: ["name", "email"],
-      },
-      returnSchema: {
-        type: "object",
-        properties: {
-          message: { type: "string" },
-        },
-      },
-    },
-    {
-      name: "chat_with_am",
-      description:
-        "Chat with Am, the AI assistant. Requires an active WebSocket connection.",
-      dynamic: true,
-      inputSchema: {
-        type: "object",
-        properties: {
-          message: {
-            type: "string",
-            description: "The message or question to send to Am",
-          },
-        },
-        required: ["message"],
-      },
-      returnSchema: {
-        type: "object",
-        properties: {
-          text: { type: "string" },
         },
       },
     },
