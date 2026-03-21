@@ -8,6 +8,7 @@ const navLinks = [
   { label: "Features", href: "/#plugins" },
   { label: "Kanban", href: "/#kanban" },
   { label: "Customize", href: "/#customize" },
+  { label: "Pilots", href: "https://github.com/augmentedmike/miniclaw-os/blob/main/PILOTS.md" },
   { label: "Blog", href: "https://blog.augmentedmike.com" },
   { label: "FAQ", href: "/#faq" },
   { label: "vs OpenClaw", href: "/compare" },

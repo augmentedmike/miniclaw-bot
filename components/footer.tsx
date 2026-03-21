@@ -5,6 +5,7 @@ import { useState } from "react"
 const footerLinks = {
   Product: [
     { label: "FAQ", href: "/#faq" },
+    { label: "Pilot Program", href: "https://github.com/augmentedmike/miniclaw-os/blob/main/PILOTS.md" },
     { label: "Preorder", href: "https://helloam.bot/#waitlist" },
   ],
   Company: [
