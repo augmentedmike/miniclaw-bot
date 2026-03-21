@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Customize", href: "/#customize" },
   { label: "Blog", href: "https://blog.augmentedmike.com" },
   { label: "FAQ", href: "/#faq" },
+  { label: "vs OpenClaw", href: "/compare" },
 ]
 
 export function Navbar() {
