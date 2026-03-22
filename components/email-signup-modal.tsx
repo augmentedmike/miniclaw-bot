@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
@@ -11,6 +12,7 @@ interface EmailSignupModalProps {
 }
 
 export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProps) {
+  const t = useTranslations('emailSignup')
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [useCase, setUseCase] = useState("")
@@ -41,7 +43,7 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
 
       if (res.ok) {
         setStatus("success")
-        setMessage("Thanks! We'll notify you when it's ready.")
+        setMessage(t('successMessage'))
         setName("")
         setEmail("")
         setUseCase("")
@@ -52,11 +54,11 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
         }, 2000)
       } else {
         setStatus("error")
-        setMessage(data.error || "Something went wrong. Please try again.")
+        setMessage(data.error || t('genericError'))
       }
     } catch (error) {
       setStatus("error")
-      setMessage("Network error. Please try again.")
+      setMessage(t('networkError'))
     }
   }
 
@@ -66,22 +68,22 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
-          aria-label="Close"
+          aria-label={t('close')}
         >
           <X className="h-5 w-5" />
         </button>
 
-        <h3 className="text-2xl font-bold text-foreground">Get notified</h3>
+        <h3 className="text-2xl font-bold text-foreground">{t('title')}</h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          We'll let you know when {plan} is available.
+          {t('subtitle', { plan })}
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4" toolname="join-waitlist" tooldescription="Join the MiniClaw waitlist to get notified when new plans are available" data-tool-name="join-waitlist" data-tool-description="Join the MiniClaw waitlist to get notified when new plans are available" action="/api/subscribe" method="POST" role="form" aria-label="Join the MiniClaw waitlist">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4" toolname="join-waitlist" tooldescription="Join the MiniClaw waitlist to get notified when new plans are available" data-tool-name="join-waitlist" data-tool-description="Join the MiniClaw waitlist to get notified when new plans are available" action="/api/subscribe" method="POST" role="form" aria-label={t('legend')}>
           <fieldset>
-          <legend className="sr-only">Join the MiniClaw Waitlist</legend>
+          <legend className="sr-only">{t('legend')}</legend>
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1.5">
-              Name <span className="text-muted-foreground">(optional)</span>
+              {t('nameLabel')} <span className="text-muted-foreground">{t('nameOptional')}</span>
             </label>
             <input
               id="name"
@@ -89,7 +91,7 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
+              placeholder={t('namePlaceholder')}
               disabled={status === "loading" || status === "success"}
               className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
@@ -97,7 +99,7 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
-              Email <span className="text-red-500">*</span>
+              {t('emailLabel')} <span className="text-red-500">{t('emailRequired')}</span>
             </label>
             <input
               id="email"
@@ -106,7 +108,7 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t('emailPlaceholder')}
               required
               pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
               title="Enter a valid email address"
@@ -118,14 +120,14 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
 
           <div>
             <label htmlFor="usecase" className="block text-sm font-medium text-foreground mb-1.5">
-              What do you want to do with it? <span className="text-muted-foreground">(optional)</span>
+              {t('useCaseLabel')} <span className="text-muted-foreground">{t('useCaseOptional')}</span>
             </label>
             <textarea
               id="usecase"
               name="useCase"
               value={useCase}
               onChange={(e) => setUseCase(e.target.value)}
-              placeholder="e.g., manage my small business, automate my inbox..."
+              placeholder={t('useCasePlaceholder')}
               rows={3}
               disabled={status === "loading" || status === "success"}
               className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
@@ -148,7 +150,7 @@ export function EmailSignupModal({ isOpen, onClose, plan }: EmailSignupModalProp
             className="w-full"
             disabled={status === "loading" || status === "success"}
           >
-            {status === "loading" ? "Subscribing..." : status === "success" ? "Done!" : "Notify Me"}
+            {status === "loading" ? t('subscribing') : status === "success" ? t('done') : t('notifyMe')}
           </Button>
           </fieldset>
         </form>

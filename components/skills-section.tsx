@@ -1,47 +1,18 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Brain, Code, Image as ImageIcon, Video } from "lucide-react"
 
-const skills: {
-  name: string
-  subtitle: string
-  description: string
-  icon: typeof Brain
-  color: string
-  note?: string
-}[] = [
-  {
-    name: "AI Agent",
-    subtitle: "Your Personal Agent",
-    description: "Clears your inbox, manages your calendar, checks you in for flights, analyzes your health data—all from chat. Real people run entire businesses from their phones.",
-    icon: Brain,
-    color: "text-purple-500",
-  },
-  {
-    name: "Claude Code",
-    subtitle: "Pair Programmer",
-    description: "Your digital assistant has access to the terminal, runs git commands, handles deployments, and codes alongside you—from any device. Requires a Claude Max subscription ($100–$200/mo), which caps your monthly spend — unlike API-based platforms where costs can spiral. Add more subscriptions to the same MiniClaw or MiniRack for even more power.",
-    icon: Code,
-    color: "text-blue-500",
-    note: "Claude Max required",
-  },
-  {
-    name: "Nano Banana",
-    subtitle: "Visual Designer",
-    description: "Generate personas, create artwork, design graphics—any style from photorealistic to furry to anime. Your imagination, visualized.",
-    icon: ImageIcon,
-    color: "text-pink-500",
-  },
-  {
-    name: "Sora",
-    subtitle: "Video Production",
-    description: "Automate video production pipelines through conversation. From concept to rendered video, your digital assistant handles it.",
-    icon: Video,
-    color: "text-orange-500",
-  },
+const skillKeys = [
+  { key: "skill1", icon: Brain, color: "text-purple-500" },
+  { key: "skill2", icon: Code, color: "text-blue-500" },
+  { key: "skill3", icon: ImageIcon, color: "text-pink-500" },
+  { key: "skill4", icon: Video, color: "text-orange-500" },
 ]
 
 export function SkillsSection() {
+  const t = useTranslations('skills')
+
   return (
     <section id="skills" className="relative overflow-hidden px-6 py-24 md:py-32">
       {/* Background */}
@@ -51,47 +22,47 @@ export function SkillsSection() {
         {/* Header */}
         <div className="mb-16 text-center">
           <h2 className="text-balance text-3xl font-bold leading-tight tracking-tight text-foreground md:text-5xl">
-            One Personality. All the Power.
+            {t('heading')}
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Your digital assistant has access to the latest cutting-edge tools. They use whichever skill is needed—you don't think about it.
+            {t('subtitle')}
           </p>
           <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/50 px-4 py-1.5 text-sm text-muted-foreground">
             <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-            No vendor lock-in — MiniClaw works across AI providers
+            {t('noVendorLockIn')}
           </p>
         </div>
 
         {/* Skills Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {skills.map((skill) => {
-            const Icon = skill.icon
+          {skillKeys.map(({ key, icon: Icon, color }) => {
+            const hasNote = key === "skill2"
             return (
               <div
-                key={skill.name}
+                key={key}
                 className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card p-6 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
               >
                 {/* Icon + Badge */}
                 <div className="mb-4 flex items-start justify-between">
                   <div className="inline-flex rounded-xl bg-primary/10 p-3">
-                    <Icon className={`h-6 w-6 ${skill.color}`} />
+                    <Icon className={`h-6 w-6 ${color}`} />
                   </div>
-                  {skill.note && (
+                  {hasNote && (
                     <span className="rounded-full bg-blue-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-400">
-                      {skill.note}
+                      {t(`${key}.note`)}
                     </span>
                   )}
                 </div>
 
                 {/* Content */}
                 <h3 className="mb-1 text-xl font-bold text-foreground">
-                  {skill.name}
+                  {t(`${key}.name`)}
                 </h3>
                 <p className="mb-3 text-sm font-medium text-muted-foreground">
-                  {skill.subtitle}
+                  {t(`${key}.subtitle`)}
                 </p>
                 <p className="text-sm leading-relaxed text-muted-foreground/80">
-                  {skill.description}
+                  {t(`${key}.description`)}
                 </p>
 
                 {/* Hover gradient */}
@@ -104,10 +75,10 @@ export function SkillsSection() {
         {/* Bottom Message */}
         <div className="mt-12 text-center">
           <p className="text-lg font-medium text-muted-foreground">
-            New AI models released?{" "}
-            <span className="text-foreground">Your digital assistant gets them automatically.</span>
+            {t('bottomMessage')}{" "}
+            <span className="text-foreground">{t('bottomHighlight')}</span>
             <br />
-            <span className="text-sm">It only gets better over time.</span>
+            <span className="text-sm">{t('bottomSuffix')}</span>
           </p>
         </div>
       </div>

@@ -80,7 +80,60 @@
     "downloadFree": "Descarga gratis",
     "orderMachine": "Ordena tu máquina AGI",
     "sysReqMac": "macOS 13+",
-    "sysReqCard": "Sin tarjeta de crédito"
+    "sysReqCard": "Sin tarjeta de crédito",
+    "slide5": {
+      "headline": "Tu marca. Todas las plataformas.",
+      "headlineSub": "Siempre activo.",
+      "description": "Publica contenido diario. Mantén la voz de tu marca. Monitorea el engagement. Ejecuta pruebas A/B. Pausa anuncios de bajo rendimiento. Tu asistente digital es el community manager que nunca",
+      "emphasisWord": "duerme.",
+      "proof1": "Todas las plataformas gestionadas",
+      "proof2": "Voz de marca definida",
+      "proof3": "Rendimiento rastreado",
+      "proof4": "Contenido en piloto automático"
+    },
+    "slide6": {
+      "headline": "Una persona de IA.",
+      "headlineSub": "Con seguidores reales.",
+      "description": "Dale a tu compañero digital un rostro, una voz, una personalidad y seguidores. Influencers virtuales, marcas nativas de IA, personajes que se sienten vivos — construidos y operados completamente por",
+      "emphasisWord": "IA.",
+      "proof1": "Identidad visual completa",
+      "proof2": "Voz y estilo únicos",
+      "proof3": "Interactúa auténticamente",
+      "proof4": "Crea su propio contenido"
+    },
+    "slide7": {
+      "headline": "Envía código mientras duermes.",
+      "headlineSub": "Despierta con un PR.",
+      "description": "Tu asistente digital escribe funciones, revisa PRs, maneja despliegues y corrige bugs — todo desde la terminal. Programa en pareja durante el día. Déjalo enviar",
+      "emphasisWord": "de noche.",
+      "proof1": "Acceso total a la terminal",
+      "proof2": "Git y CI/CD nativos",
+      "proof3": "Código auto-reparable",
+      "proof4": "Despliega autónomamente"
+    },
+    "slide8": {
+      "headline": "No solo un asistente.",
+      "headlineSub": "Una relación.",
+      "description": "Tu compañero digital recuerda tu historia, conoce tus estados de ánimo y crece contigo con el tiempo. Coach, confidente, socio creativo, o algo más. Es tu historia para escribir y tuya para",
+      "emphasisWord": "contar.",
+      "proof1": "Recuerda todo",
+      "proof2": "Cualquier apariencia que quieras",
+      "proof3": "Voz y personalidad reales",
+      "proof4": "Tuyo. Siempre."
+    },
+    "slide9": {
+      "headline": "Diseño. Video. Arte.",
+      "headlineSub": "Una conversación.",
+      "description": "Genera personas, crea arte, produce videos, diseña gráficos — cualquier estilo, desde fotorrealista hasta anime. Tu imaginación, visualizada. Tu equipo creativo,",
+      "emphasisWord": "automatizado.",
+      "proof1": "Cualquier estilo visual",
+      "proof2": "Producción de video",
+      "proof3": "Diseño gráfico",
+      "proof4": "Arte generado por IA"
+    },
+    "personaHeading": "Control total sobre cada estética.",
+    "personaDescription": "Tu compañero digital puede verse y sonar como quieras, y puedes cambiarlo en cualquier momento",
+    "personaHighlight": "sin que pierda su memoria."
   },
   "companionIntro": {
     "label": "Tu compañera de IA",
@@ -572,5 +625,321 @@
     "orderMachine": "Ordena tu máquina AGI",
     "learnMore": "Saber más",
     "getStarted": "Comenzar"
+  },
+  "features": {
+    "label": "Características",
+    "heading": "Hecho para personas reales,",
+    "headingHighlight": "no ingenieros.",
+    "subtitle": "Todo lo que necesitas de un asistente de IA, sin la curva de aprendizaje que suele venir con él.",
+    "feature1": {
+      "title": "Instalación con un clic",
+      "description": "Haz doble clic en el instalador. Eso es todo. Sin terminal, sin línea de comandos, sin entorno de desarrollo. Nosotros manejamos cada dependencia tras bambalinas."
+    },
+    "feature2": {
+      "title": "Listo en menos de 2 minutos",
+      "description": "Desde la descarga hasta tu primera conversación con IA en menos tiempo del que toma hacer un café. En serio."
+    },
+    "feature3": {
+      "title": "Habla como un humano",
+      "description": "Pide a tu asistente que redacte correos, resuma documentos, genere ideas o analice números. Tú eliges el nombre, la personalidad y la apariencia. Sin sintaxis especial — solo español sencillo."
+    },
+    "feature4": {
+      "title": "Privado por defecto",
+      "description": "Tus datos se quedan en tu máquina. MiniClaw se ejecuta localmente, así que tus conversaciones, archivos e información de negocio nunca salen de tu computadora."
+    },
+    "feature5": {
+      "title": "Actualizaciones automáticas",
+      "description": "MiniClaw se mantiene actualizado. Nuevos modelos, nuevas funciones, cero esfuerzo de tu parte. Como las apps de tu teléfono, pero más inteligente."
+    },
+    "feature6": {
+      "title": "Funciona sin internet también",
+      "description": "¿Se fue tu internet? MiniClaw sigue funcionando. Las funciones principales se ejecutan completamente en tu hardware para que nunca te quedes varado."
+    }
+  },
+  "pricing": {
+    "label": "Precios",
+    "heading": "Elige lo que te funcione.",
+    "subtitle": "MiniClaw está actualmente en desarrollo activo. Regístrate para ser notificado cuando lancemos, o pre-ordena una Mac Mini para ser el primero en la fila.",
+    "inDevelopment": "En Desarrollo",
+    "mostPopular": "Más popular",
+    "plan1": {
+      "name": "Descarga",
+      "price": "Gratis",
+      "description": "Pon MiniClaw a funcionar en tu Mac existente en minutos.",
+      "cta": "Descargar Gratis",
+      "timeline": "Disponible ahora en GitHub",
+      "feature1": "Instalador con un clic para macOS y Windows",
+      "feature2": "Capacidades completas de asistente IA",
+      "feature3": "Modo sin conexión incluido",
+      "feature4": "Actualizaciones automáticas",
+      "feature5": "Privado y local por defecto",
+      "feature6": "Soporte comunitario"
+    },
+    "plan2": {
+      "name": "AM — Mac Mini + Persona Digital",
+      "price": "$1,800",
+      "period": "pago único",
+      "description": "Amelia, nuestra Persona Digital curada, pre-instalada en una Mac Mini M1 con skin personalizado. Se envía a tu puerta. Conéctala y ya está ahí.",
+      "cta": "Ordena Tu Máquina AGI",
+      "timeline": "Envío 1 de julio, 2026",
+      "feature1": "Mac Mini M1 con skin personalizado incluido",
+      "feature2": "Amelia pre-instalada y configurada",
+      "feature3": "Configuración VIP por video el primer día",
+      "feature4": "Hardware, mano de obra y envío incluidos",
+      "feature5": "Conecta, enciende, ya está ahí",
+      "feature6": "Soporte prioritario por 1 año"
+    },
+    "orderCta": "Ordena Tu Máquina AGI — Envío 1 de julio, 2026",
+    "depositNote": "Depósito de $900 asegura tu lugar. Saldo pendiente antes del envío. Totalmente reembolsable hasta julio 2026.",
+    "rackHeading": "¿Necesitas más poder? Construye un MiniRack.",
+    "rackSubtitle": "Apila hasta 6 Claws en un solo rack. Administra toda una empresa digital desde tu escritorio."
+  },
+  "howItWorks": {
+    "label": "Cómo funciona",
+    "heading": "Tres pasos. Ese es todo el proceso.",
+    "subtitle": "No estamos bromeando cuando decimos que es fácil. Tu abuela podría hacerlo.",
+    "step1": {
+      "title": "Descarga el instalador",
+      "description": "Descarga el instalador para tu Mac. Es un archivo normal — del mismo tipo que descargarías de cualquier sitio web. Nada sospechoso, nada complicado."
+    },
+    "step2": {
+      "title": "Doble clic para instalar",
+      "description": "Abre el archivo, haz clic en instalar y espera unos 90 segundos. MiniClaw configura todo lo que necesita automáticamente. No tienes que tocar nada."
+    },
+    "step3": {
+      "title": "Empieza a hablar con MiniClaw",
+      "description": "Dile a tu IA que limpie tu bandeja de entrada, prepare tu briefing matutino, encuentre tus próximos 100 clientes o reserve tu próximo viaje. Él hace el trabajo. Tú recibes los resultados."
+    }
+  },
+  "capabilities": {
+    "label": "Qué hace",
+    "heading": "Un asistente.",
+    "headingHighlight": "Siete departamentos.",
+    "subtitle": "MiniClaw maneja el trabajo que entierra a tu equipo — tickets de soporte, generación de leads, rastreo de competencia, marketing, onboarding, investigación y operaciones diarias. De forma autónoma.",
+    "cap1": {
+      "title": "Soporte al Cliente",
+      "stat": "85-90% ahorro en costos",
+      "description": "Maneja tickets, responde consultas 24/7 y resuelve problemas comunes como estado de pedidos o reembolsos. Los tiempos de respuesta pasan de minutos a segundos."
+    },
+    "cap2": {
+      "title": "Ventas y Generación de Leads",
+      "stat": "Nunca pierdas un trato",
+      "description": "Califica leads, puntúa prospectos, agenda reuniones, actualiza tu CRM y extrae información de contacto de sitios web. Tu pipeline se mantiene lleno mientras duermes."
+    },
+    "cap3": {
+      "title": "Análisis de Competencia",
+      "stat": "Monitoreo en tiempo real",
+      "description": "Rastrea precios, productos, reseñas y disponibilidad de competidores en la web. Genera informes de inteligencia de mercado y te alerta cuando las cosas cambian."
+    },
+    "cap4": {
+      "title": "Automatización de Marketing",
+      "stat": "Configúralo y olvídate",
+      "description": "Monitorea el rendimiento de anuncios, pausa los de bajo rendimiento, ejecuta pruebas A/B, rastrea menciones sociales y crea calendarios de contenido basados en insights de comentarios."
+    },
+    "cap5": {
+      "title": "Onboarding y Operaciones",
+      "stat": "Totalmente automatizado",
+      "description": "Envía correos de bienvenida, crea entradas en CRM en Notion, notifica a tu equipo en Slack y agenda seguimientos. ¿Nuevo cliente? Ya está resuelto."
+    },
+    "cap6": {
+      "title": "Investigación e Informes",
+      "stat": "Briefings diarios",
+      "description": "Rastrea noticias de la industria, datos financieros, archivos SEC y ofertas de trabajo. Compila y formatea informes para que tu equipo se mantenga al día con las tendencias."
+    },
+    "cap7": {
+      "title": "Gestión de Tareas Internas",
+      "stat": "Horas ahorradas diariamente",
+      "description": "Gestiona calendarios, correos, actualizaciones de tareas en Trello y Jira, auditorías diarias de pipeline y resúmenes financieros de tus hojas de cálculo."
+    },
+    "bottomLine": "Y eso es solo lo que la gente está haciendo",
+    "bottomHighlight": "hoy.",
+    "bottomDescription": "MiniClaw se conecta a miles de apps y APIs. Si puedes describirlo, tu asistente probablemente puede hacerlo."
+  },
+  "cta": {
+    "heading": "Siente la AGI hoy.",
+    "headingHighlight": "Descarga MiniClaw.",
+    "description": "Únete a miles de dueños de negocios, creadores y personas comunes que ya están usando IA — sin el dolor de cabeza.",
+    "downloadFree": "Descargar Gratis",
+    "orderMini": "Ordenar Mac Mini — $1,800"
+  },
+  "testimonials": {
+    "label": "Testimonios",
+    "heading": "Los usuarios de acceso temprano ya están usando MiniClaw.",
+    "t1": {
+      "stat": "14 hrs/semana",
+      "statLabel": "ahorradas en admin",
+      "quote": "Pasaba dos horas cada mañana en correos de proveedores, re-pedidos y facturas. Mi IA maneja todo eso ahora. Recuperé mis mañanas.",
+      "name": "María González",
+      "role": "Dueña de Panadería, Portland"
+    },
+    "t2": {
+      "stat": "3× más rápido",
+      "statLabel": "preparación de ofertas",
+      "quote": "Manejo 600 acres solo. Mi IA obtiene pronósticos del tiempo, prepara recordatorios de mantenimiento de equipos y redacta ofertas por mí. Antes pasaba un día completo en ofertas. Ahora son dos horas.",
+      "name": "Tom Bridger",
+      "role": "Ganadero, Montana"
+    },
+    "t3": {
+      "stat": "+40%",
+      "statLabel": "capacidad de clientes",
+      "quote": "Lo conecté y funcionó. Mi IA maneja formularios de admisión, borradores de propuestas y correos de seguimiento. Tomé 8 nuevos clientes el mes pasado sin contratar a nadie.",
+      "name": "Priya Sharma",
+      "role": "Consultora de Marketing, Austin"
+    }
+  },
+  "skills": {
+    "heading": "Una Personalidad. Todo el Poder.",
+    "subtitle": "Tu asistente digital tiene acceso a las herramientas de última generación. Usa la habilidad que se necesite — tú no piensas en ello.",
+    "noVendorLockIn": "Sin dependencia de proveedor — MiniClaw funciona con múltiples proveedores de IA",
+    "skill1": {
+      "name": "Agente IA",
+      "subtitle": "Tu Agente Personal",
+      "description": "Limpia tu bandeja de entrada, gestiona tu calendario, te registra en vuelos, analiza tus datos de salud — todo desde el chat. Personas reales manejan negocios enteros desde sus teléfonos."
+    },
+    "skill2": {
+      "name": "Claude Code",
+      "subtitle": "Programador en Pareja",
+      "description": "Tu asistente digital tiene acceso a la terminal, ejecuta comandos git, maneja despliegues y programa junto a ti — desde cualquier dispositivo. Requiere una suscripción Claude Max ($100–$200/mes), que limita tu gasto mensual — a diferencia de plataformas basadas en API donde los costos pueden dispararse.",
+      "note": "Claude Max requerido"
+    },
+    "skill3": {
+      "name": "Nano Banana",
+      "subtitle": "Diseñador Visual",
+      "description": "Genera personas, crea arte, diseña gráficos — cualquier estilo, desde fotorrealista hasta furry y anime. Tu imaginación, visualizada."
+    },
+    "skill4": {
+      "name": "Sora",
+      "subtitle": "Producción de Video",
+      "description": "Automatiza pipelines de producción de video a través de conversación. Desde el concepto hasta el video renderizado, tu asistente digital lo maneja."
+    },
+    "bottomMessage": "¿Nuevos modelos de IA lanzados?",
+    "bottomHighlight": "Tu asistente digital los obtiene automáticamente.",
+    "bottomSuffix": "Solo mejora con el tiempo."
+  },
+  "openclawHero": {
+    "badge": "Construido sobre OpenClaw — el agente de IA que está conquistando internet",
+    "headline": "MiniClaw + OpenClaw.",
+    "headlineSub": "Hazlo tuyo.",
+    "description": "OpenClaw es el agente de IA más poderoso jamás construido. MiniClaw lo envuelve en una personalidad real, una memoria real y una interfaz donde toda tu vida puede vivir — sin terminal, sin YAML, sin doctorado requerido.",
+    "proof1": "Listo en 2 minutos",
+    "proof2": "Cero líneas de código",
+    "proof3": "Recuerda todo",
+    "proof4": "Se queda en tu máquina",
+    "downloadFree": "Descargar Gratis",
+    "orderMini": "Ordenar una Mac Mini",
+    "sysReq": "macOS 13+",
+    "sysReqCard": "Sin tarjeta de crédito requerida",
+    "personaHeading": "Control total sobre cada estética.",
+    "personaDescription": "Tu compañero digital puede verse y sonar como quieras, y puedes cambiarlo en cualquier momento",
+    "personaHighlight": "sin que pierda su memoria.",
+    "scroll": "Desplazar"
+  },
+  "investors": {
+    "label": "Inversionistas",
+    "heading": "Invierte en MiniClaw",
+    "description": "Estamos recaudando capital para llevar la AGI a todos. Únete como inversionista y ayuda a dar forma al futuro de la IA accesible.",
+    "feature1": {
+      "title": "Acceso Temprano",
+      "description": "Sé parte de la revolución AGI desde el día uno"
+    },
+    "feature2": {
+      "title": "Acuerdo SAFE",
+      "description": "Acuerdo Simple para Equidad Futura con términos favorables"
+    },
+    "feature3": {
+      "title": "Actualizaciones para Inversionistas",
+      "description": "Actualizaciones mensuales sobre progreso, métricas e hitos"
+    },
+    "interestedHeading": "¿Interesado en invertir?",
+    "interestedDescription": "Actualmente estamos recaudando a través de acuerdos SAFE. Inversión mínima: $1,000.",
+    "contactButton": "Contáctanos para Invertir",
+    "orEmailText": "o envíanos un correo directamente a",
+    "disclaimer": "Importante: Esto no es una oferta para vender valores. Todas las inversiones están sujetas a nuestros términos y condiciones, y deben cumplir con las leyes de valores aplicables. Invertir en startups es arriesgado y podrías perder toda tu inversión."
+  },
+  "emailSignup": {
+    "title": "Recibe notificaciones",
+    "subtitle": "Te avisaremos cuando {plan} esté disponible.",
+    "nameLabel": "Nombre",
+    "nameOptional": "(opcional)",
+    "namePlaceholder": "Tu nombre",
+    "emailLabel": "Correo electrónico",
+    "emailRequired": "*",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "useCaseLabel": "¿Qué quieres hacer con él?",
+    "useCaseOptional": "(opcional)",
+    "useCasePlaceholder": "ej., gestionar mi pequeño negocio, automatizar mi bandeja de entrada...",
+    "legend": "Únete a la Lista de Espera de MiniClaw",
+    "notifyMe": "Notifícame",
+    "subscribing": "Suscribiendo...",
+    "done": "¡Listo!",
+    "successMessage": "¡Gracias! Te notificaremos cuando esté listo.",
+    "genericError": "Algo salió mal. Por favor intenta de nuevo.",
+    "networkError": "Error de red. Por favor intenta de nuevo.",
+    "close": "Cerrar"
+  },
+  "preOrder": {
+    "title": "Pre-Ordenar Mac Mini",
+    "subtitle": "Elige tu opción de pago. De cualquier manera, eres el primero en la fila cuando enviemos en Primavera 2026.",
+    "whiteGloveNote": "Incluye configuración VIP:",
+    "whiteGloveDescription": "Nos uniremos contigo por video durante el unboxing para asegurarnos de que todo funcione perfectamente el primer día.",
+    "mostPopular": "Más Popular",
+    "depositTitle": "Depósito del 50%",
+    "depositPrice": "$900",
+    "depositToday": "hoy",
+    "depositRemaining": "Paga los $900 restantes antes del envío",
+    "depositFeature1": "Reserva tu lugar en la fila",
+    "depositFeature2": "Menor compromiso inicial",
+    "depositFeature3": "Paga el resto antes del envío",
+    "depositCta": "Pagar Depósito de $900",
+    "fullTitle": "Pago Completo",
+    "fullPrice": "$1,800",
+    "fullToday": "hoy",
+    "fullDescription": "Paga una vez y listo",
+    "fullFeature1": "Una transacción simple",
+    "fullFeature2": "Sin recordatorios de pago",
+    "fullFeature3": "Misma prioridad de envío",
+    "fullCta": "Pagar $1,800 Completo",
+    "refundNote": "Todos los pre-pedidos son totalmente reembolsables hasta que enviemos. Envío estimado: Primavera 2026.",
+    "close": "Cerrar"
+  },
+  "miniRack": {
+    "title": "MiniRack",
+    "subtitle": "Apila hasta {max} Claws en una fuerza de trabajo digital",
+    "configureLabel": "Configura tu rack",
+    "clawUnit": "CLAW",
+    "clawsLabel": "Claws",
+    "clawSingular": "Claw",
+    "active": "{count} de {max} Claws activos",
+    "agents": "Agentes",
+    "assistants": "Asistentes",
+    "dayPower": "/día energía",
+    "oneTime": "pago único",
+    "firstClaw": "Primer Claw",
+    "additional": "adicional",
+    "preOrderRack": "Pre-Ordenar Rack",
+    "tier1": {
+      "label": "Fundador Solo",
+      "description": "Un asistente digital, siempre encendido. Tu empleado digital 24/7."
+    },
+    "tier2": {
+      "label": "Dúo",
+      "description": "Dos asistentes digitales en paralelo — uno construye, otro gestiona."
+    },
+    "tier3": {
+      "label": "Equipo Pequeño",
+      "description": "Un escuadrón creativo completo. Diseña, programa y envía."
+    },
+    "tier4": {
+      "label": "Motor de Crecimiento",
+      "description": "Asistentes digitales dedicados para ventas, soporte, operaciones y desarrollo."
+    },
+    "tier5": {
+      "label": "Departamento",
+      "description": "Ejecuta funciones de negocio completas de forma autónoma."
+    },
+    "tier6": {
+      "label": "Empresa Digital",
+      "description": "Una empresa completa en un rack. Cada rol cubierto."
+    }
   }
 }

@@ -80,7 +80,60 @@
     "downloadFree": "免费下载",
     "orderMachine": "订购你的 AGI 主机",
     "sysReqMac": "macOS 13+",
-    "sysReqCard": "无需信用卡"
+    "sysReqCard": "无需信用卡",
+    "slide5": {
+      "headline": "你的品牌。每个平台。",
+      "headlineSub": "永不停歇。",
+      "description": "发布日常内容。保持品牌声音。监控互动。运行A/B测试。暂停表现不佳的广告。你的数字助手是永远不会",
+      "emphasisWord": "休息的社交媒体经理。",
+      "proof1": "每个平台都管理",
+      "proof2": "品牌声音锁定",
+      "proof3": "性能追踪",
+      "proof4": "内容自动运行"
+    },
+    "slide6": {
+      "headline": "AI人格。",
+      "headlineSub": "拥有真实粉丝。",
+      "description": "给你的数字伙伴一张脸、一个声音、一种个性和粉丝群。虚拟影响者、AI原生品牌、感觉活着的角色——完全由",
+      "emphasisWord": "AI构建和运营。",
+      "proof1": "完整的视觉身份",
+      "proof2": "独特的声音和风格",
+      "proof3": "真实互动",
+      "proof4": "创造自己的内容"
+    },
+    "slide7": {
+      "headline": "睡觉时发布代码。",
+      "headlineSub": "醒来看到PR。",
+      "description": "你的数字助手编写功能、审查PR、处理部署和修复bug——全部在终端完成。白天结对编程。晚上让它",
+      "emphasisWord": "发布。",
+      "proof1": "完整终端访问",
+      "proof2": "原生Git和CI/CD",
+      "proof3": "自修复代码",
+      "proof4": "自主部署"
+    },
+    "slide8": {
+      "headline": "不只是助手。",
+      "headlineSub": "是一种关系。",
+      "description": "你的数字伙伴记住你的故事，了解你的心情，随时间与你一起成长。教练、知己、创意伙伴，或更多。这是你要写的故事，也是你要",
+      "emphasisWord": "讲述的。",
+      "proof1": "记住一切",
+      "proof2": "任何你想要的外观",
+      "proof3": "真实的声音和个性",
+      "proof4": "属于你。永远。"
+    },
+    "slide9": {
+      "headline": "设计。视频。艺术。",
+      "headlineSub": "一次对话。",
+      "description": "生成人物、创作艺术品、制作视频、设计图形——从逼真到动漫的任何风格。你的想象力，可视化。你的创意团队，",
+      "emphasisWord": "自动化。",
+      "proof1": "任何视觉风格",
+      "proof2": "视频制作",
+      "proof3": "平面设计",
+      "proof4": "AI生成艺术"
+    },
+    "personaHeading": "完全掌控每一个美学细节。",
+    "personaDescription": "你的数字伙伴可以按你喜欢的任何方式呈现和发声，你可以随时更改它们",
+    "personaHighlight": "而不会丢失记忆。"
   },
   "companionIntro": {
     "label": "你的 AI 伙伴",
@@ -572,5 +625,321 @@
     "orderMachine": "订购你的 AGI 主机",
     "learnMore": "了解更多",
     "getStarted": "开始使用"
+  },
+  "features": {
+    "label": "功能特性",
+    "heading": "为普通人打造，",
+    "headingHighlight": "不是工程师。",
+    "subtitle": "AI助手所需的一切，没有通常伴随而来的学习曲线。",
+    "feature1": {
+      "title": "一键安装",
+      "description": "双击安装程序。就这样。不需要终端、命令行或开发环境。我们在幕后处理每一个依赖。"
+    },
+    "feature2": {
+      "title": "2分钟内准备就绪",
+      "description": "从下载到你的第一次AI对话，比泡一杯咖啡还快。真的。"
+    },
+    "feature3": {
+      "title": "像人类一样交谈",
+      "description": "让你的助手起草邮件、总结文档、头脑风暴或处理数字。你选择名字、个性和外观。无需特殊语法——只用简单中文。"
+    },
+    "feature4": {
+      "title": "默认私密",
+      "description": "你的数据留在你的机器上。MiniClaw在本地运行，所以你的对话、文件和商业信息永远不会离开你的电脑。"
+    },
+    "feature5": {
+      "title": "自动更新",
+      "description": "MiniClaw保持自动更新。新模型、新功能，你无需任何操作。就像你的手机应用，但更智能。"
+    },
+    "feature6": {
+      "title": "离线也能工作",
+      "description": "断网了？MiniClaw仍然工作。核心功能完全在你的硬件上运行，所以你永远不会被困住。"
+    }
+  },
+  "pricing": {
+    "label": "价格",
+    "heading": "选择适合你的方案。",
+    "subtitle": "MiniClaw目前正在积极开发中。注册以在我们发布时收到通知，或预订Mac Mini以排在最前面。",
+    "inDevelopment": "开发中",
+    "mostPopular": "最受欢迎",
+    "plan1": {
+      "name": "下载",
+      "price": "免费",
+      "description": "几分钟内在你现有的Mac上运行MiniClaw。",
+      "cta": "免费下载",
+      "timeline": "现在可在GitHub上获得",
+      "feature1": "macOS和Windows一键安装程序",
+      "feature2": "完整的AI助手功能",
+      "feature3": "包含离线模式",
+      "feature4": "自动更新",
+      "feature5": "默认私密和本地",
+      "feature6": "社区支持"
+    },
+    "plan2": {
+      "name": "AM — Mac Mini + 数字人",
+      "price": "$1,800",
+      "period": "一次性",
+      "description": "Amelia，我们精心打造的数字人，预装在M1 Mac Mini上，带有定制皮肤。送货上门。插上电就在那里了。",
+      "cta": "订购你的AGI机器",
+      "timeline": "2026年7月1日发货",
+      "feature1": "包含定制皮肤的Mac Mini M1",
+      "feature2": "Amelia预装并配置好",
+      "feature3": "第一天VIP视频设置",
+      "feature4": "包含硬件、人工和运费",
+      "feature5": "插上电，开机，她就在那里",
+      "feature6": "1年优先支持"
+    },
+    "orderCta": "订购你的AGI机器 — 2026年7月1日发货",
+    "depositNote": "$900定金确保你的位置。发货前支付余额。2026年7月前可全额退款。",
+    "rackHeading": "需要更多算力？搭建MiniRack。",
+    "rackSubtitle": "将最多6个Claw堆叠到一个机架中。从你的桌面运营一整个数字公司。"
+  },
+  "howItWorks": {
+    "label": "工作原理",
+    "heading": "三个步骤。就是整个过程。",
+    "subtitle": "我们说简单不是开玩笑。你奶奶都能做到。",
+    "step1": {
+      "title": "下载安装程序",
+      "description": "为你的Mac下载安装程序。这是一个普通文件——和你从任何网站下载的一样。没有可疑的东西，不复杂。"
+    },
+    "step2": {
+      "title": "双击安装",
+      "description": "打开文件，点击安装，等待约90秒。MiniClaw自动设置所需的一切。你不需要动任何东西。"
+    },
+    "step3": {
+      "title": "开始与MiniClaw对话",
+      "description": "告诉你的AI清理收件箱、准备晨间简报、找到你的下100个客户或预订你的下一次旅行。它做工作，你获得结果。"
+    }
+  },
+  "capabilities": {
+    "label": "功能",
+    "heading": "一个助手。",
+    "headingHighlight": "七个部门。",
+    "subtitle": "MiniClaw处理让你团队不堪重负的工作——客服工单、潜在客户开发、竞争对手追踪、营销、入职、研究和日常运营。自主进行。",
+    "cap1": {
+      "title": "客户支持",
+      "stat": "节省85-90%成本",
+      "description": "处理工单，24/7回应查询，解决订单状态或退款等常见问题。响应时间从几分钟缩短到几秒钟。"
+    },
+    "cap2": {
+      "title": "销售和潜在客户开发",
+      "stat": "不错过任何交易",
+      "description": "筛选线索，评分潜在客户，预约会议，更新CRM，从网站提取联系信息。你的销售管道在你睡觉时保持满载。"
+    },
+    "cap3": {
+      "title": "竞争对手分析",
+      "stat": "实时监控",
+      "description": "追踪竞争对手在网上的价格、产品、评论和库存。生成市场情报报告，并在情况变化时提醒你。"
+    },
+    "cap4": {
+      "title": "营销自动化",
+      "stat": "设置后忘记",
+      "description": "监控广告效果，暂停表现不佳的广告，运行A/B测试，追踪社交提及，并根据评论洞察创建内容计划。"
+    },
+    "cap5": {
+      "title": "入职和运营",
+      "stat": "完全自动化",
+      "description": "发送欢迎邮件，在Notion中创建CRM条目，在Slack上通知你的团队，并安排后续跟进。新客户？已经处理好了。"
+    },
+    "cap6": {
+      "title": "研究和报告",
+      "stat": "每日简报",
+      "description": "抓取行业新闻、财务数据、SEC文件和招聘信息。编译和格式化报告，让你的团队保持领先。"
+    },
+    "cap7": {
+      "title": "内部任务管理",
+      "stat": "每天节省数小时",
+      "description": "管理日历、邮件、Trello和Jira中的任务更新、每日管道审计和电子表格的财务摘要。"
+    },
+    "bottomLine": "这只是人们正在做的事情",
+    "bottomHighlight": "今天。",
+    "bottomDescription": "MiniClaw连接数千个应用和API。如果你能描述它，你的助手可能就能做到。"
+  },
+  "cta": {
+    "heading": "今天感受AGI。",
+    "headingHighlight": "下载MiniClaw。",
+    "description": "加入数千名企业主、创作者和普通人的行列，他们已经在使用AI——没有头痛。",
+    "downloadFree": "免费下载",
+    "orderMini": "订购Mac Mini — $1,800"
+  },
+  "testimonials": {
+    "label": "用户评价",
+    "heading": "早期用户已经在使用MiniClaw。",
+    "t1": {
+      "stat": "14小时/周",
+      "statLabel": "管理时间节省",
+      "quote": "我每天早上要花两个小时处理供应商邮件、补货和发票。我的AI现在处理所有这些。我找回了我的早晨。",
+      "name": "Maria Gonzalez",
+      "role": "面包店老板，波特兰"
+    },
+    "t2": {
+      "stat": "快3倍",
+      "statLabel": "投标周转",
+      "quote": "我独自管理600英亩。我的AI拉取天气预报，准备设备维护提醒，并为我起草投标。我以前花一整天做投标。现在只需两小时。",
+      "name": "Tom Bridger",
+      "role": "牧场主，蒙大拿"
+    },
+    "t3": {
+      "stat": "+40%",
+      "statLabel": "客户容量",
+      "quote": "我插上就能用了。我的AI处理入职表格、初稿提案和跟进邮件。上个月我接了8个新客户，没有雇任何人。",
+      "name": "Priya Sharma",
+      "role": "营销顾问，奥斯汀"
+    }
+  },
+  "skills": {
+    "heading": "一个个性。所有能力。",
+    "subtitle": "你的数字助手可以使用最前沿的工具。它们使用所需的技能——你不用考虑。",
+    "noVendorLockIn": "无供应商锁定 — MiniClaw跨AI提供商工作",
+    "skill1": {
+      "name": "AI代理",
+      "subtitle": "你的个人代理",
+      "description": "清理收件箱，管理日历，办理航班登机，分析健康数据——全部通过聊天。真实的人从手机上运营整个企业。"
+    },
+    "skill2": {
+      "name": "Claude Code",
+      "subtitle": "结对程序员",
+      "description": "你的数字助手可以访问终端，运行git命令，处理部署，和你一起编程——从任何设备。需要Claude Max订阅（$100-$200/月），限制你的月度支出——不像基于API的平台，成本可能失控。",
+      "note": "需要Claude Max"
+    },
+    "skill3": {
+      "name": "Nano Banana",
+      "subtitle": "视觉设计师",
+      "description": "生成人物、创作艺术品、设计图形——从逼真到毛绒到动漫的任何风格。你的想象力，可视化。"
+    },
+    "skill4": {
+      "name": "Sora",
+      "subtitle": "视频制作",
+      "description": "通过对话自动化视频制作流程。从概念到渲染视频，你的数字助手处理一切。"
+    },
+    "bottomMessage": "新AI模型发布了？",
+    "bottomHighlight": "你的数字助手自动获得它们。",
+    "bottomSuffix": "只会随时间变得更好。"
+  },
+  "openclawHero": {
+    "badge": "基于OpenClaw构建 — 正在接管互联网的AI代理",
+    "headline": "MiniClaw + OpenClaw。",
+    "headlineSub": "让它成为你的。",
+    "description": "OpenClaw是有史以来最强大的AI代理。MiniClaw将其包装在真实的个性、真实的记忆和一个你整个生活都可以存在的界面中——不需要终端、不需要YAML、不需要博士学位。",
+    "proof1": "2分钟准备就绪",
+    "proof2": "零行代码",
+    "proof3": "记住一切",
+    "proof4": "留在你的机器上",
+    "downloadFree": "免费下载",
+    "orderMini": "订购Mac Mini",
+    "sysReq": "macOS 13+",
+    "sysReqCard": "无需信用卡",
+    "personaHeading": "完全掌控每一个美学细节。",
+    "personaDescription": "你的数字伙伴可以按你喜欢的任何方式呈现和发声，你可以随时更改它们",
+    "personaHighlight": "而不会丢失记忆。",
+    "scroll": "滚动"
+  },
+  "investors": {
+    "label": "投资者",
+    "heading": "投资MiniClaw",
+    "description": "我们正在筹集资金，将AGI带给每个人。作为投资者加入我们，帮助塑造可访问AI的未来。",
+    "feature1": {
+      "title": "早期访问",
+      "description": "从第一天起就参与AGI革命"
+    },
+    "feature2": {
+      "title": "SAFE协议",
+      "description": "具有优惠条款的未来股权简单协议"
+    },
+    "feature3": {
+      "title": "投资者更新",
+      "description": "关于进展、指标和里程碑的月度更新"
+    },
+    "interestedHeading": "有兴趣投资吗？",
+    "interestedDescription": "我们目前通过SAFE协议筹资。最低投资：$1,000。",
+    "contactButton": "联系我们投资",
+    "orEmailText": "或直接发邮件给我们",
+    "disclaimer": "重要提示：这不是出售证券的要约。所有投资均受我们的条款和条件约束，并且必须遵守适用的证券法。投资初创企业有风险，你可能会失去全部投资。"
+  },
+  "emailSignup": {
+    "title": "获取通知",
+    "subtitle": "我们会在{plan}可用时通知你。",
+    "nameLabel": "姓名",
+    "nameOptional": "（可选）",
+    "namePlaceholder": "你的名字",
+    "emailLabel": "电子邮件",
+    "emailRequired": "*",
+    "emailPlaceholder": "you@example.com",
+    "useCaseLabel": "你想用它做什么？",
+    "useCaseOptional": "（可选）",
+    "useCasePlaceholder": "例如，管理我的小企业，自动化我的收件箱...",
+    "legend": "加入MiniClaw等待名单",
+    "notifyMe": "通知我",
+    "subscribing": "订阅中...",
+    "done": "完成！",
+    "successMessage": "谢谢！我们会在准备好时通知你。",
+    "genericError": "出了点问题。请重试。",
+    "networkError": "网络错误。请重试。",
+    "close": "关闭"
+  },
+  "preOrder": {
+    "title": "预订Mac Mini",
+    "subtitle": "选择你的付款方式。无论哪种方式，你都是2026年春季发货时的第一批。",
+    "whiteGloveNote": "包含VIP设置：",
+    "whiteGloveDescription": "我们会在开箱时通过视频加入你，确保第一天一切正常工作。",
+    "mostPopular": "最受欢迎",
+    "depositTitle": "50%定金",
+    "depositPrice": "$900",
+    "depositToday": "今天",
+    "depositRemaining": "发货前支付剩余$900",
+    "depositFeature1": "预留你的位置",
+    "depositFeature2": "较低的前期承诺",
+    "depositFeature3": "发货前支付余额",
+    "depositCta": "支付$900定金",
+    "fullTitle": "全额支付",
+    "fullPrice": "$1,800",
+    "fullToday": "今天",
+    "fullDescription": "支付一次，完成",
+    "fullFeature1": "一次简单交易",
+    "fullFeature2": "无付款提醒",
+    "fullFeature3": "同等优先发货",
+    "fullCta": "支付$1,800全额",
+    "refundNote": "所有预订在发货前均可全额退款。预计发货时间：2026年春季。",
+    "close": "关闭"
+  },
+  "miniRack": {
+    "title": "MiniRack",
+    "subtitle": "将最多{max}个Claw堆叠成数字劳动力",
+    "configureLabel": "配置你的机架",
+    "clawUnit": "CLAW",
+    "clawsLabel": "个Claw",
+    "clawSingular": "Claw",
+    "active": "{max}个Claw中有{count}个活跃",
+    "agents": "代理",
+    "assistants": "助手",
+    "dayPower": "/天电费",
+    "oneTime": "一次性",
+    "firstClaw": "第一个Claw",
+    "additional": "额外",
+    "preOrderRack": "预订机架",
+    "tier1": {
+      "label": "独立创始人",
+      "description": "一个数字助手，始终在线。你的24/7数字员工。"
+    },
+    "tier2": {
+      "label": "双人组",
+      "description": "两个数字助手并行运作——一个构建，一个管理。"
+    },
+    "tier3": {
+      "label": "小团队",
+      "description": "一个完整的创意小组。设计、编码和发布。"
+    },
+    "tier4": {
+      "label": "增长引擎",
+      "description": "专用于销售、支持、运营和开发的数字助手。"
+    },
+    "tier5": {
+      "label": "部门",
+      "description": "自主运行整个业务功能。"
+    },
+    "tier6": {
+      "label": "数字公司",
+      "description": "机架中的完整公司。每个角色都有覆盖。"
+    }
   }
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Minus, Plus, Server, Zap, Users, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EmailSignupModal } from "@/components/email-signup-modal"
@@ -14,21 +15,15 @@ function getPrice(count: number) {
   return FIRST_UNIT_PRICE + (count - 1) * ADDITIONAL_UNIT_PRICE
 }
 
-const TIER_INFO: Record<number, { label: string; description: string }> = {
-  1: { label: "Solo Founder", description: "One digital assistant, always on. Your 24/7 digital employee." },
-  2: { label: "Duo", description: "Two digital assistants in parallel — one builds, one manages." },
-  3: { label: "Small Team", description: "A full creative squad. Design, code, and ship." },
-  4: { label: "Growth Engine", description: "Dedicated digital assistants for sales, support, ops, and dev." },
-  5: { label: "Department", description: "Run entire business functions autonomously." },
-  6: { label: "Digital Company", description: "A full company in a rack. Every role covered." },
-}
+const tierKeys = ["tier1", "tier2", "tier3", "tier4", "tier5", "tier6"] as const
 
 export function MiniRackConfigurator() {
+  const t = useTranslations('miniRack')
   const [count, setCount] = useState(1)
   const [emailModalOpen, setEmailModalOpen] = useState(false)
 
   const price = getPrice(count)
-  const tier = TIER_INFO[count]
+  const tierKey = tierKeys[count - 1]
 
   const increment = () => setCount((c) => Math.min(c + 1, MAX_UNITS))
   const decrement = () => setCount((c) => Math.max(c - 1, 1))
@@ -40,14 +35,14 @@ export function MiniRackConfigurator() {
         <div className="border-b border-border/40 bg-background/50 px-6 py-4 md:px-8">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-bold text-foreground">MiniRack</h3>
+              <h3 className="text-xl font-bold text-foreground">{t('title')}</h3>
               <p className="mt-0.5 text-sm text-muted-foreground">
-                Stack up to {MAX_UNITS} Claws into a digital workforce
+                {t('subtitle', { max: MAX_UNITS })}
               </p>
             </div>
             <div className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
               <Server className="h-3.5 w-3.5" />
-              {tier.label}
+              {t(`${tierKey}.label`)}
             </div>
           </div>
         </div>
@@ -85,7 +80,7 @@ export function MiniRackConfigurator() {
                               isActive ? "text-foreground" : "text-muted-foreground/40"
                             }`}
                           >
-                            CLAW {unitNum}
+                            {t('clawUnit')} {unitNum}
                           </span>
                         </div>
                         {/* Activity bars */}
@@ -111,7 +106,7 @@ export function MiniRackConfigurator() {
 
               {/* Rack label */}
               <p className="mt-3 text-center text-xs text-muted-foreground/60">
-                {count} of {MAX_UNITS} Claws active
+                {t('active', { count, max: MAX_UNITS })}
               </p>
             </div>
           </div>
@@ -121,7 +116,7 @@ export function MiniRackConfigurator() {
             {/* Counter */}
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-primary">
-                Configure your rack
+                {t('configureLabel')}
               </p>
               <div className="mt-4 flex items-center gap-4">
                 <button
@@ -137,7 +132,7 @@ export function MiniRackConfigurator() {
                     {count}
                   </span>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Claw{count > 1 ? "s" : ""}
+                    {count > 1 ? t('clawsLabel') : t('clawSingular')}
                   </p>
                 </div>
 
@@ -152,8 +147,8 @@ export function MiniRackConfigurator() {
 
               {/* Tier description */}
               <div className="mt-4 rounded-xl border border-border/40 bg-background/50 p-4">
-                <p className="text-sm font-semibold text-foreground">{tier.label}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{tier.description}</p>
+                <p className="text-sm font-semibold text-foreground">{t(`${tierKey}.label`)}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t(`${tierKey}.description`)}</p>
               </div>
 
               {/* Stats row */}
@@ -163,21 +158,21 @@ export function MiniRackConfigurator() {
                   <span className="text-lg font-bold tabular-nums text-foreground">
                     {count * 4}
                   </span>
-                  <span className="text-[10px] text-muted-foreground">Agents</span>
+                  <span className="text-[10px] text-muted-foreground">{t('agents')}</span>
                 </div>
                 <div className="flex flex-col items-center rounded-lg border border-border/30 bg-background/50 p-3">
                   <Users className="mb-1 h-4 w-4 text-primary" />
                   <span className="text-lg font-bold tabular-nums text-foreground">
                     {count * 16}
                   </span>
-                  <span className="text-[10px] text-muted-foreground">Assistants</span>
+                  <span className="text-[10px] text-muted-foreground">{t('assistants')}</span>
                 </div>
                 <div className="flex flex-col items-center rounded-lg border border-border/30 bg-background/50 p-3">
                   <Zap className="mb-1 h-4 w-4 text-primary" />
                   <span className="text-lg font-bold tabular-nums text-foreground">
                     ${(count * 0.1).toFixed(2)}
                   </span>
-                  <span className="text-[10px] text-muted-foreground">/day power</span>
+                  <span className="text-[10px] text-muted-foreground">{t('dayPower')}</span>
                 </div>
               </div>
             </div>
@@ -189,11 +184,11 @@ export function MiniRackConfigurator() {
                   <span className="text-4xl font-bold tabular-nums text-foreground">
                     ${price.toLocaleString()}
                   </span>
-                  <span className="text-sm text-muted-foreground">one time</span>
+                  <span className="text-sm text-muted-foreground">{t('oneTime')}</span>
                 </div>
                 {count > 1 && (
                   <p className="mt-1 text-xs text-muted-foreground">
-                    First Claw ${FIRST_UNIT_PRICE.toLocaleString()} + {count - 1} additional &times; ${ADDITIONAL_UNIT_PRICE.toLocaleString()}
+                    {t('firstClaw')} ${FIRST_UNIT_PRICE.toLocaleString()} + {count - 1} {t('additional')} &times; ${ADDITIONAL_UNIT_PRICE.toLocaleString()}
                   </p>
                 )}
               </div>
@@ -201,7 +196,7 @@ export function MiniRackConfigurator() {
                 size="lg"
                 onClick={() => setEmailModalOpen(true)}
               >
-                Pre-Order Rack
+                {t('preOrderRack')}
               </Button>
             </div>
           </div>
@@ -211,7 +206,7 @@ export function MiniRackConfigurator() {
       <EmailSignupModal
         isOpen={emailModalOpen}
         onClose={() => setEmailModalOpen(false)}
-        plan={`MiniRack — ${count} Claw${count > 1 ? "s" : ""} ($${price.toLocaleString()})`}
+        plan={`MiniRack — ${count} ${count > 1 ? t('clawsLabel') : t('clawSingular')} ($${price.toLocaleString()})`}
       />
     </>
   )

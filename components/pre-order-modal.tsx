@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { X, Check } from "lucide-react"
 
@@ -9,6 +10,8 @@ interface PreOrderModalProps {
 }
 
 export function PreOrderModal({ isOpen, onClose }: PreOrderModalProps) {
+  const t = useTranslations('preOrder')
+
   if (!isOpen) return null
 
   const depositLink = process.env.NEXT_PUBLIC_STRIPE_DEPOSIT_LINK
@@ -20,19 +23,19 @@ export function PreOrderModal({ isOpen, onClose }: PreOrderModalProps) {
         <button
           onClick={onClose}
           className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
-          aria-label="Close"
+          aria-label={t('close')}
         >
           <X className="h-5 w-5" />
         </button>
 
-        <h3 className="text-2xl font-bold text-foreground">Pre-Order Mac Mini</h3>
+        <h3 className="text-2xl font-bold text-foreground">{t('title')}</h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Choose your payment option. Either way, you're first in line when we ship Spring 2026.
+          {t('subtitle')}
         </p>
 
         <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
           <p className="text-sm text-foreground">
-            <strong>Includes white glove setup:</strong> We'll join you on video during unboxing to make sure everything works perfectly on day one.
+            <strong>{t('whiteGloveNote')}</strong> {t('whiteGloveDescription')}
           </p>
         </div>
 
@@ -40,30 +43,30 @@ export function PreOrderModal({ isOpen, onClose }: PreOrderModalProps) {
           {/* 50% Deposit Option */}
           <div className="flex flex-col rounded-xl border-2 border-primary bg-card p-6">
             <div className="mb-4 inline-flex items-center gap-2 self-start rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              Most Popular
+              {t('mostPopular')}
             </div>
 
-            <h4 className="text-lg font-semibold text-foreground">50% Deposit</h4>
+            <h4 className="text-lg font-semibold text-foreground">{t('depositTitle')}</h4>
             <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-4xl font-bold text-foreground">$900</span>
-              <span className="text-sm text-muted-foreground">today</span>
+              <span className="text-4xl font-bold text-foreground">{t('depositPrice')}</span>
+              <span className="text-sm text-muted-foreground">{t('depositToday')}</span>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Pay remaining $900 before we ship
+              {t('depositRemaining')}
             </p>
 
             <ul className="mt-6 space-y-3 flex-1">
               <li className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                <span className="text-muted-foreground">Reserve your spot in line</span>
+                <span className="text-muted-foreground">{t('depositFeature1')}</span>
               </li>
               <li className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                <span className="text-muted-foreground">Lower upfront commitment</span>
+                <span className="text-muted-foreground">{t('depositFeature2')}</span>
               </li>
               <li className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                <span className="text-muted-foreground">Pay rest before shipping</span>
+                <span className="text-muted-foreground">{t('depositFeature3')}</span>
               </li>
             </ul>
 
@@ -74,7 +77,7 @@ export function PreOrderModal({ isOpen, onClose }: PreOrderModalProps) {
               disabled={!depositLink}
             >
               <a href={depositLink || "#"} target="_blank" rel="noopener noreferrer">
-                Pay $900 Deposit
+                {t('depositCta')}
               </a>
             </Button>
           </div>
@@ -83,27 +86,27 @@ export function PreOrderModal({ isOpen, onClose }: PreOrderModalProps) {
           <div className="flex flex-col rounded-xl border border-border/40 bg-card p-6">
             <div className="mb-4 h-7" /> {/* Spacer to align with other card */}
 
-            <h4 className="text-lg font-semibold text-foreground">Full Payment</h4>
+            <h4 className="text-lg font-semibold text-foreground">{t('fullTitle')}</h4>
             <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-4xl font-bold text-foreground">$1,800</span>
-              <span className="text-sm text-muted-foreground">today</span>
+              <span className="text-4xl font-bold text-foreground">{t('fullPrice')}</span>
+              <span className="text-sm text-muted-foreground">{t('fullToday')}</span>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Pay once, you're done
+              {t('fullDescription')}
             </p>
 
             <ul className="mt-6 space-y-3 flex-1">
               <li className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                <span className="text-muted-foreground">One simple transaction</span>
+                <span className="text-muted-foreground">{t('fullFeature1')}</span>
               </li>
               <li className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                <span className="text-muted-foreground">No payment reminders</span>
+                <span className="text-muted-foreground">{t('fullFeature2')}</span>
               </li>
               <li className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
-                <span className="text-muted-foreground">Same priority shipping</span>
+                <span className="text-muted-foreground">{t('fullFeature3')}</span>
               </li>
             </ul>
 
@@ -115,14 +118,14 @@ export function PreOrderModal({ isOpen, onClose }: PreOrderModalProps) {
               disabled={!fullPaymentLink}
             >
               <a href={fullPaymentLink || "#"} target="_blank" rel="noopener noreferrer">
-                Pay $1,800 Full
+                {t('fullCta')}
               </a>
             </Button>
           </div>
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          All pre-orders are fully refundable until we ship. Estimated shipping: Spring 2026.
+          {t('refundNote')}
         </p>
       </div>
     </div>

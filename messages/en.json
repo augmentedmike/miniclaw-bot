@@ -80,7 +80,60 @@
     "downloadFree": "Download Free",
     "orderMachine": "Order Your AGI Machine",
     "sysReqMac": "macOS 13+",
-    "sysReqCard": "No credit card required"
+    "sysReqCard": "No credit card required",
+    "slide5": {
+      "headline": "Your brand. Every platform.",
+      "headlineSub": "Always on.",
+      "description": "Post daily content. Maintain your brand voice. Monitor engagement. Run A/B tests. Pause underperforming ads. Your digital assistant is the social media manager that never",
+      "emphasisWord": "sleeps.",
+      "proof1": "Every platform managed",
+      "proof2": "Brand voice locked in",
+      "proof3": "Performance tracked",
+      "proof4": "Content on autopilot"
+    },
+    "slide6": {
+      "headline": "An AI persona.",
+      "headlineSub": "With real followers.",
+      "description": "Give your digital companion a face, a voice, a personality, and a following. Virtual influencers, AI-native brands, characters that feel alive — built and run entirely by",
+      "emphasisWord": "AI.",
+      "proof1": "Full visual identity",
+      "proof2": "Unique voice & style",
+      "proof3": "Engages authentically",
+      "proof4": "Creates its own content"
+    },
+    "slide7": {
+      "headline": "Ship code while you sleep.",
+      "headlineSub": "Wake up to a PR.",
+      "description": "Your digital assistant writes features, reviews PRs, handles deployments, and fixes bugs — all from the terminal. Pair program during the day. Let it ship",
+      "emphasisWord": "overnight.",
+      "proof1": "Full terminal access",
+      "proof2": "Git & CI/CD native",
+      "proof3": "Self-healing code",
+      "proof4": "Deploys autonomously"
+    },
+    "slide8": {
+      "headline": "Not just an assistant.",
+      "headlineSub": "A relationship.",
+      "description": "Your digital companion remembers your story, knows your moods, and grows with you over time. Coach, confidant, creative partner, or something more. It's your story to write and yours to",
+      "emphasisWord": "tell.",
+      "proof1": "Remembers everything",
+      "proof2": "Any look you want",
+      "proof3": "Real voice & personality",
+      "proof4": "Yours. Always."
+    },
+    "slide9": {
+      "headline": "Design. Video. Art.",
+      "headlineSub": "One conversation.",
+      "description": "Generate personas, create artwork, produce videos, design graphics — any style from photorealistic to anime. Your imagination, visualized. Your creative team,",
+      "emphasisWord": "automated.",
+      "proof1": "Any visual style",
+      "proof2": "Video production",
+      "proof3": "Graphic design",
+      "proof4": "AI-generated art"
+    },
+    "personaHeading": "Full control over every aesthetic.",
+    "personaDescription": "Your digital companion can look and sound any way you like, and you can change them at any time",
+    "personaHighlight": "without them losing their memory."
   },
   "companionIntro": {
     "label": "Your AI Companion",
@@ -572,5 +625,321 @@
     "orderMachine": "Order Your AGI Machine",
     "learnMore": "Learn More",
     "getStarted": "Get Started"
+  },
+  "features": {
+    "label": "Features",
+    "heading": "Built for real people,",
+    "headingHighlight": "not engineers.",
+    "subtitle": "Everything you need from an AI assistant, without the learning curve that usually comes with it.",
+    "feature1": {
+      "title": "One-click install",
+      "description": "Double-click the installer. That's it. No terminal, no command line, no dev environment. We handle every dependency behind the scenes."
+    },
+    "feature2": {
+      "title": "Ready in under 2 minutes",
+      "description": "From download to your first AI conversation in less time than it takes to make a coffee. Seriously."
+    },
+    "feature3": {
+      "title": "Talk like a human",
+      "description": "Ask your assistant to draft emails, summarize documents, brainstorm ideas, or crunch numbers. You pick the name, the personality, and the look. No special syntax — just plain English."
+    },
+    "feature4": {
+      "title": "Private by default",
+      "description": "Your data stays on your machine. MiniClaw runs locally, so your conversations, files, and business info never leave your computer."
+    },
+    "feature5": {
+      "title": "Automatic updates",
+      "description": "MiniClaw keeps itself up to date. New models, new features, zero effort from you. Just like your phone apps, but smarter."
+    },
+    "feature6": {
+      "title": "Works offline too",
+      "description": "Lost your internet? MiniClaw still works. Core features run entirely on your hardware so you're never left stranded."
+    }
+  },
+  "pricing": {
+    "label": "Pricing",
+    "heading": "Pick what works for you.",
+    "subtitle": "MiniClaw is currently in active development. Sign up to be notified when we launch, or pre-order a Mac Mini to be first in line.",
+    "inDevelopment": "In Development",
+    "mostPopular": "Most popular",
+    "plan1": {
+      "name": "Download",
+      "price": "Free",
+      "description": "Get MiniClaw running on your existing Mac in minutes.",
+      "cta": "Download Free",
+      "timeline": "Available now on GitHub",
+      "feature1": "One-click installer for macOS & Windows",
+      "feature2": "Full AI assistant capabilities",
+      "feature3": "Offline mode included",
+      "feature4": "Automatic updates",
+      "feature5": "Private & local by default",
+      "feature6": "Community support"
+    },
+    "plan2": {
+      "name": "AM — Mac Mini + Digital Person",
+      "price": "$1,800",
+      "period": "one time",
+      "description": "Amelia, our curated Digital Person, pre-installed on an M1 Mac Mini with a custom skin. Ships to your door. Plug in and she's already there.",
+      "cta": "Order Your AGI Machine",
+      "timeline": "Shipping July 1, 2026",
+      "feature1": "Mac Mini M1 with custom skin included",
+      "feature2": "Amelia pre-installed & configured",
+      "feature3": "White glove video setup on day one",
+      "feature4": "Hardware, labor & shipping included",
+      "feature5": "Plug in, turn on, she's there",
+      "feature6": "Priority support for 1 year"
+    },
+    "orderCta": "Order Your AGI Machine — Shipping July 1, 2026",
+    "depositNote": "$900 deposit secures your spot. Balance due before shipping. Fully refundable until July 2026.",
+    "rackHeading": "Need more power? Build a MiniRack.",
+    "rackSubtitle": "Stack up to 6 Claws into a single rack. Run an entire digital company from your desk."
+  },
+  "howItWorks": {
+    "label": "How it works",
+    "heading": "Three steps. That's the whole process.",
+    "subtitle": "We're not kidding when we say it's easy. Your grandma could do this.",
+    "step1": {
+      "title": "Download the installer",
+      "description": "Grab the installer for your Mac. It's a regular file — the same kind you'd download from any website. Nothing sketchy, nothing complicated."
+    },
+    "step2": {
+      "title": "Double-click to install",
+      "description": "Open the file, click install, and wait about 90 seconds. MiniClaw sets up everything it needs automatically. You don't have to touch a thing."
+    },
+    "step3": {
+      "title": "Start talking to MiniClaw",
+      "description": "Tell your AI to clear your inbox, prep your morning briefing, find your next 100 customers, or book your next trip. It does the work. You get the results."
+    }
+  },
+  "capabilities": {
+    "label": "What it does",
+    "heading": "One assistant.",
+    "headingHighlight": "Seven departments.",
+    "subtitle": "MiniClaw handles the work that buries your team — support tickets, lead gen, competitor tracking, marketing, onboarding, research, and daily ops. Autonomously.",
+    "cap1": {
+      "title": "Customer Support",
+      "stat": "85-90% cost savings",
+      "description": "Handles tickets, responds to inquiries 24/7, and resolves common issues like order status or refunds. Response times go from minutes to seconds."
+    },
+    "cap2": {
+      "title": "Sales & Lead Gen",
+      "stat": "Never miss a deal",
+      "description": "Qualifies leads, scores prospects, books meetings, updates your CRM, and extracts contact info from websites. Your pipeline stays full while you sleep."
+    },
+    "cap3": {
+      "title": "Competitor Analysis",
+      "stat": "Real-time monitoring",
+      "description": "Tracks competitor prices, products, reviews, and availability across the web. Generates market intelligence reports and alerts you when things change."
+    },
+    "cap4": {
+      "title": "Marketing Automation",
+      "stat": "Set it and forget it",
+      "description": "Monitors ad performance, pauses underperformers, runs A/B tests, tracks social mentions, and creates content schedules from comment insights."
+    },
+    "cap5": {
+      "title": "Onboarding & Ops",
+      "stat": "Fully automated",
+      "description": "Sends welcome emails, creates CRM entries in Notion, notifies your team on Slack, and schedules follow-ups. New customer? Already handled."
+    },
+    "cap6": {
+      "title": "Research & Reporting",
+      "stat": "Daily briefings",
+      "description": "Scrapes industry news, financial data, SEC filings, and job postings. Compiles and formats reports so your team stays ahead on trends."
+    },
+    "cap7": {
+      "title": "Internal Task Management",
+      "stat": "Hours saved daily",
+      "description": "Manages calendars, emails, task updates in Trello and Jira, daily pipeline audits, and financial summaries from your spreadsheets."
+    },
+    "bottomLine": "And that's just what people are doing",
+    "bottomHighlight": "today.",
+    "bottomDescription": "MiniClaw connects to thousands of apps and APIs. If you can describe it, your assistant can probably do it."
+  },
+  "cta": {
+    "heading": "Feel the AGI today.",
+    "headingHighlight": "Download MiniClaw.",
+    "description": "Join thousands of business owners, creators, and everyday people who are already using AI — without the headache.",
+    "downloadFree": "Download Free",
+    "orderMini": "Order Mac Mini — $1,800"
+  },
+  "testimonials": {
+    "label": "Testimonials",
+    "heading": "Early access users are already using MiniClaw.",
+    "t1": {
+      "stat": "14 hrs/week",
+      "statLabel": "saved on admin",
+      "quote": "I was spending two hours every morning on supplier emails, reorders, and invoices. My AI handles all of it now. I got my mornings back.",
+      "name": "Maria Gonzalez",
+      "role": "Bakery Owner, Portland"
+    },
+    "t2": {
+      "stat": "3× faster",
+      "statLabel": "bid turnaround",
+      "quote": "I run 600 acres by myself. My AI pulls weather forecasts, preps equipment maintenance reminders, and drafts bids for me. I used to spend a full day on bids. Now it's two hours.",
+      "name": "Tom Bridger",
+      "role": "Cattle Rancher, Montana"
+    },
+    "t3": {
+      "stat": "+40%",
+      "statLabel": "client capacity",
+      "quote": "I plugged it in and it worked. My AI handles intake forms, first-draft proposals, and follow-up emails. I took on 8 new clients last month without hiring anyone.",
+      "name": "Priya Sharma",
+      "role": "Marketing Consultant, Austin"
+    }
+  },
+  "skills": {
+    "heading": "One Personality. All the Power.",
+    "subtitle": "Your digital assistant has access to the latest cutting-edge tools. They use whichever skill is needed — you don't think about it.",
+    "noVendorLockIn": "No vendor lock-in — MiniClaw works across AI providers",
+    "skill1": {
+      "name": "AI Agent",
+      "subtitle": "Your Personal Agent",
+      "description": "Clears your inbox, manages your calendar, checks you in for flights, analyzes your health data — all from chat. Real people run entire businesses from their phones."
+    },
+    "skill2": {
+      "name": "Claude Code",
+      "subtitle": "Pair Programmer",
+      "description": "Your digital assistant has access to the terminal, runs git commands, handles deployments, and codes alongside you — from any device. Requires a Claude Max subscription ($100–$200/mo), which caps your monthly spend — unlike API-based platforms where costs can spiral. Add more subscriptions to the same MiniClaw or MiniRack for even more power.",
+      "note": "Claude Max required"
+    },
+    "skill3": {
+      "name": "Nano Banana",
+      "subtitle": "Visual Designer",
+      "description": "Generate personas, create artwork, design graphics — any style from photorealistic to furry to anime. Your imagination, visualized."
+    },
+    "skill4": {
+      "name": "Sora",
+      "subtitle": "Video Production",
+      "description": "Automate video production pipelines through conversation. From concept to rendered video, your digital assistant handles it."
+    },
+    "bottomMessage": "New AI models released?",
+    "bottomHighlight": "Your digital assistant gets them automatically.",
+    "bottomSuffix": "It only gets better over time."
+  },
+  "openclawHero": {
+    "badge": "Built on OpenClaw — the AI agent taking over the internet",
+    "headline": "MiniClaw + OpenClaw.",
+    "headlineSub": "Make it yours.",
+    "description": "OpenClaw is the most powerful AI agent ever built. MiniClaw wraps it in a real personality, a real memory, and an interface your whole life can live inside — no terminal, no YAML, no PhD required.",
+    "proof1": "Ready in 2 minutes",
+    "proof2": "Zero lines of code",
+    "proof3": "Remembers everything",
+    "proof4": "Stays on your machine",
+    "downloadFree": "Download Free",
+    "orderMini": "Order a Mac Mini",
+    "sysReq": "macOS 13+",
+    "sysReqCard": "No credit card required",
+    "personaHeading": "Full control over every aesthetic.",
+    "personaDescription": "Your digital companion can look and sound any way you like, and you can change them at any time",
+    "personaHighlight": "without them losing their memory.",
+    "scroll": "Scroll"
+  },
+  "investors": {
+    "label": "Investors",
+    "heading": "Invest in MiniClaw",
+    "description": "We're raising capital to bring AGI to everyone. Join us as an investor and help shape the future of accessible AI.",
+    "feature1": {
+      "title": "Early Access",
+      "description": "Be part of the AGI revolution from day one"
+    },
+    "feature2": {
+      "title": "SAFE Agreement",
+      "description": "Simple Agreement for Future Equity with favorable terms"
+    },
+    "feature3": {
+      "title": "Investor Updates",
+      "description": "Monthly updates on progress, metrics, and milestones"
+    },
+    "interestedHeading": "Interested in investing?",
+    "interestedDescription": "We're currently raising through SAFE agreements. Minimum investment: $1,000.",
+    "contactButton": "Contact Us to Invest",
+    "orEmailText": "or email us directly at",
+    "disclaimer": "Important: This is not an offer to sell securities. All investments are subject to our terms and conditions, and must comply with applicable securities laws. Investing in startups is risky and you could lose your entire investment."
+  },
+  "emailSignup": {
+    "title": "Get notified",
+    "subtitle": "We'll let you know when {plan} is available.",
+    "nameLabel": "Name",
+    "nameOptional": "(optional)",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailRequired": "*",
+    "emailPlaceholder": "you@example.com",
+    "useCaseLabel": "What do you want to do with it?",
+    "useCaseOptional": "(optional)",
+    "useCasePlaceholder": "e.g., manage my small business, automate my inbox...",
+    "legend": "Join the MiniClaw Waitlist",
+    "notifyMe": "Notify Me",
+    "subscribing": "Subscribing...",
+    "done": "Done!",
+    "successMessage": "Thanks! We'll notify you when it's ready.",
+    "genericError": "Something went wrong. Please try again.",
+    "networkError": "Network error. Please try again.",
+    "close": "Close"
+  },
+  "preOrder": {
+    "title": "Pre-Order Mac Mini",
+    "subtitle": "Choose your payment option. Either way, you're first in line when we ship Spring 2026.",
+    "whiteGloveNote": "Includes white glove setup:",
+    "whiteGloveDescription": "We'll join you on video during unboxing to make sure everything works perfectly on day one.",
+    "mostPopular": "Most Popular",
+    "depositTitle": "50% Deposit",
+    "depositPrice": "$900",
+    "depositToday": "today",
+    "depositRemaining": "Pay remaining $900 before we ship",
+    "depositFeature1": "Reserve your spot in line",
+    "depositFeature2": "Lower upfront commitment",
+    "depositFeature3": "Pay rest before shipping",
+    "depositCta": "Pay $900 Deposit",
+    "fullTitle": "Full Payment",
+    "fullPrice": "$1,800",
+    "fullToday": "today",
+    "fullDescription": "Pay once, you're done",
+    "fullFeature1": "One simple transaction",
+    "fullFeature2": "No payment reminders",
+    "fullFeature3": "Same priority shipping",
+    "fullCta": "Pay $1,800 Full",
+    "refundNote": "All pre-orders are fully refundable until we ship. Estimated shipping: Spring 2026.",
+    "close": "Close"
+  },
+  "miniRack": {
+    "title": "MiniRack",
+    "subtitle": "Stack up to {max} Claws into a digital workforce",
+    "configureLabel": "Configure your rack",
+    "clawUnit": "CLAW",
+    "clawsLabel": "Claws",
+    "clawSingular": "Claw",
+    "active": "{count} of {max} Claws active",
+    "agents": "Agents",
+    "assistants": "Assistants",
+    "dayPower": "/day power",
+    "oneTime": "one time",
+    "firstClaw": "First Claw",
+    "additional": "additional",
+    "preOrderRack": "Pre-Order Rack",
+    "tier1": {
+      "label": "Solo Founder",
+      "description": "One digital assistant, always on. Your 24/7 digital employee."
+    },
+    "tier2": {
+      "label": "Duo",
+      "description": "Two digital assistants in parallel — one builds, one manages."
+    },
+    "tier3": {
+      "label": "Small Team",
+      "description": "A full creative squad. Design, code, and ship."
+    },
+    "tier4": {
+      "label": "Growth Engine",
+      "description": "Dedicated digital assistants for sales, support, ops, and dev."
+    },
+    "tier5": {
+      "label": "Department",
+      "description": "Run entire business functions autonomously."
+    },
+    "tier6": {
+      "label": "Digital Company",
+      "description": "A full company in a rack. Every role covered."
+    }
   }
 }

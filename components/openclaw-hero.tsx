@@ -1,8 +1,11 @@
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { ArrowDown, Download, Monitor } from "lucide-react"
 import { HeroPersonaCard } from "@/components/hero-persona-card"
 
 export function OpenClawHero() {
+  const t = useTranslations('openclawHero')
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-20">
       {/* Subtle glow */}
@@ -11,34 +14,34 @@ export function OpenClawHero() {
       <div className="relative mx-auto flex max-w-5xl flex-col items-center text-center">
 
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/60 px-4 py-1.5 text-sm font-medium text-muted-foreground">
-          Built on OpenClaw — the AI agent taking over the internet
+          {t('badge')}
         </div>
 
         <h1 className="text-balance text-5xl font-bold leading-tight tracking-tight text-foreground md:text-7xl lg:text-8xl">
-          MiniClaw + OpenClaw.<br className="hidden md:block" />
-          <span className="text-foreground/80">Make it yours.</span>
+          {t('headline')}<br className="hidden md:block" />
+          <span className="text-foreground/80">{t('headlineSub')}</span>
         </h1>
 
         <p className="mt-6 max-w-2xl text-pretty text-xl leading-relaxed text-muted-foreground">
-          OpenClaw is the most powerful AI agent ever built. MiniClaw wraps it in a real personality, a real memory, and an interface your whole life can live inside — no terminal, no YAML, no PhD required.
+          {t('description')}
         </p>
 
         {/* Proof points */}
         <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground/70">
-          <span>⚡ Ready in 2 minutes</span>
+          <span>⚡ {t('proof1')}</span>
           <span>·</span>
-          <span>🚫 Zero lines of code</span>
+          <span>🚫 {t('proof2')}</span>
           <span>·</span>
-          <span>🧠 Remembers everything</span>
+          <span>🧠 {t('proof3')}</span>
           <span>·</span>
-          <span>🔒 Stays on your machine</span>
+          <span>🔒 {t('proof4')}</span>
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
           <Button size="lg" className="gap-2 px-8 text-base" asChild>
             <a href="https://github.com/augmentedmike/miniclaw-os">
               <Download className="h-4 w-4" />
-              Download Free
+              {t('downloadFree')}
             </a>
           </Button>
           <Button
@@ -49,24 +52,24 @@ export function OpenClawHero() {
           >
             <a href="#order">
               <Monitor className="h-4 w-4" />
-              Order a Mac Mini
+              {t('orderMini')}
             </a>
           </Button>
         </div>
 
         <p className="mt-4 text-xs text-muted-foreground/60">
-          macOS 13+&middot; No credit card required
+          {t('sysReq')}&middot; {t('sysReqCard')}
         </p>
       </div>
 
       {/* Hero persona card */}
       <div className="relative mx-auto mt-16 w-full max-w-4xl md:mt-20">
         <h2 className="mb-2 text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          Full control over every aesthetic.
+          {t('personaHeading')}
         </h2>
         <p className="mb-6 text-center text-base text-muted-foreground sm:text-lg">
-          Your digital companion can look and sound any way you like, and you can change them at any time{" "}
-          <span className="font-medium text-foreground">without them losing their memory.</span>
+          {t('personaDescription')}{" "}
+          <span className="font-medium text-foreground">{t('personaHighlight')}</span>
         </p>
         <HeroPersonaCard />
       </div>
@@ -75,9 +78,9 @@ export function OpenClawHero() {
       <a
         href="#features"
         className="mt-12 mb-8 flex flex-col items-center gap-2 text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-        aria-label="Scroll to features"
+        aria-label={t('scroll')}
       >
-        <span className="text-xs">Scroll</span>
+        <span className="text-xs">{t('scroll')}</span>
         <ArrowDown className="h-4 w-4 animate-bounce" />
       </a>
     </section>
