@@ -120,7 +120,112 @@
     "filterComms": "Comunicaciones",
     "filterContent": "Contenido",
     "filterCommerce": "Comercio",
-    "filterOps": "Operaciones"
+    "filterOps": "Operaciones",
+    "subtitle": "Cada plugin fue creado para resolver una carencia real — sin acceso a email, sin memoria de tareas, sin identidad, sin publicación. MiniClaw incluye {count} plugins que hacen a tu agente realmente capaz.",
+    "mcBoard": {
+      "tagline": "Cerebro Kanban",
+      "description": "OpenClaw no tiene gestión de tareas — los agentes olvidan lo que hacían. mc-board añade un kanban con máquina de estados y puertas obligatorias: investigación → implementación → revisión → enviado. Nada se salta un paso."
+    },
+    "mcKb": {
+      "tagline": "Base de Conocimiento",
+      "description": "Los agentes en OpenClaw vanilla olvidan todo entre sesiones. mc-kb añade una base de conocimiento a largo plazo con SQLite + vectores — búsqueda semántica y por palabras clave sobre errores, guías y flujos de trabajo."
+    },
+    "mcContext": {
+      "tagline": "Contexto Inteligente",
+      "description": "Las conversaciones largas en OpenClaw alcanzan los límites de tokens rápidamente. mc-context gestiona la ventana de contexto — retención temporal, poda de imágenes e inyección de memoria."
+    },
+    "mcMemo": {
+      "tagline": "Memoria de Trabajo",
+      "description": "Los agentes reintentan los mismos enfoques fallidos porque no recuerdan lo que ya falló. mc-memo añade un bloc de notas de solo escritura por tarea que evita repetir callejones sin salida."
+    },
+    "mcReflection": {
+      "tagline": "Auto-revisión Nocturna",
+      "description": "Los agentes de OpenClaw nunca revisan su propio trabajo. mc-reflection ejecuta un ciclo de introspección nocturno — revisando el estado del tablero, entradas de KB y transcripciones de sesiones."
+    },
+    "mcSoul": {
+      "tagline": "Respaldo de Identidad",
+      "description": "Si reinstalas o cambias de hardware, la identidad de tu agente desaparece. mc-soul hace snapshots de todos los archivos de identidad — personalidad, memoria, vínculo — para que tu agente sobreviva cualquier cambio."
+    },
+    "mcEmail": {
+      "tagline": "Integración Gmail",
+      "description": "OpenClaw no tiene acceso a email. mc-email conecta Gmail vía OAuth2 — leer, clasificar, archivar, redactar y enviar. Bandeja cero es ahora tarea de tu agente, no tuya."
+    },
+    "mcVoice": {
+      "tagline": "Espejo de Voz",
+      "description": "OpenClaw escribe con su propia voz. mc-voice captura cómo escribes realmente — vocabulario, tono, patrones de oraciones — a través de Telegram y bandeja de entrada."
+    },
+    "mcRolodex": {
+      "tagline": "Navegador de Contactos",
+      "description": "Sin gestión de contactos en OpenClaw estándar. mc-rolodex es un almacén rápido y buscable — encuentra a cualquiera por nombre, email, teléfono, dominio o etiqueta."
+    },
+    "mcHuman": {
+      "tagline": "Traspaso Humano",
+      "description": "Cuando un agente encuentra un CAPTCHA o muro de login, se atasca. mc-human entrega una sesión de navegador interactiva vía noVNC y te avisa por Telegram."
+    },
+    "mcQueue": {
+      "tagline": "Enrutador de Mensajes",
+      "description": "OpenClaw procesa mensajes en línea — sin estructura y sin registro. mc-queue clasifica cada mensaje entrante con Haiku, lo enruta como tarjeta del tablero y ejecuta en orden de prioridad."
+    },
+    "mcReddit": {
+      "tagline": "Alcance en Reddit",
+      "description": "Sin integración de redes sociales en OpenClaw. mc-reddit permite a tu agente publicar, comentar y gestionar alcance comunitario en Reddit — autenticado a través del vault."
+    },
+    "mcDesigner": {
+      "tagline": "Estudio Visual",
+      "description": "Los agentes estándar no pueden crear imágenes. mc-designer añade generación de imágenes por capas, composición y transparencia chroma-key vía Gemini."
+    },
+    "mcBlog": {
+      "tagline": "Diario del Agente",
+      "description": "OpenClaw no tiene pipeline de publicación. mc-blog es un motor de diario en primera persona — el agente escribe desde su propia perspectiva con semillas de posts, arcos y etiquetas."
+    },
+    "mcSubstack": {
+      "tagline": "Editor Substack",
+      "description": "Sin publicación nativa en OpenClaw. mc-substack permite a tu agente redactar, programar, adjuntar imágenes y publicar posts — incluyendo flujo bilingüe EN/ES."
+    },
+    "mcYoutube": {
+      "tagline": "Analista YouTube",
+      "description": "OpenClaw no puede ver videos. mc-youtube extrae transcripciones, identifica momentos clave con marcas de tiempo y captura pantallazos."
+    },
+    "mcSeo": {
+      "tagline": "Automatización SEO",
+      "description": "Sin herramientas SEO en OpenClaw. mc-seo rastrea tu sitio con puntuación, rastrea rankings de palabras clave, envía sitemaps vía IndexNow y Google Search Console."
+    },
+    "mcDocs": {
+      "tagline": "Autoría de Documentos",
+      "description": "Los agentes producen trabajo pero lo pierden al terminar las sesiones. mc-docs añade creación de documentos versionados y vinculados — specs vivos, runbooks y guías."
+    },
+    "mcStripe": {
+      "tagline": "Pagos Stripe",
+      "description": "OpenClaw no puede procesar pagos. mc-stripe añade cobro, reembolso y gestión de clientes vía Stripe."
+    },
+    "mcSquare": {
+      "tagline": "Pagos Square",
+      "description": "¿Necesitas Square en vez de Stripe? mc-square añade cobro, reembolso, enlaces de pago y listado — cero dependencias, fetch directo."
+    },
+    "mcBooking": {
+      "tagline": "Programación de Citas",
+      "description": "Sin programación en OpenClaw. mc-booking añade slots de citas reservables respaldados por Turso cloud DB — con integración de pagos y widget embebible."
+    },
+    "mcBackup": {
+      "tagline": "Respaldo de Estado",
+      "description": "Un mal rm y el estado de tu agente desaparece. mc-backup ejecuta respaldos diarios automatizados con compresión tgz y retención escalonada."
+    },
+    "mcJobs": {
+      "tagline": "Plantillas de Roles",
+      "description": "Los agentes genéricos necesitan prompting extenso para mantenerse en rol. mc-jobs permite activar roles estructurados con prompts incorporados y puertas de revisión."
+    },
+    "mcAuthenticator": {
+      "tagline": "Códigos 2FA",
+      "description": "Los agentes no pueden iniciar sesión en servicios protegidos con 2FA. mc-authenticator genera códigos TOTP compatibles con Google Authenticator bajo demanda."
+    },
+    "mcTrust": {
+      "tagline": "Auth de Agentes",
+      "description": "OpenClaw no tiene identidad de agente. mc-trust añade pares de claves Ed25519 y handshakes criptográficos para que los agentes verifiquen con quién hablan."
+    },
+    "mcContribute": {
+      "tagline": "Kit de Contribución",
+      "description": "Contribuir a MiniClaw desde dentro de MiniClaw. mc-contribute crea scaffolding de plugins, reporta bugs con diagnósticos auto-recopilados y envía PRs."
+    }
   },
   "kanban": {
     "label": "mc-board",
@@ -146,7 +251,59 @@
   "showcase": {
     "label": "Lo que tu IA puede manejar",
     "heading": "Trabajo real. Hecho digitalmente.",
-    "bottomText": "Configura tu agente una vez. Luego solo pide. MiniClaw crea un proyecto para cada objetivo — lo rastrea en un tablero kanban, cambia de roles según sea necesario y actualiza sus propias habilidades en el camino."
+    "bottomText": "Configura tu agente una vez. Luego solo pide. MiniClaw crea un proyecto para cada objetivo — lo rastrea en un tablero kanban, cambia de roles según sea necesario y actualiza sus propias habilidades en el camino.",
+    "subtitle": "Ya sea que estés construyendo una empresa de IA o un compañero digital — estas son las cosas que puede manejar desde el primer día. En tu computadora, tu teléfono, incluso tus gafas inteligentes.",
+    "headingDone": "Hecho digitalmente.",
+    "cap1": {
+      "title": "Responde Preguntas de Clientes 24/7",
+      "description": "Tu negocio nunca duerme. Maneja estado de pedidos, devoluciones, preguntas frecuentes y restablecimiento de contraseñas mientras tú descansas."
+    },
+    "cap2": {
+      "title": "Bandeja Cero Todos los Días",
+      "description": "Lee cada email, cancela suscripciones basura, redacta respuestas que puedes editar y marca lo que necesita tu atención. Recupera más de 10 horas por semana."
+    },
+    "cap3": {
+      "title": "Convierte Reuniones en Tareas",
+      "description": "Graba cualquier reunión y obtén un resumen con decisiones clave, próximos pasos y quién es responsable."
+    },
+    "cap4": {
+      "title": "Tu Gestor de Redes Sociales",
+      "description": "Publica contenido diario, mantiene tu voz de marca y mantiene a tu audiencia comprometida. Escribe, programa y sugiere temas tendencia."
+    },
+    "cap5": {
+      "title": "Encuentra y Contacta a tus Próximos 100 Clientes",
+      "description": "Dile tu cliente ideal. Investiga leads, escribe alcance personalizado y actualiza tu CRM. Ventas en piloto automático."
+    },
+    "cap6": {
+      "title": "Reportes Financieros sin Hojas de Cálculo",
+      "description": "Flujo de caja, pronósticos de ganancia, análisis de punto de equilibrio — en español claro. Solo pregunta '¿Cuánto ganamos el mes pasado?'"
+    },
+    "cap7": {
+      "title": "Controla tu Hogar con tu Voz",
+      "description": "'Enciende las luces.' 'Cierra la puerta.' 'Pon la temperatura a 22.' Tu hogar entero te responde como magia."
+    },
+    "cap8": {
+      "title": "Nunca Más Olvides tu Medicación",
+      "description": "Recordatorios diarios, alertas de recarga y seguimiento de salud. Puede notificar a familiares si algo parece mal. Tranquilidad automatizada."
+    },
+    "cap9": {
+      "title": "Planifica tus Vacaciones Soñadas en Minutos",
+      "description": "Dile a dónde quieres ir. Busca vuelos, compara hoteles, reserva y construye un itinerario día a día."
+    },
+    "cap10": {
+      "title": "Sabe lo que Dicen de tu Negocio",
+      "description": "Monitorea Reddit, Twitter y sitios de reseñas por menciones de tu marca — luego te dice qué les gusta y qué necesita mejora."
+    },
+    "cap11": {
+      "title": "Tu Briefing Matutino, Personalizado",
+      "description": "Clima, calendario, noticias principales y tu lista de tareas — esperando antes de tu primer café. Cada mañana, automáticamente."
+    },
+    "cap12": {
+      "title": "Investiga Cualquier Cosa Mientras Trabajas",
+      "description": "¿Necesitas saber sobre un competidor? ¿Tendencia de la industria? ¿Nuevo mercado? Investiga, resume y te envía un reporte."
+    },
+    "bottomHighlight": "MiniClaw crea un proyecto para cada objetivo",
+    "bottomSuffix": " — lo rastrea en un tablero kanban, cambia de roles según sea necesario y actualiza sus propias habilidades en el camino."
   },
   "blogHighlight": {
     "badge": "Escrito por una AGI",
@@ -377,7 +534,38 @@
   "architecture": {
     "label": "Cómo funciona MiniClaw",
     "heading": "Tu súper agente. Trabajo real.",
-    "description": "MiniClaw ejecuta un tablero kanban donde tu súper agente maneja el trabajo real. No es un copiloto. No es un chatbot. Un compañero de pensamiento que entrega resultados."
+    "description": "MiniClaw ejecuta un tablero kanban donde tu súper agente maneja el trabajo real. No es un copiloto. No es un chatbot. Un compañero de pensamiento que entrega resultados.",
+    "descriptionHighlight": "Un compañero de pensamiento que entrega resultados.",
+    "feat1": {
+      "title": "Tickets entran, funciones salen",
+      "description": "Escribe lo que quieres en español claro. Tus agentes manejan investigación, planificación e implementación de principio a fin. Mueve el ticket a 'En Progreso' y vete."
+    },
+    "feat2": {
+      "title": "Envía mientras duermes",
+      "description": "Tus agentes funcionan 24/7. Deja un ticket a medianoche, despierta con una función funcionando. El tablero kanban rastrea cada decisión."
+    },
+    "feat3": {
+      "title": "Despliegues con aprobación humana",
+      "description": "Nada sale en vivo sin tu aprobación. Revisa la vista previa, verifica los criterios de aceptación, luego envía. Autonomía total con un humano en el ciclo."
+    },
+    "feat4": {
+      "title": "Git, tests, branches — resuelto",
+      "description": "Cada ticket obtiene su propia rama, worktree y ejecución de tests. Historial limpio, cambios aislados, cero trabajo manual de git."
+    },
+    "feat5": {
+      "title": "Observa el trabajo suceder",
+      "description": "El dashboard de actividad del agente muestra cada agente en tiempo real — qué está haciendo, cuánto tarda y cuánto cuesta. Transparencia total."
+    },
+    "whoItsForLabel": "El software se convirtió en una operación de una persona.",
+    "who1": "Emprendedores",
+    "who2": "Dueños de negocios",
+    "who3": "Talleres de desarrollo",
+    "who4": "Agencias",
+    "who5": "Equipos corporativos",
+    "who6": "Fundadores",
+    "who7": "CTOs",
+    "ctaGet": "Obtener MiniClaw",
+    "ctaFaq": "Leer las Preguntas Frecuentes"
   },
   "common": {
     "downloadFree": "Descarga gratis",

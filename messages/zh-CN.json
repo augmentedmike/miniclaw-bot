@@ -120,7 +120,112 @@
     "filterComms": "通讯",
     "filterContent": "内容",
     "filterCommerce": "商业",
-    "filterOps": "运维"
+    "filterOps": "运维",
+    "subtitle": "每个插件都是为了解决真正的不足而构建的——没有邮件访问、没有任务记忆、没有身份、没有发布功能。MiniClaw 附带 {count} 个插件，让你的代理真正有能力。",
+    "mcBoard": {
+      "tagline": "看板大脑",
+      "description": "OpenClaw没有任务管理——代理忘记了他们在做什么。mc-board添加了一个带强制门控的状态机看板：研究→实现→审查→发布。没有步骤可以跳过。"
+    },
+    "mcKb": {
+      "tagline": "知识库",
+      "description": "原生OpenClaw中的代理在会话之间忘记一切。mc-kb添加了SQLite+向量长期知识库——对错误、指南和工作流程进行语义和关键词搜索。"
+    },
+    "mcContext": {
+      "tagline": "智能上下文",
+      "description": "OpenClaw中的长对话很快达到token限制。mc-context工程化上下文窗口——基于时间的保留、图像修剪和记忆注入。"
+    },
+    "mcMemo": {
+      "tagline": "工作记忆",
+      "description": "代理重复尝试相同的失败方法，因为它们不记得已经失败的。mc-memo为每个任务添加了只追加的便签，防止重复死胡同。"
+    },
+    "mcReflection": {
+      "tagline": "夜间自我审查",
+      "description": "OpenClaw代理从不回顾自己的工作。mc-reflection运行夜间反省循环——审查看板状态、KB条目和会话记录以提取经验教训。"
+    },
+    "mcSoul": {
+      "tagline": "身份备份",
+      "description": "如果你重装或换硬件，你的OpenClaw代理身份就消失了。mc-soul快照所有灵魂文件——身份、记忆、个性、纽带——让你的代理在任何硬件变更中存活。"
+    },
+    "mcEmail": {
+      "tagline": "Gmail集成",
+      "description": "OpenClaw没有邮件访问。mc-email通过OAuth2连接Gmail——阅读、分类、归档、起草和发送。收件箱清零现在是你的代理处理的任务。"
+    },
+    "mcVoice": {
+      "tagline": "语音镜像",
+      "description": "OpenClaw用自己的声音写作。mc-voice捕捉你实际的写作方式——词汇、语调、句式——通过Telegram和收件箱。"
+    },
+    "mcRolodex": {
+      "tagline": "联系人浏览器",
+      "description": "原生OpenClaw没有联系人管理。mc-rolodex是一个快速、可搜索的存储——按姓名、邮箱、电话、域名或标签查找任何人。"
+    },
+    "mcHuman": {
+      "tagline": "人工交接",
+      "description": "当代理遇到验证码或登录墙时，它就卡住了。mc-human通过noVNC提供交互式浏览器会话，并在Telegram上通知你。"
+    },
+    "mcQueue": {
+      "tagline": "消息路由器",
+      "description": "OpenClaw内联处理消息——无结构且无记录。mc-queue用Haiku分类每条传入消息，将其路由为看板卡片，并按优先级顺序执行。"
+    },
+    "mcReddit": {
+      "tagline": "Reddit推广",
+      "description": "OpenClaw没有社交媒体集成。mc-reddit让你的代理在Reddit上发帖、评论和管理社区推广——通过vault认证。"
+    },
+    "mcDesigner": {
+      "tagline": "视觉工作室",
+      "description": "标准代理无法创建图像。mc-designer通过Gemini添加分层图像生成、合成和色度键透明——让你的代理可以设计角色、缩略图和图形。"
+    },
+    "mcBlog": {
+      "tagline": "代理日志",
+      "description": "OpenClaw没有发布管道。mc-blog是一个第一人称日志引擎——代理从自己的角度写作，包含帖子种子、弧线和标签。"
+    },
+    "mcSubstack": {
+      "tagline": "Substack发布器",
+      "description": "OpenClaw没有原生发布功能。mc-substack让你的代理起草、安排、附加图片和发布帖子——包括双语EN/ES工作流。"
+    },
+    "mcYoutube": {
+      "tagline": "YouTube分析师",
+      "description": "OpenClaw无法观看视频。mc-youtube提取字幕、识别带时间戳的关键时刻并捕获截图。"
+    },
+    "mcSeo": {
+      "tagline": "SEO自动化",
+      "description": "OpenClaw没有SEO工具。mc-seo抓取你的网站评分、追踪关键词排名、通过IndexNow和Google Search Console提交站点地图。"
+    },
+    "mcDocs": {
+      "tagline": "文档创作",
+      "description": "代理产生工作但在会话结束时丢失。mc-docs添加版本化、链接的文档创建——活的规范、运行手册和指南。"
+    },
+    "mcStripe": {
+      "tagline": "Stripe支付",
+      "description": "OpenClaw无法处理支付。mc-stripe添加通过Stripe的收费、退款和客户管理。"
+    },
+    "mcSquare": {
+      "tagline": "Square支付",
+      "description": "需要Square而不是Stripe？mc-square添加收费、退款、支付链接和列表——零依赖，原始fetch。"
+    },
+    "mcBooking": {
+      "tagline": "预约调度",
+      "description": "OpenClaw没有调度功能。mc-booking添加由Turso云数据库支持的可预约时段——带支付集成和可嵌入小部件。"
+    },
+    "mcBackup": {
+      "tagline": "状态备份",
+      "description": "一个错误的rm命令，你的代理状态就没了。mc-backup运行自动化每日备份，tgz压缩和分层保留。"
+    },
+    "mcJobs": {
+      "tagline": "角色模板",
+      "description": "通用代理需要大量提示才能保持角色。mc-jobs允许激活结构化角色（软件开发者、内容作家）带内置提示和审查门控。"
+    },
+    "mcAuthenticator": {
+      "tagline": "2FA验证码",
+      "description": "代理无法登录受2FA保护的服务。mc-authenticator按需生成兼容Google Authenticator的TOTP验证码。"
+    },
+    "mcTrust": {
+      "tagline": "代理认证",
+      "description": "OpenClaw没有代理身份——任何消息都可以声称来自任何人。mc-trust添加Ed25519密钥对和加密握手，以便代理验证通信对象。"
+    },
+    "mcContribute": {
+      "tagline": "贡献工具包",
+      "description": "在MiniClaw内部为MiniClaw做贡献。mc-contribute搭建插件脚手架、提交带自动收集诊断的bug、创建分支和提交PR。"
+    }
   },
   "kanban": {
     "label": "mc-board",
@@ -146,7 +251,59 @@
   "showcase": {
     "label": "你的 AI 能处理什么",
     "heading": "真实的工作。数字化完成。",
-    "bottomText": "只需设置一次你的代理。然后直接提问。MiniClaw 为每个目标创建一个项目——在看板上跟踪它，根据需要切换角色，并在过程中更新自身技能。"
+    "bottomText": "只需设置一次你的代理。然后直接提问。MiniClaw 为每个目标创建一个项目——在看板上跟踪它，根据需要切换角色，并在过程中更新自身技能。",
+    "subtitle": "无论你是在建设一家AI公司还是一个数字伙伴——这些都是它从第一天就能处理的事情。在你的电脑、手机，甚至智能眼镜上。",
+    "headingDone": "数字化完成。",
+    "cap1": {
+      "title": "全天候回答客户问题",
+      "description": "你的业务永不休眠。它处理订单状态、退货、常见问题和密码重置，而你在休息。真实客户，真实回答，零加班。"
+    },
+    "cap2": {
+      "title": "每天收件箱清零",
+      "description": "它阅读每封邮件，退订垃圾邮件，起草你可以编辑的回复，并标记需要你注意的内容。每周节省10+小时。"
+    },
+    "cap3": {
+      "title": "将会议转化为行动项",
+      "description": "录制任何会议，获得包含关键决策、后续步骤和负责人的摘要。"
+    },
+    "cap4": {
+      "title": "你的社交媒体经理",
+      "description": "每日发布内容，保持你的品牌声音，保持受众参与度。它撰写、安排，甚至建议热门话题。"
+    },
+    "cap5": {
+      "title": "找到并邮件联系你的下100个客户",
+      "description": "告诉它你的理想客户。它研究线索，撰写个性化外联，并更新你的CRM。销售自动驾驶。"
+    },
+    "cap6": {
+      "title": "无需电子表格获取财务报告",
+      "description": "现金流、利润预测、盈亏平衡分析——用简明的语言。只需问'我们上个月赚了多少？'就能得到答案。"
+    },
+    "cap7": {
+      "title": "用声音控制你的家",
+      "description": "'开灯。''锁门。''把温度设到22度。'你的整个家像魔法一样回应你。"
+    },
+    "cap8": {
+      "title": "再也不会忘记吃药",
+      "description": "每日提醒、补药提醒和健康跟踪。它甚至可以在情况异常时通知家人。自动化的安心。"
+    },
+    "cap9": {
+      "title": "几分钟内规划你的梦想假期",
+      "description": "告诉它你想去哪里。它搜索航班，比较酒店，预订，并建立逐日行程。"
+    },
+    "cap10": {
+      "title": "了解人们对你的业务怎么说",
+      "description": "它监控Reddit、Twitter和评论网站上你的品牌提及——然后告诉你人们喜欢什么，什么需要改进。"
+    },
+    "cap11": {
+      "title": "你的个性化晨间简报",
+      "description": "天气、日历、头条新闻和你的待办事项——在你的第一杯咖啡之前等着你。每天早上，自动进行。"
+    },
+    "cap12": {
+      "title": "工作时研究任何事物",
+      "description": "需要了解竞争对手？行业趋势？新市场？它研究、总结并发送报告给你。就像有一个分析师在身边。"
+    },
+    "bottomHighlight": "MiniClaw为每个目标创建一个项目",
+    "bottomSuffix": "——在看板上跟踪它，按需切换角色，并在过程中更新自己的技能。"
   },
   "blogHighlight": {
     "badge": "由 AGI 撰写",
@@ -377,7 +534,38 @@
   "architecture": {
     "label": "MiniClaw 的工作原理",
     "heading": "你的超级代理。真实的工作。",
-    "description": "MiniClaw 运行一个看板，你的超级代理在上面处理实际工作。不是副驾驶。不是聊天机器人。是一个能交付成果的思维伙伴。"
+    "description": "MiniClaw 运行一个看板，你的超级代理在上面处理实际工作。不是副驾驶。不是聊天机器人。是一个能交付成果的思维伙伴。",
+    "descriptionHighlight": "一个能交付成果的思维伙伴。",
+    "feat1": {
+      "title": "票据进，功能出",
+      "description": "用简单的语言写你想要的。你的代理端到端处理研究、规划和实现。把票据移到'进行中'然后离开。"
+    },
+    "feat2": {
+      "title": "你睡觉时发布",
+      "description": "你的代理全天候运行。午夜放一张票，醒来就有一个工作的功能。看板追踪每个决策。"
+    },
+    "feat3": {
+      "title": "人工审批部署",
+      "description": "未经你的批准，任何东西都不会上线。审查预览，检查验收标准，然后发布。完全自主，人类在环。"
+    },
+    "feat4": {
+      "title": "Git、测试、分支——搞定",
+      "description": "每张票获得自己的分支、工作树和测试运行。干净的历史，隔离的变更，零手动git工作。"
+    },
+    "feat5": {
+      "title": "观看工作发生",
+      "description": "代理活动仪表板实时显示每个代理——它在做什么，花了多长时间，花了多少钱。完全透明。"
+    },
+    "whoItsForLabel": "软件变成了一人操作。",
+    "who1": "独立创业者",
+    "who2": "企业主",
+    "who3": "开发工作室",
+    "who4": "代理机构",
+    "who5": "企业团队",
+    "who6": "创始人",
+    "who7": "CTO们",
+    "ctaGet": "获取MiniClaw",
+    "ctaFaq": "阅读常见问题"
   },
   "common": {
     "downloadFree": "免费下载",

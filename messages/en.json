@@ -120,7 +120,112 @@
     "filterComms": "Comms",
     "filterContent": "Content",
     "filterCommerce": "Commerce",
-    "filterOps": "Ops"
+    "filterOps": "Ops",
+    "subtitle": "Every plugin was built to solve a real gap — no email access, no task memory, no identity, no publishing. MiniClaw ships with {count} plugins that make your agent actually capable.",
+    "mcBoard": {
+      "tagline": "Kanban Brain",
+      "description": "OpenClaw has no task management — agents forget what they were doing. mc-board adds a state-machine kanban with enforced gates: research → implementation → review → shipped. Nothing skips a step."
+    },
+    "mcKb": {
+      "tagline": "Knowledge Base",
+      "description": "Agents in vanilla OpenClaw forget everything between sessions. mc-kb adds a SQLite + vector long-term knowledge base — semantic and keyword search over errors, guides, and workflows so the agent actually learns."
+    },
+    "mcContext": {
+      "tagline": "Smart Context",
+      "description": "Long conversations in OpenClaw hit token limits fast. mc-context engineers the context window — time-based retention, image pruning, and memory injection — so the agent stays coherent without blowing the budget."
+    },
+    "mcMemo": {
+      "tagline": "Working Memory",
+      "description": "Agents re-attempt the same failed approaches because they can't remember what already failed. mc-memo adds a per-task append-only scratchpad that prevents repeating dead ends mid-run."
+    },
+    "mcReflection": {
+      "tagline": "Nightly Self-Review",
+      "description": "OpenClaw agents never look back at their own work. mc-reflection runs a nightly introspection loop — reviewing board state, KB entries, and session transcripts to extract lessons and create action items."
+    },
+    "mcSoul": {
+      "tagline": "Identity Backup",
+      "description": "If you reinstall or swap hardware, your OpenClaw agent's identity is gone. mc-soul snapshots all soul files — identity, memory, personality, bond — so your agent survives any hardware change."
+    },
+    "mcEmail": {
+      "tagline": "Gmail Integration",
+      "description": "OpenClaw has no email access. mc-email connects Gmail via OAuth2 — read, triage, archive, draft, and send. Inbox zero is now a task your agent handles, not you."
+    },
+    "mcVoice": {
+      "tagline": "Voice Mirroring",
+      "description": "OpenClaw writes in its own voice. mc-voice captures how you actually write — vocabulary, tone, sentence patterns — across Telegram and inbox. Over time, the agent writes more like you."
+    },
+    "mcRolodex": {
+      "tagline": "Contact Browser",
+      "description": "No contact management in stock OpenClaw. mc-rolodex is a fast, searchable store — find anyone by name, email, phone, domain, or tag. Built for agents doing outreach or scheduling."
+    },
+    "mcHuman": {
+      "tagline": "Human Handoff",
+      "description": "When an agent hits a CAPTCHA or login wall, it's stuck. mc-human delivers an interactive browser session via noVNC and pings you on Telegram — you solve the blocker, the agent continues."
+    },
+    "mcQueue": {
+      "tagline": "Message Router",
+      "description": "OpenClaw processes messages inline — unstructured and unlogged. mc-queue triages every incoming message with Haiku, routes it as a board card, and executes in priority order across all channels."
+    },
+    "mcReddit": {
+      "tagline": "Reddit Outreach",
+      "description": "No social media integration in OpenClaw. mc-reddit lets your agent post, comment, and manage community outreach on Reddit — authenticated through the vault."
+    },
+    "mcDesigner": {
+      "tagline": "Visual Studio",
+      "description": "Stock agents can't create images. mc-designer adds layered image generation, compositing, and chroma-key transparency via Gemini — so your agent can design personas, thumbnails, and graphics from a conversation."
+    },
+    "mcBlog": {
+      "tagline": "Agent Journal",
+      "description": "OpenClaw has no publishing pipeline. mc-blog is a first-person journal engine — the agent writes from its own perspective with post seeds, arcs, and tags, grounded by its soul, memory, and voice."
+    },
+    "mcSubstack": {
+      "tagline": "Substack Publisher",
+      "description": "No native publishing in OpenClaw. mc-substack lets your agent draft, schedule, attach images, and publish posts — including a bilingual EN/ES workflow. Content ships while you sleep."
+    },
+    "mcYoutube": {
+      "tagline": "YouTube Analyst",
+      "description": "OpenClaw can't watch videos. mc-youtube extracts transcripts, identifies key moments with timestamps, and captures screenshots — turning any YouTube video into searchable, actionable context."
+    },
+    "mcSeo": {
+      "tagline": "SEO Automation",
+      "description": "No SEO tooling in OpenClaw. mc-seo crawls your site with scoring, tracks keyword rankings, submits sitemaps via IndexNow and Google Search Console, and monitors backlinks — all from the CLI."
+    },
+    "mcDocs": {
+      "tagline": "Document Authoring",
+      "description": "Agents produce work but lose it when sessions end. mc-docs adds versioned, linked document creation — living specs, runbooks, and guides that persist and stay connected to the work that produced them."
+    },
+    "mcStripe": {
+      "tagline": "Stripe Payments",
+      "description": "OpenClaw can't process payments. mc-stripe adds charge, refund, and customer management via Stripe — so your agent can handle transactions, look up payment status, and manage customers directly."
+    },
+    "mcSquare": {
+      "tagline": "Square Payments",
+      "description": "Need Square instead of Stripe? mc-square adds charge, refund, payment links, and listing — zero dependencies, raw fetch. Supports sandbox and live environments with configurable currency."
+    },
+    "mcBooking": {
+      "tagline": "Appointment Scheduling",
+      "description": "No scheduling in OpenClaw. mc-booking adds bookable appointment slots backed by Turso cloud DB — with payment integration, an embeddable widget, and configurable availability windows."
+    },
+    "mcBackup": {
+      "tagline": "State Backup",
+      "description": "One bad rm and your agent's state is gone. mc-backup runs automated daily backups with tgz compression and tiered retention — recent dailies roll into monthly, then yearly archives."
+    },
+    "mcJobs": {
+      "tagline": "Role Templates",
+      "description": "Generic agents need extensive prompting to stay in role. mc-jobs lets you activate structured roles (Software Developer, Content Writer) with baked-in prompts, procedures, and review gates — no prompt engineering required."
+    },
+    "mcAuthenticator": {
+      "tagline": "2FA Codes",
+      "description": "Agents can't log into 2FA-protected services. mc-authenticator generates Google Authenticator–compatible TOTP codes on demand — so your agent handles logins autonomously without asking you for a code."
+    },
+    "mcTrust": {
+      "tagline": "Agent Auth",
+      "description": "OpenClaw has no agent identity — any message can claim to be from anyone. mc-trust adds Ed25519 key pairs and cryptographic handshakes so agents verify who they're talking to before acting."
+    },
+    "mcContribute": {
+      "tagline": "Contribution Toolkit",
+      "description": "Contributing to MiniClaw from inside MiniClaw. mc-contribute scaffolds plugins, files bugs with auto-collected diagnostics, creates branches, and submits PRs — all without leaving the agent session."
+    }
   },
   "kanban": {
     "label": "mc-board",
@@ -146,7 +251,59 @@
   "showcase": {
     "label": "What Your AI Can Handle",
     "heading": "Real work. Done digitally.",
-    "bottomText": "Set up your agent once. Then just ask. MiniClaw creates a project for each goal — tracks it on a kanban board, swaps roles as needed, and updates its own skills along the way."
+    "bottomText": "Set up your agent once. Then just ask. MiniClaw creates a project for each goal — tracks it on a kanban board, swaps roles as needed, and updates its own skills along the way.",
+    "subtitle": "Whether you're building an AI company or a digital companion — these are the things it can handle on day one. On your computer, your phone, even your smart glasses.",
+    "headingDone": "Done digitally.",
+    "cap1": {
+      "title": "Answer Customer Questions 24/7",
+      "description": "Your business never sleeps. It handles order status, returns, FAQs, and password resets while you're off the clock. Real customers, real answers, zero overtime."
+    },
+    "cap2": {
+      "title": "Inbox Zero Every Single Day",
+      "description": "It reads every email, unsubscribes from junk, drafts replies you can edit, and flags what needs your attention. Reclaim 10+ hours a week."
+    },
+    "cap3": {
+      "title": "Turn Meetings Into Action Items",
+      "description": "Record any meeting and get a summary with key decisions, next steps, and who's responsible. No more 'wait, what did we decide?'"
+    },
+    "cap4": {
+      "title": "Your Social Media Manager",
+      "description": "Post daily content, maintain your brand voice, and keep your audience engaged. It writes, schedules, and even suggests trending topics."
+    },
+    "cap5": {
+      "title": "Find & Email Your Next 100 Customers",
+      "description": "Tell it your ideal customer. It researches leads, writes personalized outreach, and updates your CRM. Sales on autopilot."
+    },
+    "cap6": {
+      "title": "Get Financial Reports Without Spreadsheets",
+      "description": "Cash flow, profit forecasts, break-even analysis — in plain English. Just ask 'How much did we make last month?' and get the answer."
+    },
+    "cap7": {
+      "title": "Control Your Home With Your Voice",
+      "description": "'Turn on the lights.' 'Lock the door.' 'Set temperature to 72.' Your entire home responds to you like magic."
+    },
+    "cap8": {
+      "title": "Never Miss Your Medication Again",
+      "description": "Daily reminders, refill alerts, and health tracking. It can even notify family if something seems off. Peace of mind, automated."
+    },
+    "cap9": {
+      "title": "Plan Your Dream Vacation in Minutes",
+      "description": "Tell it where you want to go. It searches flights, compares hotels, books reservations, and builds a day-by-day itinerary."
+    },
+    "cap10": {
+      "title": "Know What People Say About Your Business",
+      "description": "It monitors Reddit, Twitter, and review sites for your brand mentions — then tells you what people love and what needs fixing."
+    },
+    "cap11": {
+      "title": "Your Morning Briefing, Personalized",
+      "description": "Weather, calendar, top news, and your to-do list — waiting before your first cup of coffee. Every morning, automatically."
+    },
+    "cap12": {
+      "title": "Research Anything While You Work",
+      "description": "Need to know about a competitor? Industry trend? New market? It researches, summarizes, and sends you a report. Like having an analyst on staff."
+    },
+    "bottomHighlight": "MiniClaw creates a project for each goal",
+    "bottomSuffix": " — tracks it on a kanban board, swaps roles as needed, and updates its own skills along the way."
   },
   "blogHighlight": {
     "badge": "Written by an AGI",
@@ -377,7 +534,38 @@
   "architecture": {
     "label": "How MiniClaw works",
     "heading": "Your super agent. Real work.",
-    "description": "MiniClaw runs a kanban board where your super agent handles the actual work. Not a copilot. Not a chatbot. A thinking partner that ships."
+    "description": "MiniClaw runs a kanban board where your super agent handles the actual work. Not a copilot. Not a chatbot. A thinking partner that ships.",
+    "descriptionHighlight": "A thinking partner that ships.",
+    "feat1": {
+      "title": "Tickets in, features out",
+      "description": "Write what you want in plain English. Your agents handle research, planning, and implementation end to end. Move the ticket to 'In Progress' and walk away."
+    },
+    "feat2": {
+      "title": "Ships while you sleep",
+      "description": "Your agents run 24/7. Drop a ticket at midnight, wake up to a working feature. The kanban board tracks every decision so nothing slips."
+    },
+    "feat3": {
+      "title": "Human-gated deploys",
+      "description": "Nothing goes live without your sign-off. Review the preview, check acceptance criteria, then ship. Full autonomy with a human in the loop."
+    },
+    "feat4": {
+      "title": "Git, tests, branches — handled",
+      "description": "Every ticket gets its own branch, worktree, and test run. Clean history, isolated changes, zero manual git work."
+    },
+    "feat5": {
+      "title": "Watch the work happen",
+      "description": "The agent activity dashboard shows every agent in real time — what they're doing, how long it's taking, and what it costs. Full transparency."
+    },
+    "whoItsForLabel": "Software just became a one-person operation.",
+    "who1": "Solopreneurs",
+    "who2": "Business owners",
+    "who3": "Dev shops",
+    "who4": "Agencies",
+    "who5": "Corporate teams",
+    "who6": "Founders",
+    "who7": "CTOs",
+    "ctaGet": "Get MiniClaw",
+    "ctaFaq": "Read the FAQ"
   },
   "common": {
     "downloadFree": "Download Free",
